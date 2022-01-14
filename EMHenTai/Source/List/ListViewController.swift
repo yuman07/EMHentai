@@ -55,7 +55,7 @@ class ListViewController: UIViewController {
     func setupView() {
         view.backgroundColor = .white
         
-        requestID = SearchManager.shared.searchWith(info: SearchInfo(), pageIndex: 0) { books, requestID in
+        requestID = SearchManager.shared.searchWith(info: SearchInfo()) { books, requestID in
             if self.requestID == requestID {
                 print("同一个请求")
                 print(books)

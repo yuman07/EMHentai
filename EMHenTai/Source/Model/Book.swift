@@ -7,6 +7,10 @@
 
 import Foundation
 
+struct Gmetadata: Codable {
+    let gmetadata: [Book]
+}
+
 struct Book: Codable {
     let gid: Int
     let title: String

@@ -13,7 +13,7 @@ enum SearchSource: String {
 }
 
 struct SearchInfo {
-    var source = SearchSource.EHentai
+    var source = SearchSource.EHentai.rawValue
     var keyWord = ""
     var rating = false
     var doujinshi = true
@@ -27,12 +27,12 @@ struct SearchInfo {
     var asianporn = true
     var misc = true
     var chineseOnly = false
+    var pageIndex = 0
     
-    func requestStringAt(_ pageIndex: Int) -> String {
-        var keyWord = self.keyWord
-        if chineseOnly { keyWord += " language:Chinese" }
+    var requestString: String {
+        var keyWord = self.keyWord + (chineseOnly ? " language:Chinese" : "")
         keyWord = keyWord.split(separator: " ").joined(separator: "+")
-        var url = source.rawValue
+        var url = source
         url += "?page=\(pageIndex)"
         url += "&f_doujinshi=\(doujinshi)"
         url += "&f_manga=\(manga)"
