@@ -78,6 +78,10 @@ class SearchManager {
     }
     
     private func requestFinish(result: ([Book], String), completion: @escaping ([Book], String) -> Void) {
+        DispatchQueue.main.async {
+            completion(result.0, result.1)
+        }
+        
         lock.lock()
         defer { lock.unlock() }
         
@@ -86,10 +90,6 @@ class SearchManager {
             runningURL = next.info.requestString
             waitingRequest = nil
             p_searchWith(info: next.info, completion: completion)
-        }
-        
-        DispatchQueue.main.async {
-            completion(result.0, result.1)
         }
     }
 }
