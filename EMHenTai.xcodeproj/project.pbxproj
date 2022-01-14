@@ -11,15 +11,19 @@
 		7AB967FE279117CD0006466A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7AB967FD279117CD0006466A /* Assets.xcassets */; };
 		7AB96801279117CD0006466A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7AB967FF279117CD0006466A /* LaunchScreen.storyboard */; };
 		7AB9680B279118F90006466A /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB9680A279118F90006466A /* MainViewController.swift */; };
+		93E71501DFDB5FB91ED376A2 /* Pods_EMHenTai.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2104C61E89008033DC6B3C5C /* Pods_EMHenTai.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1E7F3C881E1ABE71764FBE29 /* Pods-EMHenTai.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EMHenTai.release.xcconfig"; path = "Target Support Files/Pods-EMHenTai/Pods-EMHenTai.release.xcconfig"; sourceTree = "<group>"; };
+		2104C61E89008033DC6B3C5C /* Pods_EMHenTai.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EMHenTai.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7AB967F1279117CC0006466A /* EMHenTai.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EMHenTai.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7AB967F4279117CC0006466A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7AB967FD279117CD0006466A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7AB96800279117CD0006466A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7AB96802279117CD0006466A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7AB9680A279118F90006466A /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		B0B243D0240E92FA129A0D9A /* Pods-EMHenTai.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EMHenTai.debug.xcconfig"; path = "Target Support Files/Pods-EMHenTai/Pods-EMHenTai.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -27,17 +31,28 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				93E71501DFDB5FB91ED376A2 /* Pods_EMHenTai.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0AB70A369CCA38912AE1D6CE /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				2104C61E89008033DC6B3C5C /* Pods_EMHenTai.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		7AB967E8279117CC0006466A = {
 			isa = PBXGroup;
 			children = (
 				7AB967F3279117CC0006466A /* EMHenTai */,
 				7AB967F2279117CC0006466A /* Products */,
+				E2E8379CB55C407BE26EF8C6 /* Pods */,
+				0AB70A369CCA38912AE1D6CE /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -77,6 +92,16 @@
 			path = Support;
 			sourceTree = "<group>";
 		};
+		E2E8379CB55C407BE26EF8C6 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				B0B243D0240E92FA129A0D9A /* Pods-EMHenTai.debug.xcconfig */,
+				1E7F3C881E1ABE71764FBE29 /* Pods-EMHenTai.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -84,6 +109,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7AB96805279117CD0006466A /* Build configuration list for PBXNativeTarget "EMHenTai" */;
 			buildPhases = (
+				97F76C76E1A7810026899304 /* [CP] Check Pods Manifest.lock */,
 				7AB967ED279117CC0006466A /* Sources */,
 				7AB967EE279117CC0006466A /* Frameworks */,
 				7AB967EF279117CC0006466A /* Resources */,
@@ -141,6 +167,31 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		97F76C76E1A7810026899304 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-EMHenTai-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		7AB967ED279117CC0006466A /* Sources */ = {
@@ -217,7 +268,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -272,7 +323,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -284,6 +335,7 @@
 		};
 		7AB96806279117CD0006466A /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B0B243D0240E92FA129A0D9A /* Pods-EMHenTai.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -298,6 +350,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -313,6 +366,7 @@
 		};
 		7AB96807279117CD0006466A /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1E7F3C881E1ABE71764FBE29 /* Pods-EMHenTai.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -327,6 +381,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
