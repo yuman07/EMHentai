@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7A6C95C727911DC200077093 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A6C95C627911DC200077093 /* ListViewController.swift */; };
+		7A6C95CC27911E4600077093 /* GalleryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A6C95CB27911E4600077093 /* GalleryViewController.swift */; };
+		7A6C95D127911E9A00077093 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A6C95D027911E9A00077093 /* SettingViewController.swift */; };
+		7A6C95D327911EB200077093 /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A6C95D227911EB200077093 /* Book.swift */; };
+		7A6C95D527911EE400077093 /* HistoryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A6C95D427911EE400077093 /* HistoryManager.swift */; };
+		7A6C95D727911EF300077093 /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A6C95D627911EF300077093 /* DownloadManager.swift */; };
+		7A6C95D927911FAA00077093 /* SummaryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A6C95D827911FAA00077093 /* SummaryTableViewCell.swift */; };
 		7AB967F5279117CC0006466A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB967F4279117CC0006466A /* AppDelegate.swift */; };
 		7AB967FE279117CD0006466A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7AB967FD279117CD0006466A /* Assets.xcassets */; };
 		7AB96801279117CD0006466A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7AB967FF279117CD0006466A /* LaunchScreen.storyboard */; };
@@ -17,6 +24,13 @@
 /* Begin PBXFileReference section */
 		1E7F3C881E1ABE71764FBE29 /* Pods-EMHenTai.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EMHenTai.release.xcconfig"; path = "Target Support Files/Pods-EMHenTai/Pods-EMHenTai.release.xcconfig"; sourceTree = "<group>"; };
 		2104C61E89008033DC6B3C5C /* Pods_EMHenTai.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EMHenTai.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7A6C95C627911DC200077093 /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
+		7A6C95CB27911E4600077093 /* GalleryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryViewController.swift; sourceTree = "<group>"; };
+		7A6C95D027911E9A00077093 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
+		7A6C95D227911EB200077093 /* Book.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Book.swift; sourceTree = "<group>"; };
+		7A6C95D427911EE400077093 /* HistoryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryManager.swift; sourceTree = "<group>"; };
+		7A6C95D627911EF300077093 /* DownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
+		7A6C95D827911FAA00077093 /* SummaryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryTableViewCell.swift; sourceTree = "<group>"; };
 		7AB967F1279117CC0006466A /* EMHenTai.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EMHenTai.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7AB967F4279117CC0006466A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7AB967FD279117CD0006466A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -44,6 +58,48 @@
 				2104C61E89008033DC6B3C5C /* Pods_EMHenTai.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		7A6C95C827911DD700077093 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				7A6C95D227911EB200077093 /* Book.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		7A6C95CA27911DF400077093 /* Manager */ = {
+			isa = PBXGroup;
+			children = (
+				7A6C95D427911EE400077093 /* HistoryManager.swift */,
+				7A6C95D627911EF300077093 /* DownloadManager.swift */,
+			);
+			path = Manager;
+			sourceTree = "<group>";
+		};
+		7A6C95CD27911E4C00077093 /* List */ = {
+			isa = PBXGroup;
+			children = (
+				7A6C95C627911DC200077093 /* ListViewController.swift */,
+				7A6C95D827911FAA00077093 /* SummaryTableViewCell.swift */,
+			);
+			path = List;
+			sourceTree = "<group>";
+		};
+		7A6C95CE27911E5F00077093 /* Gallery */ = {
+			isa = PBXGroup;
+			children = (
+				7A6C95CB27911E4600077093 /* GalleryViewController.swift */,
+			);
+			path = Gallery;
+			sourceTree = "<group>";
+		};
+		7A6C95CF27911E6500077093 /* Setting */ = {
+			isa = PBXGroup;
+			children = (
+				7A6C95D027911E9A00077093 /* SettingViewController.swift */,
+			);
+			path = Setting;
 			sourceTree = "<group>";
 		};
 		7AB967E8279117CC0006466A = {
@@ -76,6 +132,11 @@
 		7AB96808279118950006466A /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				7A6C95C827911DD700077093 /* Model */,
+				7A6C95CA27911DF400077093 /* Manager */,
+				7A6C95CD27911E4C00077093 /* List */,
+				7A6C95CF27911E6500077093 /* Setting */,
+				7A6C95CE27911E5F00077093 /* Gallery */,
 				7AB967F4279117CC0006466A /* AppDelegate.swift */,
 				7AB9680A279118F90006466A /* MainViewController.swift */,
 			);
@@ -98,7 +159,6 @@
 				B0B243D0240E92FA129A0D9A /* Pods-EMHenTai.debug.xcconfig */,
 				1E7F3C881E1ABE71764FBE29 /* Pods-EMHenTai.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -198,8 +258,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7A6C95D127911E9A00077093 /* SettingViewController.swift in Sources */,
 				7AB967F5279117CC0006466A /* AppDelegate.swift in Sources */,
+				7A6C95D327911EB200077093 /* Book.swift in Sources */,
+				7A6C95D727911EF300077093 /* DownloadManager.swift in Sources */,
+				7A6C95D927911FAA00077093 /* SummaryTableViewCell.swift in Sources */,
+				7A6C95CC27911E4600077093 /* GalleryViewController.swift in Sources */,
+				7A6C95D527911EE400077093 /* HistoryManager.swift in Sources */,
 				7AB9680B279118F90006466A /* MainViewController.swift in Sources */,
+				7A6C95C727911DC200077093 /* ListViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
