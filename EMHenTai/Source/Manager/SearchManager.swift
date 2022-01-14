@@ -85,9 +85,7 @@ class SearchManager {
         if let next = waitingRequest {
             runningURL = next.info.requestString
             waitingRequest = nil
-            DispatchQueue.global().async {
-                self.p_searchWith(info: next.info, completion: completion)
-            }
+            p_searchWith(info: next.info, completion: completion)
         }
         
         DispatchQueue.main.async {
