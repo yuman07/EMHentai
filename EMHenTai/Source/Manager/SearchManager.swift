@@ -7,14 +7,27 @@
 
 import Foundation
 import Alamofire
+import CommonCrypto
 
 class SearchManager {
     static let shared = SearchManager()
-    static let serialQueue = DispatchQueue(label: "com.SearchManager.EMHenTai")
     private init() {}
     
-    func searchWith(info: SearchInfo, pageIndex: Int, completion: @escaping ([Book]) -> Void) {
-        AF.request(info.requestStringAt(pageIndex)).responseString(queue: SearchManager.serialQueue) { response in
+    let lock = NSLock()
+    var runningRequest: Set<String> = []
+    
+    func searchWith(info: SearchInfo, pageIndex: Int, completion: @escaping ([Book], String) -> Void) -> String {
+        let url = info.requestStringAt(pageIndex)
+        let requestID = url.SHA256
+        lock.lock()
+        if runningRequest.contains(requestID) {
+            lock.unlock()
+            return requestID
+        }
+        runningRequest.insert(requestID)
+        lock.unlock()
+        
+        AF.request(url).responseString(queue: .global()) { response in
             switch response.result {
             case .success(let value):
                 let target = info.source.rawValue + "g/"
@@ -32,9 +45,7 @@ class SearchManager {
                 }
                 
                 if ids.count == 0 {
-                    DispatchQueue.main.async {
-                        completion([])
-                    }
+                    self.requestFinish(result: ([], requestID), completion: completion)
                     return
                 }
                 
@@ -46,13 +57,11 @@ class SearchManager {
                         "gidlist": ids
                     ],
                     encoding: JSONEncoding.default
-                ).responseJSON(queue: SearchManager.serialQueue) { response in
+                ).responseJSON(queue: .global()) { response in
                     switch response.result {
                     case .success(let value):
                         guard let value = value as? [String: Any], let content = value["gmetadata"] as? [Any] else {
-                            DispatchQueue.main.async {
-                                completion([])
-                            }
+                            self.requestFinish(result: ([], requestID), completion: completion)
                             return
                         }
                         
@@ -63,30 +72,39 @@ class SearchManager {
                                 result.append(book)
                             }
                         }
-                        DispatchQueue.main.async {
-                            completion(result)
-                        }
+                        self.requestFinish(result: (result, requestID), completion: completion)
                     case .failure:
-                        DispatchQueue.main.async {
-                            completion([])
-                        }
+                        self.requestFinish(result: ([], requestID), completion: completion)
                     }
                 }
-                
             case .failure:
-                DispatchQueue.main.async {
-                    completion([])
-                }
+                self.requestFinish(result: ([], requestID), completion: completion)
             }
+        }
+        return requestID
+    }
+    
+    private func requestFinish(result: ([Book], String), completion: @escaping ([Book], String) -> Void) {
+        lock.lock()
+        runningRequest.remove(result.1)
+        lock.unlock()
+        DispatchQueue.main.async {
+            completion(result.0, result.1)
         }
     }
 }
 
 fileprivate extension String {
+    var SHA256: String {
+        let utf8 = cString(using: .utf8)
+        var digest = [UInt8](repeating: 0, count: Int(CC_SHA256_DIGEST_LENGTH))
+        CC_SHA256(utf8, CC_LONG(utf8!.count - 1), &digest)
+        return digest.reduce("") { $0 + String(format:"%02x", $1) }
+    }
+    
     func allIndicesOf(string: String) -> [Int] {
         var indices = [Int]()
         var searchStartIndex = self.startIndex
-        
         while searchStartIndex < self.endIndex, let range = self.range(of: string, range: searchStartIndex..<self.endIndex), !range.isEmpty {
             let index = distance(from: self.startIndex, to: range.lowerBound)
             indices.append(index)
