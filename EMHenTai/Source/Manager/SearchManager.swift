@@ -13,8 +13,8 @@ class SearchManager {
     static let shared = SearchManager()
     private init() {}
     
-    let lock = NSLock()
-    var runningRequest: Set<String> = []
+    private let lock = NSLock()
+    private var runningRequest: Set<String> = []
     
     func searchWith(info: SearchInfo, pageIndex: Int, completion: @escaping ([Book], String) -> Void) -> String {
         let url = info.requestStringAt(pageIndex)
