@@ -24,19 +24,19 @@ class ListViewController: UIViewController {
     }
     
     required init?(coder: NSCoder) {
-        self.style = .History
+        self.style = .Home
         super.init(coder: coder)
     }
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        self.style = .History
+        self.style = .Home
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupNavBar()
         setupView()
+        setupNavBar()
     }
     
     func setupNavBar() {
@@ -51,6 +51,10 @@ class ListViewController: UIViewController {
     }
     
     func setupView() {
+        view.backgroundColor = .white
         
+        SearchManager.shared.searchWith(info: SearchInfo(), pageIndex: 0) { books in
+            print(books)
+        }
     }
 }
