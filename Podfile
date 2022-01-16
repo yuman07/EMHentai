@@ -5,6 +5,6 @@ inhibit_all_warnings!
 target 'EMHenTai' do
 
 pod 'Alamofire', '5.5.0'
-pod 'SDWebImage', '5.12.2'
+pod 'Kingfisher', '7.1.2'
 
 end
