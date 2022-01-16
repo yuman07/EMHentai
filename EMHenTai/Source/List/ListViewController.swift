@@ -18,8 +18,6 @@ class ListViewController: UIViewController {
     
     let style: ListStyle
     
-    var requestID = ""
-    
     init(style: ListStyle) {
         self.style = style
         super.init()
@@ -55,15 +53,13 @@ class ListViewController: UIViewController {
     func setupView() {
         view.backgroundColor = .white
         
-        requestID = SearchManager.shared.searchWith(info: SearchInfo()) { books, requestID in
-            if self.requestID == requestID {
-                print("同一个请求")
-                print(books)
+        SearchManager.shared.searchWith(info: SearchInfo()) { books in
+        //    print(books)
+            if books.count > 0 {
+                print("请求成功")
             } else {
-                print("不同请求")
+                print("请求失败")
             }
         }
-        
-        print(requestID)
     }
 }

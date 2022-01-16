@@ -15,26 +15,24 @@ class SearchManager {
     
     private let lock = NSLock()
     private var runningURL: String?
-    private var waitingRequest: (info: SearchInfo, completion: (([Book], String) -> Void))?
+    private var waitingRequest: (info: SearchInfo, completion: ([Book]) -> Void)?
     
-    func searchWith(info: SearchInfo, completion: @escaping ([Book], String) -> Void) -> String {
+    func searchWith(info: SearchInfo, completion: @escaping ([Book]) -> Void) {
         let url = info.requestString
-        lock.lock()
-        defer { lock.unlock() }
         
-        if runningURL == nil {
-            runningURL = url
-            p_searchWith(info: info, completion: completion)
-        } else if runningURL! == url {
-            // skip same request
-        } else {
-            waitingRequest = (info, completion)
+        do {
+            lock.lock()
+            defer { lock.unlock() }
+            if runningURL == nil {
+                runningURL = url
+            } else if runningURL! == url {
+                return
+            } else {
+                waitingRequest = (info, completion)
+                return
+            }
         }
-        return url
-    }
-    
-    private func p_searchWith(info: SearchInfo, completion: @escaping ([Book], String) -> Void) {
-        let url = info.requestString
+        
         AF.request(url).responseString(queue: .global()) { response in
             switch response.result {
             case .success(let value):
@@ -51,7 +49,7 @@ class SearchManager {
                 }
                 
                 if ids.count == 0 {
-                    self.requestFinish(result: ([], url), completion: completion)
+                    self.requestFinish(result: [], completion: completion)
                     return
                 }
                 
@@ -66,30 +64,30 @@ class SearchManager {
                 ).responseDecodable(of: Gmetadata.self, queue: .global()) { response in
                     switch response.result {
                     case .success(let value):
-                        self.requestFinish(result: (value.gmetadata, url), completion: completion)
+                        self.requestFinish(result: value.gmetadata, completion: completion)
                     case .failure:
-                        self.requestFinish(result: ([], url), completion: completion)
+                        self.requestFinish(result: [], completion: completion)
                     }
                 }
             case .failure:
-                self.requestFinish(result: ([], url), completion: completion)
+                self.requestFinish(result: [], completion: completion)
             }
         }
     }
     
-    private func requestFinish(result: ([Book], String), completion: @escaping ([Book], String) -> Void) {
-        DispatchQueue.main.async {
-            completion(result.0, result.1)
-        }
-        
+    private func requestFinish(result: [Book], completion: @escaping ([Book]) -> Void) {
         lock.lock()
-        defer { lock.unlock() }
-        
-        runningURL = nil
-        if let next = waitingRequest {
-            runningURL = next.info.requestString
+        if waitingRequest == nil {
+            lock.unlock()
+            DispatchQueue.main.async {
+                completion(result)
+            }
+        } else {
+            let next = waitingRequest!
+            runningURL = nil
             waitingRequest = nil
-            p_searchWith(info: next.info, completion: completion)
+            lock.unlock()
+            searchWith(info: next.info, completion: next.completion)
         }
     }
 }
