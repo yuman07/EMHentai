@@ -7,7 +7,6 @@
 
 import Foundation
 import Alamofire
-import CommonCrypto
 
 class SearchManager {
     static let shared = SearchManager()

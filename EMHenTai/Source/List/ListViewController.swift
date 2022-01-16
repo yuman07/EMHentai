@@ -20,7 +20,7 @@ class ListViewController: UIViewController {
     
     init(style: ListStyle) {
         self.style = style
-        super.init()
+        super.init(nibName: nil, bundle: nil)
     }
     
     required init?(coder: NSCoder) {
@@ -28,18 +28,18 @@ class ListViewController: UIViewController {
         super.init(coder: coder)
     }
     
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        self.style = .Home
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         setupNavBar()
+        setupData()
     }
     
-    func setupNavBar() {
+    private func setupView() {
+        view.backgroundColor = .white
+    }
+    
+    private func setupNavBar() {
         switch style {
         case .Home:
             navigationItem.title = "主页"
@@ -50,11 +50,13 @@ class ListViewController: UIViewController {
         }
     }
     
-    func setupView() {
-        view.backgroundColor = .white
-        
-        SearchManager.shared.searchWith(info: SearchInfo()) { books in
-        //    print(books)
+    private func setupData() {
+        refreshDataWith(searchInfo: SearchInfo())
+    }
+    
+    func refreshDataWith(searchInfo: SearchInfo) {
+        SearchManager.shared.searchWith(info: searchInfo) { books in
+            print(books)
             if books.count > 0 {
                 print("请求成功")
             } else {

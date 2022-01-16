@@ -47,6 +47,9 @@ struct SearchInfo {
         url += "&f_search=\(keyWord)"
         url += "&f_apply=Apply+Filter&inline_set=dm_l"
         if rating { url += "&advsearch=1&f_sname=on&f_stags=on&f_sr=on&f_srdd=1" }
+        if URL(string: url) == nil, let encodedURL = url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
+            url = encodedURL
+        }
         return url
     }
 }
