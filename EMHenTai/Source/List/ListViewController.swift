@@ -20,9 +20,11 @@ class ListViewController: UIViewController {
     
     var books = [Book]()
     
-    let tableView: UITableView = {
+    lazy var tableView: UITableView = {
         let table = UITableView()
-        table.estimatedRowHeight = 180
+        table.delegate = self
+        table.dataSource = self
+        table.estimatedRowHeight = 150
         table.estimatedSectionHeaderHeight = 0
         table.estimatedSectionFooterHeight = 0
         table.register(BookTableViewCell.self, forCellReuseIdentifier: NSStringFromClass(BookTableViewCell.self))
@@ -50,8 +52,6 @@ class ListViewController: UIViewController {
         view.backgroundColor = .white
         view.addSubview(tableView)
         
-        tableView.delegate = self
-        tableView.dataSource = self
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
         tableView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor).isActive = true
@@ -79,7 +79,6 @@ class ListViewController: UIViewController {
             guard let self = self else { return }
             self.books = books
             self.tableView.reloadData()
-            print(books.count)
         }
     }
 }

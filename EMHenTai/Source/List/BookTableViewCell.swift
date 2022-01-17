@@ -58,15 +58,17 @@ class BookTableViewCell: UITableViewCell {
         thumbImageView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 8).isActive = true
         thumbImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8).isActive = true
         thumbImageView.widthAnchor.constraint(equalToConstant: 125).isActive = true
-        thumbImageView.heightAnchor.constraint(equalToConstant: 125).isActive = true
+        let constraint = thumbImageView.heightAnchor.constraint(equalToConstant: 125)
+        constraint.priority = .defaultHigh
+        constraint.isActive = true
         
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.topAnchor.constraint(equalTo: thumbImageView.topAnchor).isActive = true
-        titleLabel.leftAnchor.constraint(equalTo: thumbImageView.rightAnchor, constant: 15).isActive = true
+        titleLabel.leftAnchor.constraint(equalTo: thumbImageView.rightAnchor, constant: 8).isActive = true
         titleLabel.rightAnchor.constraint(lessThanOrEqualTo: scoreLabel.rightAnchor).isActive = true
         
         categoryLabel.translatesAutoresizingMaskIntoConstraints = false
-        categoryLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 5).isActive = true
+        categoryLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8).isActive = true
         categoryLabel.leftAnchor.constraint(equalTo: titleLabel.leftAnchor).isActive = true
         
         scoreLabel.translatesAutoresizingMaskIntoConstraints = false
