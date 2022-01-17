@@ -90,3 +90,7 @@ class SearchManager {
         }
     }
 }
+
+private struct Gmetadata: Codable {
+    let gmetadata: [Book]
+}

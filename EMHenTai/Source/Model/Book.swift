@@ -7,10 +7,6 @@
 
 import Foundation
 
-struct Gmetadata: Codable {
-    let gmetadata: [Book]
-}
-
 struct Book: Codable {
     let gid: Int
     let title: String
@@ -36,13 +32,4 @@ struct torrent: Codable {
     let name: String
     let tsize: String
     let fsize: String
-}
-
-extension Book {
-    func imageString(at pageIndex: Int) -> String {
-        var url = "\(SearchInfo().source)g/\(gid)/\(token)"
-        if pageIndex > 0 { url += "?p=\(pageIndex)" }
-        url += "&inline_set=ts_m"
-        return url
-    }
 }
