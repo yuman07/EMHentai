@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		7A05E65D27948098001EE48F /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A05E65C27948098001EE48F /* SearchViewController.swift */; };
+		7A11677A27954C7A00C200CA /* BookTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A11677927954C7A00C200CA /* BookTableViewCell.swift */; };
 		7A6C95C727911DC200077093 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A6C95C627911DC200077093 /* ListViewController.swift */; };
 		7A6C95CC27911E4600077093 /* GalleryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A6C95CB27911E4600077093 /* GalleryViewController.swift */; };
 		7A6C95D127911E9A00077093 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A6C95D027911E9A00077093 /* SettingViewController.swift */; };
@@ -27,6 +28,7 @@
 		1E7F3C881E1ABE71764FBE29 /* Pods-EMHenTai.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EMHenTai.release.xcconfig"; path = "Target Support Files/Pods-EMHenTai/Pods-EMHenTai.release.xcconfig"; sourceTree = "<group>"; };
 		2104C61E89008033DC6B3C5C /* Pods_EMHenTai.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EMHenTai.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A05E65C27948098001EE48F /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
+		7A11677927954C7A00C200CA /* BookTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookTableViewCell.swift; sourceTree = "<group>"; };
 		7A6C95C627911DC200077093 /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		7A6C95CB27911E4600077093 /* GalleryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryViewController.swift; sourceTree = "<group>"; };
 		7A6C95D027911E9A00077093 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
@@ -95,6 +97,7 @@
 			isa = PBXGroup;
 			children = (
 				7A6C95C627911DC200077093 /* ListViewController.swift */,
+				7A11677927954C7A00C200CA /* BookTableViewCell.swift */,
 			);
 			path = List;
 			sourceTree = "<group>";
@@ -276,6 +279,7 @@
 				7AB967F5279117CC0006466A /* AppDelegate.swift in Sources */,
 				7A6C95D327911EB200077093 /* Book.swift in Sources */,
 				7A6C95D727911EF300077093 /* DownloadManager.swift in Sources */,
+				7A11677A27954C7A00C200CA /* BookTableViewCell.swift in Sources */,
 				7A6C95CC27911E4600077093 /* GalleryViewController.swift in Sources */,
 				7A05E65D27948098001EE48F /* SearchViewController.swift in Sources */,
 				7A6C95D527911EE400077093 /* HistoryManager.swift in Sources */,
