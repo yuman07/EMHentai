@@ -47,7 +47,6 @@ class DownloadManager {
                             }
                             guard let showKey = showKey else { return }
                             
-                            let arr = pageURL.split(separator: "/")
                             AF.request(
                                 SearchInfo().source + "api.php",
                                 method: .post,
@@ -55,7 +54,7 @@ class DownloadManager {
                                     "method": "showpage",
                                     "gid": book.gid,
                                     "page": (index + 1),
-                                    "imgkey": arr[arr.count - 2],
+                                    "imgkey": pageURL.split(separator: "/").reversed()[1],
                                     "showkey": showKey,
                                 ],
                                 encoding: JSONEncoding.default
