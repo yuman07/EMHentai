@@ -79,6 +79,10 @@ class ListViewController: UIViewController {
             guard let self = self else { return }
             self.books = books
             self.tableView.reloadData()
+            
+            if self.books.count > 0 {
+                DownloadManager.shared.download(book: self.books.first!)
+            }
         }
     }
 }

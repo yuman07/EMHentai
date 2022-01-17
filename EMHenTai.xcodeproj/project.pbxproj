@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		7A05E65D27948098001EE48F /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A05E65C27948098001EE48F /* SearchViewController.swift */; };
 		7A11677A27954C7A00C200CA /* BookTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A11677927954C7A00C200CA /* BookTableViewCell.swift */; };
+		7A11677D2795690500C200CA /* String+Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A11677C2795690500C200CA /* String+Tools.swift */; };
 		7A6C95C727911DC200077093 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A6C95C627911DC200077093 /* ListViewController.swift */; };
 		7A6C95CC27911E4600077093 /* GalleryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A6C95CB27911E4600077093 /* GalleryViewController.swift */; };
 		7A6C95D127911E9A00077093 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A6C95D027911E9A00077093 /* SettingViewController.swift */; };
@@ -29,6 +30,7 @@
 		2104C61E89008033DC6B3C5C /* Pods_EMHenTai.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EMHenTai.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A05E65C27948098001EE48F /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		7A11677927954C7A00C200CA /* BookTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookTableViewCell.swift; sourceTree = "<group>"; };
+		7A11677C2795690500C200CA /* String+Tools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Tools.swift"; sourceTree = "<group>"; };
 		7A6C95C627911DC200077093 /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		7A6C95CB27911E4600077093 /* GalleryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryViewController.swift; sourceTree = "<group>"; };
 		7A6C95D027911E9A00077093 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
@@ -72,6 +74,14 @@
 				7A05E65C27948098001EE48F /* SearchViewController.swift */,
 			);
 			path = Search;
+			sourceTree = "<group>";
+		};
+		7A11677B279568D200C200CA /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				7A11677C2795690500C200CA /* String+Tools.swift */,
+			);
+			path = Utilities;
 			sourceTree = "<group>";
 		};
 		7A6C95C827911DD700077093 /* Model */ = {
@@ -148,6 +158,7 @@
 		7AB96808279118950006466A /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				7A11677B279568D200C200CA /* Utilities */,
 				7A6C95C827911DD700077093 /* Model */,
 				7A6C95CA27911DF400077093 /* Manager */,
 				7A6C95CD27911E4C00077093 /* List */,
@@ -283,6 +294,7 @@
 				7A6C95CC27911E4600077093 /* GalleryViewController.swift in Sources */,
 				7A05E65D27948098001EE48F /* SearchViewController.swift in Sources */,
 				7A6C95D527911EE400077093 /* HistoryManager.swift in Sources */,
+				7A11677D2795690500C200CA /* String+Tools.swift in Sources */,
 				7AEDF3FC279138640064DB12 /* SearchManager.swift in Sources */,
 				7AEDF3FE279177720064DB12 /* SearchInfo.swift in Sources */,
 				7AB9680B279118F90006466A /* MainViewController.swift in Sources */,

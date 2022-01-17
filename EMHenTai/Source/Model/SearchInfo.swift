@@ -14,7 +14,7 @@ enum SearchSource: String {
 
 struct SearchInfo {
     var source = SearchSource.EHentai.rawValue
-    var keyWord = "王都"
+    var keyWord = ""
     var rating = false
     var doujinshi = true
     var manga = true
@@ -28,7 +28,9 @@ struct SearchInfo {
     var misc = true
     var chineseOnly = false
     var pageIndex = 0
-    
+}
+
+extension SearchInfo {
     var requestString: String {
         var keyWord = self.keyWord + (chineseOnly ? " language:Chinese" : "")
         keyWord = keyWord.split(separator: " ").joined(separator: "+")
