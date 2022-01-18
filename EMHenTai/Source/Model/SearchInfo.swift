@@ -14,7 +14,7 @@ enum SearchSource: String {
 
 struct SearchInfo {
     var source = SettingManager.shared.currentSearchSource
-    var keyWord = "王都"
+    var keyWord = "王都"  // ""
     var rating: Bool {
         set { UserDefaults.standard.set(newValue, forKey: "SearchInfo_rating") }
         get { (UserDefaults.standard.object(forKey: "SearchInfo_rating") as? Bool) ?? true }
@@ -61,7 +61,7 @@ struct SearchInfo {
     }
     var chineseOnly: Bool {
         set { UserDefaults.standard.set(newValue, forKey: "SearchInfo_chineseOnly") }
-        get { (UserDefaults.standard.object(forKey: "SearchInfo_chineseOnly") as? Bool) ?? true }
+        get { (UserDefaults.standard.object(forKey: "SearchInfo_chineseOnly") as? Bool) ?? true }  // false
     }
     var pageIndex = 0
 }
