@@ -14,6 +14,7 @@
 		7A1167812796887500C200CA /* PageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1167802796887500C200CA /* PageCollectionViewCell.swift */; };
 		7A116783279696DB00C200CA /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A116782279696DB00C200CA /* StorageManager.swift */; };
 		7A1167852796970F00C200CA /* SettingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1167842796970F00C200CA /* SettingManager.swift */; };
+		7A1167892796D41F00C200CA /* TextFieldTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1167882796D41F00C200CA /* TextFieldTableViewCell.swift */; };
 		7A6C95C727911DC200077093 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A6C95C627911DC200077093 /* ListViewController.swift */; };
 		7A6C95CC27911E4600077093 /* GalleryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A6C95CB27911E4600077093 /* GalleryViewController.swift */; };
 		7A6C95D127911E9A00077093 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A6C95D027911E9A00077093 /* SettingViewController.swift */; };
@@ -39,6 +40,7 @@
 		7A1167802796887500C200CA /* PageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageCollectionViewCell.swift; sourceTree = "<group>"; };
 		7A116782279696DB00C200CA /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 		7A1167842796970F00C200CA /* SettingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingManager.swift; sourceTree = "<group>"; };
+		7A1167882796D41F00C200CA /* TextFieldTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldTableViewCell.swift; sourceTree = "<group>"; };
 		7A6C95C627911DC200077093 /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		7A6C95CB27911E4600077093 /* GalleryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryViewController.swift; sourceTree = "<group>"; };
 		7A6C95D027911E9A00077093 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
@@ -80,6 +82,7 @@
 			isa = PBXGroup;
 			children = (
 				7A05E65C27948098001EE48F /* SearchViewController.swift */,
+				7A1167882796D41F00C200CA /* TextFieldTableViewCell.swift */,
 			);
 			path = Search;
 			sourceTree = "<group>";
@@ -313,6 +316,7 @@
 				7AEDF3FC279138640064DB12 /* SearchManager.swift in Sources */,
 				7AEDF3FE279177720064DB12 /* SearchInfo.swift in Sources */,
 				7AB9680B279118F90006466A /* MainViewController.swift in Sources */,
+				7A1167892796D41F00C200CA /* TextFieldTableViewCell.swift in Sources */,
 				7A6C95C727911DC200077093 /* ListViewController.swift in Sources */,
 				7A116783279696DB00C200CA /* StorageManager.swift in Sources */,
 			);

@@ -63,6 +63,7 @@ class ListViewController: UIViewController {
         switch style {
         case .Home:
             navigationItem.title = "主页"
+            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(jumpToSearchPage))
         case .History:
             navigationItem.title = "历史"
         case .Download:
@@ -80,8 +81,8 @@ class ListViewController: UIViewController {
             self.books = books
             self.tableView.reloadData()
             
-            if self.books.count > 0 {
-                DownloadManager.shared.download(book: self.books.first!)
+            if books.isEmpty {
+                print("net error")
             }
         }
     }
@@ -103,7 +104,19 @@ extension ListViewController: UITableViewDataSource {
 
 extension ListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard indexPath.row < books.count else { return }
-        navigationController?.pushViewController(GalleryViewController(book: books[indexPath.row]), animated: true)
+        tableView.deselectRow(at: indexPath, animated: true)
+        if indexPath.row < books.count {
+            navigationController?.pushViewController(GalleryViewController(book: books[indexPath.row]), animated: true)
+        }
+    }
+}
+
+// Home
+extension ListViewController {
+    @objc
+    func jumpToSearchPage() {
+        let searchVC = SearchViewController()
+        searchVC.listVC = self
+        navigationController?.pushViewController(searchVC, animated: true)
     }
 }

@@ -81,13 +81,13 @@ class DownloadManager {
     }
     
     private func getImageString(of book: Book, completion: @escaping (Int, String) -> Void) {
-        let url = "\(SettingManager.shared.searchSource)g/\(book.gid)/\(book.token)/?inline_set=ts_m"
+        let url = "\(SearchInfo.currentSource)g/\(book.gid)/\(book.token)/?inline_set=ts_m"
         AF.request(url).responseString(queue: .global()) { response in
             switch response.result {
             case .success(let value):
                 if self.downloadState(of: book) != .ing { return }
                 
-                let urls = value.allIndicesOf(string: SettingManager.shared.searchSource + "s/").map { index -> String in
+                let urls = value.allIndicesOf(string: SearchInfo.currentSource + "s/").map { index -> String in
                     let start = value.index(value.startIndex, offsetBy: index)
                     var end = value.index(after: start)
                     while value[end] != "\"" {
@@ -114,7 +114,7 @@ class DownloadManager {
                             }) else { sema.signal(); return }
                             
                             AF.request(
-                                SettingManager.shared.searchSource + "api.php",
+                                SearchInfo.currentSource + "api.php",
                                 method: .post,
                                 parameters: [
                                     "method": "showpage",

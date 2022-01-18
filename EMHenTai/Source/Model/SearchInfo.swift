@@ -7,17 +7,24 @@
 
 import Foundation
 
-enum SearchSource: String {
+enum SearchSource: String, CaseIterable {
     case EHentai = "https://e-hentai.org/"
     case ExHentai = "https://exhentai.org/"
 }
 
 struct SearchInfo {
-    var source = SettingManager.shared.searchSource
-    var keyWord = "王都"  // ""
-    var rating: Bool {
+    var source: String {
+        set { UserDefaults.standard.set(newValue, forKey: "SearchInfo_searchSource") }
+        get { (UserDefaults.standard.object(forKey: "SearchInfo_searchSource") as? String) ?? SearchSource.EHentai.rawValue }
+    }
+    private static var keyWord = ""
+    var keyWord: String {
+        set { SearchInfo.keyWord = newValue }
+        get { SearchInfo.keyWord }
+    }
+    var rating: Int {
         set { UserDefaults.standard.set(newValue, forKey: "SearchInfo_rating") }
-        get { (UserDefaults.standard.object(forKey: "SearchInfo_rating") as? Bool) ?? true }
+        get { (UserDefaults.standard.object(forKey: "SearchInfo_rating") as? Int) ?? 0 }
     }
     var doujinshi: Bool {
         set { UserDefaults.standard.set(newValue, forKey: "SearchInfo_doujinshi") }
@@ -61,7 +68,7 @@ struct SearchInfo {
     }
     var chineseOnly: Bool {
         set { UserDefaults.standard.set(newValue, forKey: "SearchInfo_chineseOnly") }
-        get { (UserDefaults.standard.object(forKey: "SearchInfo_chineseOnly") as? Bool) ?? true }  // false
+        get { (UserDefaults.standard.object(forKey: "SearchInfo_chineseOnly") as? Bool) ?? false }
     }
     var pageIndex = 0
 }
@@ -84,10 +91,14 @@ extension SearchInfo {
         url += "&f_misc=\(misc)"
         url += "&f_search=\(keyWord)"
         url += "&f_apply=Apply+Filter&inline_set=dm_l"
-        if rating { url += "&advsearch=1&f_sname=on&f_stags=on&f_sr=on&f_srdd=1" }
+        if rating > 0 { url += "&advsearch=1&f_sname=on&f_stags=on&f_sr=on&f_srdd=\(rating + 1)" }
         if URL(string: url) == nil, let encodedURL = url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
             url = encodedURL
         }
         return url
+    }
+    
+    static var currentSource: String {
+        (UserDefaults.standard.object(forKey: "SearchInfo_searchSource") as? String) ?? SearchSource.EHentai.rawValue
     }
 }
