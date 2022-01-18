@@ -35,20 +35,24 @@ class DownloadManager {
             return
         }
         
+        let sema = DispatchSemaphore(value: DownloadManager.maxConcurrentOperationCount)
         getImageString(of: book) { index, imgString in
             if self.downloadState(of: book) != .ing { return }
             
             let destination: DownloadRequest.Destination = { _, _ in
                 (URL(fileURLWithPath: FilePathHelper.imagePath(of: book, at: index)), [.removePreviousFile, .createIntermediateDirectories])
             }
+            
+            sema.wait()
             AF.download(imgString, to: destination).response { response in
                 switch response.result {
                 case .success:
+                    sema.signal()
                     NotificationCenter.default.post(name: DownloadManager.DownloadPageSuccessNotification,
                                                     object: book.gid,
                                                     userInfo: nil)
                 case .failure:
-                    break
+                    sema.signal()
                 }
             }
         }
@@ -92,11 +96,13 @@ class DownloadManager {
                     return "\(value[start..<end])"
                 }
                 
+                let sema = DispatchSemaphore(value: DownloadManager.maxConcurrentOperationCount)
                 for (index, pageURL) in urls.enumerated() {
+                    sema.wait()
                     AF.request(pageURL).responseString(queue: .global()) { response in
                         switch response.result {
                         case .success(let value):
-                            if self.downloadState(of: book) != .ing { return }
+                            if self.downloadState(of: book) != .ing { sema.signal(); return }
                             
                             guard let showKey = value.range(of: "showkey=\"").map({ range -> Substring in
                                 let start = range.upperBound
@@ -105,7 +111,7 @@ class DownloadManager {
                                     end = value.index(after: end)
                                 }
                                 return value[start..<end]
-                            }) else { return }
+                            }) else { sema.signal(); return }
                             
                             AF.request(
                                 SearchInfo().source + "api.php",
@@ -121,7 +127,7 @@ class DownloadManager {
                             ).responseDecodable(of: ImagePageResult.self, queue: .global()) { response in
                                 switch response.result {
                                 case .success(let value):
-                                    if self.downloadState(of: book) != .ing { return }
+                                    if self.downloadState(of: book) != .ing { sema.signal(); return }
                                     
                                     guard let img = value.i3.range(of: "src=\"").map({ range -> String in
                                         let start = range.upperBound
@@ -130,16 +136,16 @@ class DownloadManager {
                                             end = value.i3.index(after: end)
                                         }
                                         return "\(value.i3[start..<end])"
-                                    }) else { return }
+                                    }) else { sema.signal(); return }
                                     
+                                    sema.signal()
                                     completion(index, img)
                                 case .failure:
-                                    break
+                                    sema.signal()
                                 }
                             }
-                            
                         case .failure:
-                            break
+                            sema.signal()
                         }
                     }
                 }
