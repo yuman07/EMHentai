@@ -25,7 +25,6 @@ struct FilePathHelper {
     }
     
     static func imagePath(of book:Book, at index: Int) -> String {
-        let imageName = "/\(book.gid)-\(index).jpg"
-        return self.bookFolderPath(of: book) + imageName
+        self.bookFolderPath(of: book) + "/\(book.gid)-\(index).jpg"
     }
 }
