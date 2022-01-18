@@ -76,15 +76,14 @@ class SearchManager {
     
     private func requestFinish(result: [Book], completion: @escaping ([Book]) -> Void) {
         lock.lock()
+        runningURL = nil
         if waitingRequest == nil {
-            runningURL = nil
             lock.unlock()
             DispatchQueue.main.async {
                 completion(result)
             }
         } else {
             let next = waitingRequest!
-            runningURL = nil
             waitingRequest = nil
             lock.unlock()
             searchWith(info: next.info, completion: next.completion)
