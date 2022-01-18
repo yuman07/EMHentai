@@ -13,20 +13,56 @@ enum SearchSource: String {
 }
 
 struct SearchInfo {
-    var source = SearchSource.EHentai.rawValue
-    var keyWord = "王都" // ""
-    var rating = false
-    var doujinshi = true
-    var manga = true
-    var artistcg = true
-    var gamecg = true
-    var western = true
-    var non_h = true
-    var imageset = true
-    var cosplay = true
-    var asianporn = true
-    var misc = true
-    var chineseOnly = true  // false
+    var source = SettingManager.shared.currentSearchSource
+    var keyWord = "王都"
+    var rating: Bool {
+        set { UserDefaults.standard.set(newValue, forKey: "SearchInfo_rating") }
+        get { (UserDefaults.standard.object(forKey: "SearchInfo_rating") as? Bool) ?? true }
+    }
+    var doujinshi: Bool {
+        set { UserDefaults.standard.set(newValue, forKey: "SearchInfo_doujinshi") }
+        get { (UserDefaults.standard.object(forKey: "SearchInfo_doujinshi") as? Bool) ?? true }
+    }
+    var manga: Bool {
+        set { UserDefaults.standard.set(newValue, forKey: "SearchInfo_manga") }
+        get { (UserDefaults.standard.object(forKey: "SearchInfo_manga") as? Bool) ?? true }
+    }
+    var artistcg: Bool {
+        set { UserDefaults.standard.set(newValue, forKey: "SearchInfo_artistcg") }
+        get { (UserDefaults.standard.object(forKey: "SearchInfo_artistcg") as? Bool) ?? true }
+    }
+    var gamecg: Bool {
+        set { UserDefaults.standard.set(newValue, forKey: "SearchInfo_gamecg") }
+        get { (UserDefaults.standard.object(forKey: "SearchInfo_gamecg") as? Bool) ?? true }
+    }
+    var western: Bool {
+        set { UserDefaults.standard.set(newValue, forKey: "SearchInfo_western") }
+        get { (UserDefaults.standard.object(forKey: "SearchInfo_western") as? Bool) ?? true }
+    }
+    var non_h: Bool {
+        set { UserDefaults.standard.set(newValue, forKey: "SearchInfo_non_h") }
+        get { (UserDefaults.standard.object(forKey: "SearchInfo_non_h") as? Bool) ?? true }
+    }
+    var imageset: Bool {
+        set { UserDefaults.standard.set(newValue, forKey: "SearchInfo_imageset") }
+        get { (UserDefaults.standard.object(forKey: "SearchInfo_imageset") as? Bool) ?? true }
+    }
+    var cosplay: Bool {
+        set { UserDefaults.standard.set(newValue, forKey: "SearchInfo_cosplay") }
+        get { (UserDefaults.standard.object(forKey: "SearchInfo_cosplay") as? Bool) ?? true }
+    }
+    var asianporn: Bool {
+        set { UserDefaults.standard.set(newValue, forKey: "SearchInfo_asianporn") }
+        get { (UserDefaults.standard.object(forKey: "SearchInfo_asianporn") as? Bool) ?? true }
+    }
+    var misc: Bool {
+        set { UserDefaults.standard.set(newValue, forKey: "SearchInfo_misc") }
+        get { (UserDefaults.standard.object(forKey: "SearchInfo_misc") as? Bool) ?? true }
+    }
+    var chineseOnly: Bool {
+        set { UserDefaults.standard.set(newValue, forKey: "SearchInfo_chineseOnly") }
+        get { (UserDefaults.standard.object(forKey: "SearchInfo_chineseOnly") as? Bool) ?? true }
+    }
     var pageIndex = 0
 }
 
