@@ -20,7 +20,7 @@ class DownloadManager {
     static let shared = DownloadManager()
     private init() {}
     private static let maxConcurrentOperationCount = 6
-    private static let DownloadPageSuccessNotification = NSNotification.Name(rawValue: "EMHenTai.DownloadManager.DownloadPageSuccessNotification")
+    static let DownloadPageSuccessNotification = NSNotification.Name(rawValue: "EMHenTai.DownloadManager.DownloadPageSuccessNotification")
     
     private let lock = NSLock()
     private var runningDownload = Set<Int>()
@@ -45,7 +45,7 @@ class DownloadManager {
                 switch response.result {
                 case .success:
                     NotificationCenter.default.post(name: DownloadManager.DownloadPageSuccessNotification,
-                                                    object: nil,
+                                                    object: book.gid,
                                                     userInfo: nil)
                 case .failure:
                     break

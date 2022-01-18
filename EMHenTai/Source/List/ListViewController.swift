@@ -102,5 +102,8 @@ extension ListViewController: UITableViewDataSource {
 }
 
 extension ListViewController: UITableViewDelegate {
-    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard indexPath.row < books.count else { return }
+        navigationController?.pushViewController(GalleryViewController(book: books[indexPath.row]), animated: true)
+    }
 }
