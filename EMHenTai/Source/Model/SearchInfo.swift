@@ -13,7 +13,7 @@ enum SearchSource: String {
 }
 
 struct SearchInfo {
-    var source = SettingManager.shared.currentSearchSource
+    var source = SettingManager.shared.searchSource
     var keyWord = "王都"  // ""
     var rating: Bool {
         set { UserDefaults.standard.set(newValue, forKey: "SearchInfo_rating") }

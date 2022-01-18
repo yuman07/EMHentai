@@ -11,8 +11,8 @@ class SettingManager {
     static let shared = SettingManager()
     private init() {}
     
-    var currentSearchSource: String {
-        set { UserDefaults.standard.set(newValue, forKey: "SettingManager_currentSearchSource") }
-        get { (UserDefaults.standard.object(forKey: "SettingManager_currentSearchSource") as? String) ?? SearchSource.EHentai.rawValue }
+    var searchSource: String {
+        set { UserDefaults.standard.set(newValue, forKey: "SettingManager_searchSource") }
+        get { (UserDefaults.standard.object(forKey: "SettingManager_searchSource") as? String) ?? SearchSource.EHentai.rawValue }
     }
 }
