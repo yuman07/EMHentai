@@ -14,7 +14,7 @@ enum SearchSource: String {
 
 struct SearchInfo {
     var source = SearchSource.EHentai.rawValue
-    var keyWord = ""
+    var keyWord = "王都" // ""
     var rating = false
     var doujinshi = true
     var manga = true
@@ -26,7 +26,7 @@ struct SearchInfo {
     var cosplay = true
     var asianporn = true
     var misc = true
-    var chineseOnly = false
+    var chineseOnly = true  // false
     var pageIndex = 0
 }
 

@@ -11,6 +11,12 @@ import UIKit
 class GalleryViewController: UIViewController {
     private var book: Book!
     
+    private let navBarBackgroundView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        return view
+    }()
+    
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -21,6 +27,7 @@ class GalleryViewController: UIViewController {
         view.dataSource = self
         view.isPagingEnabled = true
         view.backgroundColor = .black
+        view.contentInsetAdjustmentBehavior = .never
         view.register(PageCollectionViewCell.self, forCellWithReuseIdentifier: NSStringFromClass(PageCollectionViewCell.self))
         return view
     }()
@@ -43,14 +50,21 @@ class GalleryViewController: UIViewController {
     }
     
     private func setupView() {
-        view.backgroundColor = .white
+        view.backgroundColor = .black
         view.addSubview(collectionView)
+        view.addSubview(navBarBackgroundView)
         
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        collectionView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         collectionView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor).isActive = true
         collectionView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor).isActive = true
         collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        
+        navBarBackgroundView.translatesAutoresizingMaskIntoConstraints = false
+        navBarBackgroundView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        navBarBackgroundView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor).isActive = true
+        navBarBackgroundView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor).isActive = true
+        navBarBackgroundView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
     }
     
     private func setupNotification() {
@@ -61,6 +75,18 @@ class GalleryViewController: UIViewController {
                 self.collectionView.reloadData()
             }
         }
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        let isHide = navigationController?.navigationBar.isHidden ?? false
+        return isHide ? .lightContent : .darkContent
+    }
+    
+    private func changeNavBarHidden() {
+        let isHide = navigationController?.navigationBar.isHidden ?? false
+        navigationController?.setNavigationBarHidden(!isHide, animated: false)
+        navBarBackgroundView.isHidden = !isHide
+        setNeedsStatusBarAppearanceUpdate()
     }
 }
 
@@ -82,10 +108,9 @@ extension GalleryViewController: UICollectionViewDataSource {
     }
 }
 
-extension GalleryViewController: UICollectionViewDelegate {
+extension GalleryViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let isHide = navigationController?.navigationBar.isHidden ?? false
-        navigationController?.setNavigationBarHidden(!isHide, animated: false)
+        changeNavBarHidden()
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
