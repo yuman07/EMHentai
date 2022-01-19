@@ -102,7 +102,7 @@ extension GalleryViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NSStringFromClass(PageCollectionViewCell.self), for: indexPath)
         if let cell = cell as? PageCollectionViewCell {
-            cell.updateImageWith(filePath: FilePathHelper.imagePath(of: self.book, at: indexPath.row))
+            cell.updateImageWith(filePath: book.imagePath(at: indexPath.row))
         }
         return cell
     }

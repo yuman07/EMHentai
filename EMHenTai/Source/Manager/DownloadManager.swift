@@ -40,7 +40,7 @@ class DownloadManager {
             if self.downloadState(of: book) != .ing { return }
             
             let destination: DownloadRequest.Destination = { _, _ in
-                (URL(fileURLWithPath: FilePathHelper.imagePath(of: book, at: index)), [.removePreviousFile, .createIntermediateDirectories])
+                (URL(fileURLWithPath: book.imagePath(at: index)), [.removePreviousFile, .createIntermediateDirectories])
             }
             
             sema.wait()
@@ -69,7 +69,7 @@ class DownloadManager {
         let isRunning = runningDownload.contains(book.gid)
         lock.unlock()
         
-        let contents = try? FileManager.default.contentsOfDirectory(atPath: FilePathHelper.bookFolderPath(of: book))
+        let contents = try? FileManager.default.contentsOfDirectory(atPath: book.folderPath)
         
         if contents == nil || contents!.isEmpty {
             return isRunning ? .ing : .before
