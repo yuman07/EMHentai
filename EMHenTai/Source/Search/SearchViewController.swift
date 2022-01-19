@@ -29,9 +29,9 @@ class SearchViewController: UIViewController {
         "Misc",
     ]
     
-    private lazy var searchInfo = SearchInfo()
+    private var searchInfo = SearchInfo()
     
-    weak var listVC: BookViewController?
+    weak var bookVC: BookViewController?
     weak var textField: UITextField?
     
     private lazy var tableView: UITableView = {
@@ -79,7 +79,7 @@ class SearchViewController: UIViewController {
     @objc
     private func searchAction() {
         searchInfo.keyWord = textField?.text ?? ""
-        listVC?.refreshData(with: searchInfo)
+        bookVC?.refreshData(with: searchInfo)
         navigationController?.popViewController(animated: true)
     }
 }

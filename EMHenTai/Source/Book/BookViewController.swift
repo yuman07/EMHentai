@@ -14,27 +14,19 @@ enum BookVCType {
     case Download
 }
 
-class BookViewController: UIViewController {
+class BookViewController: UITableViewController {
     let type: BookVCType
-    var searchInfo: SearchInfo? {
+    var searchInfo = SearchInfo() {
         didSet {
             hasNext = true
         }
     }
-    var hasNext = true
+    var hasNext = true {
+        didSet {
+            footerView.isHidden = hasNext
+        }
+    }
     var books = [Book]()
-    
-    lazy var tableView: UITableView = {
-        let table = UITableView()
-        table.delegate = self
-        table.dataSource = self
-        table.prefetchDataSource = self
-        table.estimatedRowHeight = 150
-        table.estimatedSectionHeaderHeight = 0
-        table.estimatedSectionFooterHeight = 0
-        table.register(BookTableViewCell.self, forCellReuseIdentifier: NSStringFromClass(BookTableViewCell.self))
-        return table
-    }()
     
     init(type: BookVCType) {
         self.type = type
@@ -53,15 +45,35 @@ class BookViewController: UIViewController {
         setupData()
     }
     
+    private let footerView: UIView = {
+        let view = UIView()
+        let label = UILabel()
+        label.text = "到底啦~"
+        label.font = UIFont.systemFont(ofSize: 14)
+        label.sizeToFit()
+        view.frame = CGRect(x: 0, y: 0, width: 0, height: label.bounds.size.height + 20)
+        view.isHidden = true
+        view.addSubview(label)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        label.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        return view
+    }()
+    
     private func setupView() {
         view.backgroundColor = .white
-        view.addSubview(tableView)
         
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
-        tableView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor).isActive = true
-        tableView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.estimatedRowHeight = 150
+        tableView.estimatedSectionHeaderHeight = 0
+        tableView.estimatedSectionFooterHeight = 0
+        tableView.tableFooterView = footerView
+        tableView.register(BookTableViewCell.self, forCellReuseIdentifier: NSStringFromClass(BookTableViewCell.self))
+        
+        refreshControl = UIRefreshControl()
+        refreshControl?.attributedTitle = NSAttributedString(string: "刷新中...")
+        refreshControl?.addTarget(self, action: #selector(setupData), for: .valueChanged)
     }
     
     private func setupNavBar() {
@@ -76,10 +88,11 @@ class BookViewController: UIViewController {
         }
     }
     
+    @objc
     private func setupData() {
         switch type {
         case .Home:
-            refreshData(with: SearchInfo())
+            refreshData(with: searchInfo)
         case .History:
             refreshData(with: nil)
         case .Download:
@@ -88,46 +101,51 @@ class BookViewController: UIViewController {
     }
     
     func refreshData(with searchInfo: SearchInfo?) {
+        refreshControl?.beginRefreshing()
+        tableView.setContentOffset(CGPoint(x: 0, y: tableView.contentOffset.y - refreshControl!.frame.size.height), animated: true)
         switch type {
         case .Home:
-            guard let searchInfo = searchInfo else { return }
+            guard let searchInfo = searchInfo else { refreshControl?.endRefreshing(); return }
             self.searchInfo = searchInfo
             SearchManager.shared.searchWith(info: searchInfo) { [weak self] books in
                 guard let self = self else { return }
                 self.books = books
                 self.hasNext = !books.isEmpty
                 self.tableView.reloadData()
+                self.refreshControl?.endRefreshing()
             }
         case .History:
-            break
+            refreshControl?.endRefreshing()
         case .Download:
-            break
+            refreshControl?.endRefreshing()
         }
     }
     
     func loadMoreData() {
-        guard var searchInfo = self.searchInfo, type == .Home, hasNext else { return }
-        searchInfo.pageIndex += 1
-        SearchManager.shared.searchWith(info: searchInfo) { [weak self] books in
+        guard type == .Home, hasNext else { return }
+        var nextInfo = searchInfo
+        nextInfo.pageIndex += 1
+        SearchManager.shared.searchWith(info: nextInfo) { [weak self] books in
             guard let self = self else { return }
             if books.isEmpty {
                 self.hasNext = false
             } else {
                 self.hasNext = true
                 self.books += books
-                self.searchInfo?.pageIndex += 1
+                self.searchInfo.pageIndex += 1
                 self.tableView.reloadData()
             }
         }
     }
 }
 
-extension BookViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+// UITableViewDataSource
+extension BookViewController {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return books.count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(BookTableViewCell.self), for: indexPath)
         if let cell = cell as? BookTableViewCell, indexPath.row < books.count {
             cell.updateWith(book: books[indexPath.row])
@@ -136,19 +154,18 @@ extension BookViewController: UITableViewDataSource {
     }
 }
 
-extension BookViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+// UITableViewDelegate
+extension BookViewController {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         if indexPath.row < books.count {
             navigationController?.pushViewController(GalleryViewController(book: books[indexPath.row]), animated: true)
         }
     }
-}
-
-extension BookViewController: UITableViewDataSourcePrefetching {
-    func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
-        let prefetchPoint = Int(Double(books.count) * 0.8)
-        if let last = indexPaths.last, last.row >= prefetchPoint {
+    
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let prefetchPoint = Int(Double(books.count) * 0.7)
+        if indexPath.row >= prefetchPoint {
             loadMoreData()
         }
     }
@@ -159,7 +176,7 @@ extension BookViewController {
     @objc
     func jumpToSearchPage() {
         let searchVC = SearchViewController()
-        searchVC.listVC = self
+        searchVC.bookVC = self
         navigationController?.pushViewController(searchVC, animated: true)
     }
 }
