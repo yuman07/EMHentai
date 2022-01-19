@@ -1,5 +1,5 @@
 //
-//  PageCollectionViewCell.swift
+//  GalleryCollectionViewCell.swift
 //  EMHenTai
 //
 //  Created by yuman on 2022/1/18.
@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class PageCollectionViewCell: UICollectionViewCell {
+class GalleryCollectionViewCell: UICollectionViewCell {
     
     private let imageView: UIImageView = {
         let img = UIImageView()

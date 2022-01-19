@@ -28,7 +28,7 @@ class GalleryViewController: UIViewController {
         view.isPagingEnabled = true
         view.backgroundColor = .black
         view.contentInsetAdjustmentBehavior = .never
-        view.register(PageCollectionViewCell.self, forCellWithReuseIdentifier: NSStringFromClass(PageCollectionViewCell.self))
+        view.register(GalleryCollectionViewCell.self, forCellWithReuseIdentifier: NSStringFromClass(GalleryCollectionViewCell.self))
         return view
     }()
     
@@ -100,8 +100,8 @@ extension GalleryViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NSStringFromClass(PageCollectionViewCell.self), for: indexPath)
-        if let cell = cell as? PageCollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NSStringFromClass(GalleryCollectionViewCell.self), for: indexPath)
+        if let cell = cell as? GalleryCollectionViewCell {
             cell.updateImageWith(filePath: book.imagePath(at: indexPath.row))
         }
         return cell
