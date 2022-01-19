@@ -40,7 +40,7 @@ class SearchManager {
                     var count = 0
                     let start = value.index(value.startIndex, offsetBy: index + target.count)
                     var end = value.index(after: start)
-                    while count < 2 {
+                    while count < 2 && end < value.endIndex {
                         if value[end] == "/" { count += 1 }
                         end = value.index(after: end)
                     }

@@ -118,7 +118,7 @@ class DownloadManager {
                 let urls = value.allIndicesOf(string: SearchInfo.currentSource + "s/").map { index -> String in
                     let start = value.index(value.startIndex, offsetBy: index)
                     var end = value.index(after: start)
-                    while value[end] != "\"" {
+                    while value[end] != "\"" && end < value.endIndex {
                         end = value.index(after: end)
                     }
                     return "\(value[start..<end])"
@@ -139,7 +139,7 @@ class DownloadManager {
                             guard let showKey = value.range(of: "showkey=\"").map({ range -> Substring in
                                 let start = range.upperBound
                                 var end = value.index(after: start)
-                                while value[end] != "\"" {
+                                while value[end] != "\"" && end < value.endIndex {
                                     end = value.index(after: end)
                                 }
                                 return value[start..<end]
@@ -164,7 +164,7 @@ class DownloadManager {
                                     guard let img = value.i3.range(of: "src=\"").map({ range -> String in
                                         let start = range.upperBound
                                         var end = value.i3.index(after: start)
-                                        while value.i3[end] != "\"" {
+                                        while value.i3[end] != "\"" && end < value.i3.endIndex {
                                             end = value.i3.index(after: end)
                                         }
                                         return "\(value.i3[start..<end])"
