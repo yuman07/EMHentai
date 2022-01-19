@@ -17,7 +17,7 @@ struct SearchInfo {
         set { UserDefaults.standard.set(newValue, forKey: "SearchInfo_searchSource") }
         get { (UserDefaults.standard.object(forKey: "SearchInfo_searchSource") as? String) ?? SearchSource.EHentai.rawValue }
     }
-    private static var keyWord = "王都"
+    private static var keyWord = ""
     var keyWord: String {
         set { SearchInfo.keyWord = newValue }
         get { SearchInfo.keyWord }
