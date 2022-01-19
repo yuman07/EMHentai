@@ -1,11 +1,15 @@
 //
-//  Book+Path.swift
+//  Book+Tools.swift
 //  EMHenTai
 //
 //  Created by yuman on 2022/1/19.
 //
 
 import Foundation
+
+extension Book {
+    var showTitle: String { title_jpn.isEmpty ? title : title_jpn }
+}
 
 extension Book {
     private static var downloadFolderPath: String {
@@ -22,5 +26,12 @@ extension Book {
     
     func imagePath(at index: Int) -> String {
         self.folderPath + "/\(gid)-\(index).jpg"
+    }
+    
+    var downloadedFileCount: String {
+        if let content = try? FileManager.default.contentsOfDirectory(atPath: folderPath) {
+            return "\(content.count)"
+        }
+        return "0"
     }
 }

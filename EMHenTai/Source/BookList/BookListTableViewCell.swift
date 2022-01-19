@@ -13,26 +13,34 @@ class BookListTableViewCell: UITableViewCell {
     
     var book: Book?
     
-    let thumbImageView: UIImageView = {
+    var longPressBlock: (() -> ())?
+    
+    private let thumbImageView: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFit
         return view
     }()
     
-    let titleLabel: UILabel = {
+    private let titleLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
         label.font = UIFont.systemFont(ofSize: 13)
         return label
     }()
     
-    let categoryLabel: UILabel = {
+    private let categoryLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 12)
         return label
     }()
     
-    let scoreLabel: UILabel = {
+    private let progressLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 12)
+        return label
+    }()
+    
+    private let scoreLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 12)
         return label
@@ -41,6 +49,8 @@ class BookListTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
+        setupGesture()
+        setupNoticication()
     }
     
     required init?(coder: NSCoder) {
@@ -51,6 +61,7 @@ class BookListTableViewCell: UITableViewCell {
         contentView.addSubview(thumbImageView)
         contentView.addSubview(titleLabel)
         contentView.addSubview(categoryLabel)
+        contentView.addSubview(progressLabel)
         contentView.addSubview(scoreLabel)
         
         thumbImageView.translatesAutoresizingMaskIntoConstraints = false
@@ -71,17 +82,65 @@ class BookListTableViewCell: UITableViewCell {
         categoryLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8).isActive = true
         categoryLabel.leftAnchor.constraint(equalTo: titleLabel.leftAnchor).isActive = true
         
+        progressLabel.translatesAutoresizingMaskIntoConstraints = false
+        progressLabel.bottomAnchor.constraint(equalTo: scoreLabel.bottomAnchor).isActive = true
+        progressLabel.leftAnchor.constraint(equalTo: titleLabel.leftAnchor).isActive = true
+        
         scoreLabel.translatesAutoresizingMaskIntoConstraints = false
         scoreLabel.bottomAnchor.constraint(equalTo: thumbImageView.bottomAnchor).isActive = true
         scoreLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -8).isActive = true
     }
     
+    private func setupGesture() {
+        contentView.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(longPressAction)))
+    }
+    
+    private func setupNoticication() {
+        NotificationCenter.default.addObserver(forName: DownloadManager.DownloadPageSuccessNotification,
+                                               object: nil,
+                                               queue: .main) { notification in
+            guard let gid = notification.object as? Int else { return }
+            guard let book = self.book else { return }
+            guard book.gid == gid else { return }
+            self.updateProgress()
+        }
+        NotificationCenter.default.addObserver(forName: DownloadManager.DownloadStateChangedNotification,
+                                               object: nil,
+                                               queue: .main) { notification in
+            guard let gid = notification.object as? Int else { return }
+            guard let book = self.book else { return }
+            guard book.gid == gid else { return }
+            self.updateProgress()
+        }
+    }
+    
+    private func updateProgress() {
+        progressLabel.text = ""
+        guard let book = self.book else { return }
+        
+        switch DownloadManager.shared.downloadState(of: book) {
+        case .before:
+            break
+        case .ing:
+            progressLabel.text = "下载中：" + "\(book.downloadedFileCount)/\(book.filecount)"
+        case .suspend:
+            progressLabel.text = "已暂停：" + "\(book.downloadedFileCount)/\(book.filecount)"
+        case .finish:
+            progressLabel.text = "已下载"
+        }
+    }
+    
     func updateWith(book: Book) {
         self.book = book
-        
         thumbImageView.kf.setImage(with: URL(string: book.thumb))
-        titleLabel.text = book.title
+        titleLabel.text = book.showTitle
         categoryLabel.text = book.category
         scoreLabel.text = book.rating
+        updateProgress()
+    }
+    
+    @objc
+    private func longPressAction() {
+        longPressBlock?()
     }
 }

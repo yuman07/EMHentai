@@ -62,7 +62,7 @@ class BookListViewController: UITableViewController {
         switch type {
         case .Home:
             navigationItem.title = "主页"
-            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(jumpToSearchPage))
+            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(tapNavBarRightItem))
         case .History:
             navigationItem.title = "历史"
         case .Download:
@@ -129,6 +129,53 @@ class BookListViewController: UITableViewController {
             }
         }
     }
+    
+    @objc
+    private func tapNavBarRightItem() {
+        switch type {
+        case .Home:
+            let searchVC = SearchViewController()
+            searchVC.bookVC = self
+            navigationController?.pushViewController(searchVC, animated: true)
+        case .History:
+            break
+        case .Download:
+            break
+        }
+    }
+    
+    private func makeAlertVC(with book: Book) -> UIAlertController {
+        let vc = UIAlertController(title: "", message: book.showTitle, preferredStyle: .alert)
+        let state = DownloadManager.shared.downloadState(of: book)
+        
+        switch state {
+        case .before:
+            vc.addAction(UIAlertAction(title: "下载", style: .default, handler: { _ in
+                DownloadManager.shared.download(book: book)
+            }))
+        case .ing:
+            vc.addAction(UIAlertAction(title: "暂停", style: .default, handler: { _ in
+                DownloadManager.shared.suspend(book: book)
+            }))
+        case .suspend:
+            vc.addAction(UIAlertAction(title: "继续下载", style: .default, handler: { _ in
+                DownloadManager.shared.download(book: book)
+            }))
+        case .finish:
+            break
+        }
+        if state != .before {
+            vc.addAction(UIAlertAction(title: "删除", style: .default, handler: { _ in
+                DownloadManager.shared.remove(book: book)
+            }))
+        }
+        
+        vc.addAction(UIAlertAction(title: "详细信息", style: .default, handler: { _ in
+            print("查看详细信息~")
+        }))
+        vc.addAction(UIAlertAction(title: "没事", style: .cancel, handler: nil))
+        return vc
+    }
 }
 
 // UITableViewDataSource
@@ -140,7 +187,11 @@ extension BookListViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(BookListTableViewCell.self), for: indexPath)
         if let cell = cell as? BookListTableViewCell, indexPath.row < books.count {
-            cell.updateWith(book: books[indexPath.row])
+            let book = books[indexPath.row]
+            cell.updateWith(book: book)
+            cell.longPressBlock = {
+                self.present(self.makeAlertVC(with: book), animated: true, completion: nil)
+            }
         }
         return cell
     }
@@ -163,12 +214,3 @@ extension BookListViewController {
     }
 }
 
-// Home
-extension BookListViewController {
-    @objc
-    func jumpToSearchPage() {
-        let searchVC = SearchViewController()
-        searchVC.bookVC = self
-        navigationController?.pushViewController(searchVC, animated: true)
-    }
-}
