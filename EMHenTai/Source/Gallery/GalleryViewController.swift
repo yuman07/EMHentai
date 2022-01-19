@@ -11,6 +11,8 @@ import UIKit
 class GalleryViewController: UIViewController {
     private var book: Book!
     
+    var isRotating = false
+    
     private let navBarBackgroundView: UIView = {
         let view = UIView()
         view.backgroundColor = .systemGroupedBackground
@@ -75,6 +77,18 @@ class GalleryViewController: UIViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "回到第一页", style: .plain, target: self, action: #selector(backToFirstPage))
     }
     
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        
+        isRotating = true
+        let currentIndex = Int(collectionView.contentOffset.x / collectionView.bounds.size.width)
+        coordinator.animate(alongsideTransition: nil) { _ in
+            self.isRotating = false
+            self.collectionView.collectionViewLayout.invalidateLayout()
+            self.collectionView.scrollToItem(at: IndexPath(row: currentIndex, section: 0), at: .centeredHorizontally, animated: false)
+        }
+    }
+    
     private func setupNotification() {
         NotificationCenter.default.addObserver(forName: DownloadManager.DownloadPageSuccessNotification,
                                                object: nil,
@@ -124,7 +138,7 @@ extension GalleryViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        collectionView.bounds.size
+        isRotating ? CGSize.zero : collectionView.bounds.size
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

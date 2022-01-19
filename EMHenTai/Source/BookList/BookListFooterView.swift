@@ -11,7 +11,7 @@ import UIKit
 enum BookListFooterHint: String {
     case none = " "
     case noData = "没有数据"
-    case noMoreData = "没有更多数据"
+    case noMoreData = "没有更多数据了"
     case netError = "网络错误：请检查网络连接或VPN设置"
 }
 
