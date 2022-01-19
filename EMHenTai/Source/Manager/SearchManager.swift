@@ -14,9 +14,9 @@ class SearchManager {
     
     private let lock = NSLock()
     private var runningURL: String?
-    private var waitingRequest: (info: SearchInfo, completion: ([Book]) -> Void)?
+    private var waitingRequest: (info: SearchInfo, completion: ([Book], Bool) -> Void)?
     
-    func searchWith(info: SearchInfo, completion: @escaping ([Book]) -> Void) {
+    func searchWith(info: SearchInfo, completion: @escaping ([Book], Bool) -> Void) {
         let url = info.requestString
         
         do {
@@ -48,7 +48,7 @@ class SearchManager {
                 }
                 
                 if ids.count == 0 {
-                    self.requestFinish(result: [], completion: completion)
+                    self.requestFinish(result: ([], false), completion: completion)
                     return
                 }
                 
@@ -63,24 +63,24 @@ class SearchManager {
                 ).responseDecodable(of: Gmetadata.self, queue: .global()) { response in
                     switch response.result {
                     case .success(let value):
-                        self.requestFinish(result: value.gmetadata, completion: completion)
+                        self.requestFinish(result: (value.gmetadata, false), completion: completion)
                     case .failure:
-                        self.requestFinish(result: [], completion: completion)
+                        self.requestFinish(result: ([], true), completion: completion)
                     }
                 }
             case .failure:
-                self.requestFinish(result: [], completion: completion)
+                self.requestFinish(result: ([], true), completion: completion)
             }
         }
     }
     
-    private func requestFinish(result: [Book], completion: @escaping ([Book]) -> Void) {
+    private func requestFinish(result: ([Book], Bool), completion: @escaping ([Book], Bool) -> Void) {
         lock.lock()
         runningURL = nil
         if waitingRequest == nil {
             lock.unlock()
             DispatchQueue.main.async {
-                completion(result)
+                completion(result.0, result.1)
             }
         } else {
             let next = waitingRequest!

@@ -21,11 +21,7 @@ class BookViewController: UITableViewController {
             hasNext = true
         }
     }
-    var hasNext = true {
-        didSet {
-            footerView.isHidden = hasNext
-        }
-    }
+    var hasNext = true
     var books = [Book]()
     
     init(type: BookVCType) {
@@ -45,20 +41,7 @@ class BookViewController: UITableViewController {
         setupData()
     }
     
-    private let footerView: UIView = {
-        let view = UIView()
-        let label = UILabel()
-        label.text = "到底啦~"
-        label.font = UIFont.systemFont(ofSize: 14)
-        label.sizeToFit()
-        view.frame = CGRect(x: 0, y: 0, width: 0, height: label.bounds.size.height + 20)
-        view.isHidden = true
-        view.addSubview(label)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        label.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-        return view
-    }()
+    private let footerView = BookFooterView()
     
     private func setupView() {
         view.backgroundColor = .white
@@ -107,10 +90,15 @@ class BookViewController: UITableViewController {
         case .Home:
             guard let searchInfo = searchInfo else { refreshControl?.endRefreshing(); return }
             self.searchInfo = searchInfo
-            SearchManager.shared.searchWith(info: searchInfo) { [weak self] books in
+            SearchManager.shared.searchWith(info: searchInfo) { [weak self] books, isHappenNetError in
                 guard let self = self else { return }
                 self.books = books
                 self.hasNext = !books.isEmpty
+                if isHappenNetError {
+                    self.footerView.update(hint: .netError)
+                } else {
+                    self.footerView.update(hint: self.hasNext ? .none : .noData)
+                }
                 self.tableView.reloadData()
                 self.refreshControl?.endRefreshing()
             }
@@ -125,7 +113,7 @@ class BookViewController: UITableViewController {
         guard type == .Home, hasNext else { return }
         var nextInfo = searchInfo
         nextInfo.pageIndex += 1
-        SearchManager.shared.searchWith(info: nextInfo) { [weak self] books in
+        SearchManager.shared.searchWith(info: nextInfo) { [weak self] books, isHappenNetError in
             guard let self = self else { return }
             if books.isEmpty {
                 self.hasNext = false
@@ -134,6 +122,11 @@ class BookViewController: UITableViewController {
                 self.books += books
                 self.searchInfo.pageIndex += 1
                 self.tableView.reloadData()
+            }
+            if isHappenNetError {
+                self.footerView.update(hint: .netError)
+            } else {
+                self.footerView.update(hint: self.hasNext ? .none : .noMoreData)
             }
         }
     }
