@@ -8,14 +8,14 @@
 import Foundation
 import UIKit
 
-enum ListStyle {
+enum BookVCType {
     case Home
     case History
     case Download
 }
 
 class BookViewController: UIViewController {
-    let style: ListStyle
+    let type: BookVCType
     var searchInfo: SearchInfo? {
         didSet {
             hasNext = true
@@ -36,13 +36,13 @@ class BookViewController: UIViewController {
         return table
     }()
     
-    init(style: ListStyle) {
-        self.style = style
+    init(type: BookVCType) {
+        self.type = type
         super.init(nibName: nil, bundle: nil)
     }
     
     required init?(coder: NSCoder) {
-        self.style = .Home
+        self.type = .Home
         super.init(coder: coder)
     }
     
@@ -65,7 +65,7 @@ class BookViewController: UIViewController {
     }
     
     private func setupNavBar() {
-        switch style {
+        switch type {
         case .Home:
             navigationItem.title = "主页"
             navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(jumpToSearchPage))
@@ -77,7 +77,7 @@ class BookViewController: UIViewController {
     }
     
     private func setupData() {
-        switch style {
+        switch type {
         case .Home:
             refreshData(with: SearchInfo())
         case .History:
@@ -88,7 +88,7 @@ class BookViewController: UIViewController {
     }
     
     func refreshData(with searchInfo: SearchInfo?) {
-        switch style {
+        switch type {
         case .Home:
             guard let searchInfo = searchInfo else { return }
             self.searchInfo = searchInfo
@@ -106,7 +106,7 @@ class BookViewController: UIViewController {
     }
     
     func loadMoreData() {
-        guard var searchInfo = self.searchInfo, style == .Home, hasNext else { return }
+        guard var searchInfo = self.searchInfo, type == .Home, hasNext else { return }
         searchInfo.pageIndex += 1
         SearchManager.shared.searchWith(info: searchInfo) { [weak self] books in
             guard let self = self else { return }
