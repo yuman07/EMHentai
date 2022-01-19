@@ -46,7 +46,13 @@ class GalleryViewController: UIViewController {
         super.viewDidLoad()
         setupView()
         setupNotification()
+        backToLastSeenPage()
         DownloadManager.shared.download(book: self.book)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        DownloadManager.shared.suspend(book: book)
     }
     
     private func setupView() {
@@ -65,13 +71,15 @@ class GalleryViewController: UIViewController {
         navBarBackgroundView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor).isActive = true
         navBarBackgroundView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor).isActive = true
         navBarBackgroundView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "回到第一页", style: .plain, target: self, action: #selector(backToFirstPage))
     }
     
     private func setupNotification() {
         NotificationCenter.default.addObserver(forName: DownloadManager.DownloadPageSuccessNotification,
                                                object: nil,
                                                queue: .main) { notification in
-            if let obj = notification.object, let gid = obj as? Int, gid == self.book.gid {
+            if let gid = notification.object as? Int, gid == self.book.gid {
                 self.collectionView.reloadData()
             }
         }
@@ -87,6 +95,26 @@ class GalleryViewController: UIViewController {
         navigationController?.setNavigationBarHidden(!isHide, animated: false)
         navBarBackgroundView.isHidden = !isHide
         setNeedsStatusBarAppearanceUpdate()
+    }
+    
+    private func backToLastSeenPage() {
+        let lastIndex = self.getLastSeenPageIndex(of: self.book)
+        DispatchQueue.main.async {
+            self.collectionView.setContentOffset(CGPoint(x: self.collectionView.bounds.size.width * CGFloat(lastIndex), y: 0), animated: false)
+        }
+    }
+    
+    @objc
+    private func backToFirstPage() {
+        collectionView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+    }
+
+    private func saveLastSeenPageIndex(of book: Book, index: Int) {
+        UserDefaults.standard.set(index, forKey: "GalleryViewController_lastPageIndex_\(book.gid)")
+    }
+    
+    private func getLastSeenPageIndex(of book: Book) -> Int {
+        UserDefaults.standard.integer(forKey: "GalleryViewController_lastPageIndex_\(book.gid)")
     }
 }
 
@@ -115,5 +143,6 @@ extension GalleryViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         navigationItem.title = "\(indexPath.row + 1)/\(self.book.filecount)"
+        saveLastSeenPageIndex(of: book, index: indexPath.row)
     }
 }
