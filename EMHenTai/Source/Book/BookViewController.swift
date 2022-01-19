@@ -1,5 +1,5 @@
 //
-//  ListViewController.swift
+//  BookViewController.swift
 //  EMHenTai
 //
 //  Created by yuman on 2022/1/14.
@@ -14,7 +14,7 @@ enum ListStyle {
     case Download
 }
 
-class ListViewController: UIViewController {
+class BookViewController: UIViewController {
     let style: ListStyle
     var searchInfo: SearchInfo? {
         didSet {
@@ -122,7 +122,7 @@ class ListViewController: UIViewController {
     }
 }
 
-extension ListViewController: UITableViewDataSource {
+extension BookViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return books.count
     }
@@ -136,7 +136,7 @@ extension ListViewController: UITableViewDataSource {
     }
 }
 
-extension ListViewController: UITableViewDelegate {
+extension BookViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         if indexPath.row < books.count {
@@ -145,7 +145,7 @@ extension ListViewController: UITableViewDelegate {
     }
 }
 
-extension ListViewController: UITableViewDataSourcePrefetching {
+extension BookViewController: UITableViewDataSourcePrefetching {
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         let prefetchPoint = Int(Double(books.count) * 0.8)
         if let last = indexPaths.last, last.row >= prefetchPoint {
@@ -155,7 +155,7 @@ extension ListViewController: UITableViewDataSourcePrefetching {
 }
 
 // Home
-extension ListViewController {
+extension BookViewController {
     @objc
     func jumpToSearchPage() {
         let searchVC = SearchViewController()
