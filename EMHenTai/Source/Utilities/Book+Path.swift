@@ -8,20 +8,16 @@
 import Foundation
 
 extension Book {
-    static private func documentFolderPath() -> String {
+    private static var downloadFolderPath: String {
         if let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first {
-            return path
+            return path + "/EMDownload"
         } else {
-            return NSHomeDirectory() + "/Documents"
+            return NSHomeDirectory() + "/Documents" + "/EMDownload"
         }
     }
     
-    static private func downloadFolderPath() -> String {
-        self.documentFolderPath() + "/EMDownload"
-    }
-    
     var folderPath: String {
-        Book.downloadFolderPath() + "/\(gid)"
+        Book.downloadFolderPath + "/\(gid)"
     }
     
     func imagePath(at index: Int) -> String {
