@@ -120,7 +120,7 @@ extension SearchViewController: UITableViewDataSource {
         case 1:
             return "语言"
         case 2:
-            return "搜索源"
+            return "数据源"
         case 3:
             return "星级"
         case 4:
@@ -150,11 +150,13 @@ extension SearchViewController: UITableViewDataSource {
             }
         case 1:
             cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(UITableViewCell.self), for: indexPath)
-            cell.textLabel?.text = "只看中文内容"
+            cell.textLabel?.text = "中文"
             cell.accessoryType = searchInfo.chineseOnly ? .checkmark : .none
         case 2:
             cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(UITableViewCell.self), for: indexPath)
-            cell.textLabel?.text = SearchSource.allCases[indexPath.row].rawValue
+            var text = SearchSource.allCases[indexPath.row].rawValue
+            if (SearchSource.allCases[indexPath.row] == .ExHentai && !SettingManager.shared.isLogin) { text += "(登录后可用)" }
+            cell.textLabel?.text = text
             cell.accessoryType = (searchInfo.source == SearchSource.allCases[indexPath.row].rawValue) ? .checkmark : .none
         case 3:
             cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(UITableViewCell.self), for: indexPath)

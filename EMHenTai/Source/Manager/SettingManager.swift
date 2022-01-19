@@ -10,4 +10,8 @@ import Foundation
 class SettingManager {
     static let shared = SettingManager()
     private init() {}
+    
+    var isLogin: Bool {
+        false
+    }
 }
