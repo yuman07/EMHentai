@@ -15,15 +15,20 @@ enum ListStyle {
 }
 
 class ListViewController: UIViewController {
-    
     let style: ListStyle
-    
+    var searchInfo: SearchInfo? {
+        didSet {
+            hasNext = true
+        }
+    }
+    var hasNext = true
     var books = [Book]()
     
     lazy var tableView: UITableView = {
         let table = UITableView()
         table.delegate = self
         table.dataSource = self
+        table.prefetchDataSource = self
         table.estimatedRowHeight = 150
         table.estimatedSectionHeaderHeight = 0
         table.estimatedSectionFooterHeight = 0
@@ -72,17 +77,46 @@ class ListViewController: UIViewController {
     }
     
     private func setupData() {
-        refreshDataWith(searchInfo: SearchInfo())
+        switch style {
+        case .Home:
+            refreshData(with: SearchInfo())
+        case .History:
+            refreshData(with: nil)
+        case .Download:
+            refreshData(with: nil)
+        }
     }
     
-    func refreshDataWith(searchInfo: SearchInfo) {
+    func refreshData(with searchInfo: SearchInfo?) {
+        switch style {
+        case .Home:
+            guard let searchInfo = searchInfo else { return }
+            self.searchInfo = searchInfo
+            SearchManager.shared.searchWith(info: searchInfo) { [weak self] books in
+                guard let self = self else { return }
+                self.books = books
+                self.hasNext = !books.isEmpty
+                self.tableView.reloadData()
+            }
+        case .History:
+            break
+        case .Download:
+            break
+        }
+    }
+    
+    func loadMoreData() {
+        guard var searchInfo = self.searchInfo, style == .Home, hasNext else { return }
+        searchInfo.pageIndex += 1
         SearchManager.shared.searchWith(info: searchInfo) { [weak self] books in
             guard let self = self else { return }
-            self.books = books
-            self.tableView.reloadData()
-            
             if books.isEmpty {
-                print("net error")
+                self.hasNext = false
+            } else {
+                self.hasNext = true
+                self.books += books
+                self.searchInfo?.pageIndex += 1
+                self.tableView.reloadData()
             }
         }
     }
@@ -107,6 +141,15 @@ extension ListViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         if indexPath.row < books.count {
             navigationController?.pushViewController(GalleryViewController(book: books[indexPath.row]), animated: true)
+        }
+    }
+}
+
+extension ListViewController: UITableViewDataSourcePrefetching {
+    func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+        let prefetchPoint = Int(Double(books.count) * 0.8)
+        if let last = indexPaths.last, last.row >= prefetchPoint {
+            loadMoreData()
         }
     }
 }

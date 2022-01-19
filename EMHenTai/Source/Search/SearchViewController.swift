@@ -79,7 +79,7 @@ class SearchViewController: UIViewController {
     @objc
     private func searchAction() {
         searchInfo.keyWord = textField?.text ?? ""
-        listVC?.refreshDataWith(searchInfo: searchInfo)
+        listVC?.refreshData(with: searchInfo)
         navigationController?.popViewController(animated: true)
     }
 }
