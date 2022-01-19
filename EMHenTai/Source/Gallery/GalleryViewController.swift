@@ -13,7 +13,7 @@ class GalleryViewController: UIViewController {
     
     private let navBarBackgroundView: UIView = {
         let view = UIView()
-        view.backgroundColor = .white
+        view.backgroundColor = .systemGroupedBackground
         return view
     }()
     

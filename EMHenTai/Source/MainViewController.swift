@@ -11,7 +11,7 @@ import UIKit
 class MainViewController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = .systemGroupedBackground
         viewControllers = [
             {
                 let vc = UINavigationController(rootViewController: BookListViewController(type: .Home))

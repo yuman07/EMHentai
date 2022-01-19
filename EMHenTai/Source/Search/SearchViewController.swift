@@ -66,7 +66,7 @@ class SearchViewController: UIViewController {
         navigationItem.title = "搜索"
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(searchAction))
         
-        view.backgroundColor = .white
+        view.backgroundColor = .systemGroupedBackground
         view.addSubview(tableView)
         
         tableView.translatesAutoresizingMaskIntoConstraints = false

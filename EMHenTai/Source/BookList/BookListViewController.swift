@@ -43,7 +43,7 @@ class BookListViewController: UITableViewController {
     private let footerView = BookListFooterView()
     
     private func setupView() {
-        view.backgroundColor = .white
+        view.backgroundColor = .systemGroupedBackground
         
         tableView.delegate = self
         tableView.dataSource = self
