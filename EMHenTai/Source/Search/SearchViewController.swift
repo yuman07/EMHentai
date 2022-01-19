@@ -31,7 +31,7 @@ class SearchViewController: UIViewController {
     
     private var searchInfo = SearchInfo()
     
-    weak var bookVC: BookViewController?
+    weak var bookVC: BookListViewController?
     weak var textField: UITextField?
     
     private lazy var tableView: UITableView = {

@@ -1,5 +1,5 @@
 //
-//  BookViewController.swift
+//  BookListViewController.swift
 //  EMHenTai
 //
 //  Created by yuman on 2022/1/14.
@@ -8,14 +8,14 @@
 import Foundation
 import UIKit
 
-enum BookVCType {
+enum BookListType {
     case Home
     case History
     case Download
 }
 
-class BookViewController: UITableViewController {
-    let type: BookVCType
+class BookListViewController: UITableViewController {
+    let type: BookListType
     var searchInfo = SearchInfo() {
         didSet {
             hasNext = true
@@ -24,7 +24,7 @@ class BookViewController: UITableViewController {
     var hasNext = true
     var books = [Book]()
     
-    init(type: BookVCType) {
+    init(type: BookListType) {
         self.type = type
         super.init(nibName: nil, bundle: nil)
     }
@@ -40,7 +40,7 @@ class BookViewController: UITableViewController {
         setupData()
     }
     
-    private let footerView = BookFooterView()
+    private let footerView = BookListFooterView()
     
     private func setupView() {
         view.backgroundColor = .white
@@ -51,7 +51,7 @@ class BookViewController: UITableViewController {
         tableView.estimatedSectionHeaderHeight = 0
         tableView.estimatedSectionFooterHeight = 0
         tableView.tableFooterView = footerView
-        tableView.register(BookTableViewCell.self, forCellReuseIdentifier: NSStringFromClass(BookTableViewCell.self))
+        tableView.register(BookListTableViewCell.self, forCellReuseIdentifier: NSStringFromClass(BookListTableViewCell.self))
         
         refreshControl = UIRefreshControl()
         refreshControl?.attributedTitle = NSAttributedString(string: "刷新中...")
@@ -132,14 +132,14 @@ class BookViewController: UITableViewController {
 }
 
 // UITableViewDataSource
-extension BookViewController {
+extension BookListViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return books.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(BookTableViewCell.self), for: indexPath)
-        if let cell = cell as? BookTableViewCell, indexPath.row < books.count {
+        let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(BookListTableViewCell.self), for: indexPath)
+        if let cell = cell as? BookListTableViewCell, indexPath.row < books.count {
             cell.updateWith(book: books[indexPath.row])
         }
         return cell
@@ -147,7 +147,7 @@ extension BookViewController {
 }
 
 // UITableViewDelegate
-extension BookViewController {
+extension BookListViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         if indexPath.row < books.count {
@@ -164,7 +164,7 @@ extension BookViewController {
 }
 
 // Home
-extension BookViewController {
+extension BookListViewController {
     @objc
     func jumpToSearchPage() {
         let searchVC = SearchViewController()

@@ -14,17 +14,17 @@ class MainViewController: UITabBarController {
         view.backgroundColor = .white
         viewControllers = [
             {
-                let vc = UINavigationController(rootViewController: BookViewController(type: .Home))
+                let vc = UINavigationController(rootViewController: BookListViewController(type: .Home))
                 vc.tabBarItem.title = "主页"
                 return vc
             }(),
             {
-                let vc = UINavigationController(rootViewController: BookViewController(type: .History))
+                let vc = UINavigationController(rootViewController: BookListViewController(type: .History))
                 vc.tabBarItem.title = "历史"
                 return vc
             }(),
             {
-                let vc = UINavigationController(rootViewController: BookViewController(type: .Download))
+                let vc = UINavigationController(rootViewController: BookListViewController(type: .Download))
                 vc.tabBarItem.title = "下载"
                 return vc
             }(),

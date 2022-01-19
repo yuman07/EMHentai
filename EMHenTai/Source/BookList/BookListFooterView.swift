@@ -1,5 +1,5 @@
 //
-//  BookFooterView.swift
+//  BookListFooterView.swift
 //  EMHenTai
 //
 //  Created by yuman on 2022/1/19.
@@ -8,14 +8,14 @@
 import Foundation
 import UIKit
 
-enum BookFooterHint: String {
+enum BookListFooterHint: String {
     case none = " "
     case noData = "没有数据"
     case noMoreData = "没有更多数据"
     case netError = "网络错误：请检查网络连接或VPN设置"
 }
 
-class BookFooterView: UIView {
+class BookListFooterView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
@@ -27,7 +27,7 @@ class BookFooterView: UIView {
     
     private let label: UILabel = {
         let label = UILabel()
-        label.text = BookFooterHint.none.rawValue
+        label.text = BookListFooterHint.none.rawValue
         label.font = UIFont.systemFont(ofSize: 14)
         label.sizeToFit()
         return label
@@ -42,7 +42,7 @@ class BookFooterView: UIView {
         label.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
     }
     
-    func update(hint: BookFooterHint) {
+    func update(hint: BookListFooterHint) {
         self.label.text = hint.rawValue
     }
 }

@@ -1,5 +1,5 @@
 //
-//  BookTableViewCell.swift
+//  BookListTableViewCell.swift
 //  EMHenTai
 //
 //  Created by yuman on 2022/1/17.
@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 import Kingfisher
 
-class BookTableViewCell: UITableViewCell {
+class BookListTableViewCell: UITableViewCell {
     
     var book: Book?
     
