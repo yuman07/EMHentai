@@ -9,9 +9,10 @@ import Foundation
 import UIKit
 
 class GalleryViewController: UIViewController {
-    private var book: Book!
     
+    private var book: Book!
     var isRotating = false
+    var isStartedDownloadFromOutside = false
     
     private let navBarBackgroundView: UIView = {
         let view = UIView()
@@ -49,6 +50,7 @@ class GalleryViewController: UIViewController {
         setupView()
         setupNotification()
         backToLastSeenPage()
+        if (DownloadManager.shared.downloadState(of: book) == .ing) { isStartedDownloadFromOutside = true }
         DownloadManager.shared.download(book: self.book)
         DBManager.shared.remove(book: book, at: .history)
         DBManager.shared.insertIfNotExist(book: book, at: .history)
@@ -56,7 +58,9 @@ class GalleryViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        DownloadManager.shared.suspend(book: book)
+        if !isStartedDownloadFromOutside {
+            DownloadManager.shared.suspend(book: book)
+        }
     }
     
     private func setupView() {

@@ -33,9 +33,6 @@ extension Book {
     }
     
     var downloadedFileCount: Int {
-        if let content = try? FileManager.default.contentsOfDirectory(atPath: folderPath) {
-            return content.count
-        }
-        return 0
+        (try? FileManager.default.contentsOfDirectory(atPath: folderPath))?.count ?? 0
     }
 }
