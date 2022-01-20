@@ -18,26 +18,27 @@ class DBManager {
     static let shared = DBManager()
     private init() {}
     
-    private(set) var historyBooks = [Book]()
-    private(set) var downloadBooks = [Book]()
-    
-    var persistentContainer: NSPersistentContainer {
-        (UIApplication.shared.delegate as! AppDelegate).persistentContainer
+    var context: NSManagedObjectContext {
+        (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     }
     
-    func setupDB() {
-        let context = persistentContainer.viewContext
-        
-        var request = NSFetchRequest<NSFetchRequestResult>(entityName: DBType.history.rawValue)
+    private(set) lazy var historyBooks: [Book] = {
+        var books = [Book]()
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: DBType.history.rawValue)
         if let result = try? context.fetch(request) as? [NSManagedObject] {
-            historyBooks = result.map { bookFrom(obj: $0) }.reversed()
+            books = result.map { bookFrom(obj: $0) }.reversed()
         }
-        
-        request = NSFetchRequest<NSFetchRequestResult>(entityName: DBType.download.rawValue)
+        return books
+    }()
+    
+    private(set) lazy var downloadBooks: [Book] = {
+        var books = [Book]()
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: DBType.download.rawValue)
         if let result = try? context.fetch(request) as? [NSManagedObject] {
-            downloadBooks = result.map { bookFrom(obj: $0) }.reversed()
+            books = result.map { bookFrom(obj: $0) }.reversed()
         }
-    }
+        return books
+    }()
     
     func insert(book: Book, at type: DBType) {
         switch type {
@@ -46,7 +47,6 @@ class DBManager {
         case .download:
             downloadBooks.insert(book, at: 0)
         }
-        let context = persistentContainer.viewContext
         let obj = NSEntityDescription.insertNewObject(forEntityName: type.rawValue, into: context)
         update(obj: obj, with: book)
         saveDB()
@@ -59,7 +59,6 @@ class DBManager {
         case .download:
             downloadBooks.removeAll { $0.gid == book.gid }
         }
-        let context = persistentContainer.viewContext
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: type.rawValue)
         request.predicate = NSPredicate(format: "gid = %d", book.gid)
         if let content = try? context.fetch(request) as? [NSManagedObject] {
@@ -69,7 +68,6 @@ class DBManager {
     }
     
     private func saveDB() {
-        let context = persistentContainer.viewContext
         if context.hasChanges {
             try? context.save()
         }
