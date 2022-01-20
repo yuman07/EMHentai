@@ -42,7 +42,9 @@ class BookListViewController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        tableView.reloadData()
+        if type != .Home {
+            self.refreshData(with: nil)
+        }
     }
     
     private let footerView = BookListFooterView()
@@ -113,6 +115,7 @@ class BookListViewController: UITableViewController {
             books = type == .History ? DBManager.shared.historyBooks : DBManager.shared.downloadBooks
             hasNext = false
             footerView.update(hint: books.isEmpty ? .noData : .noMoreData)
+            self.tableView.reloadData()
             refreshControl?.endRefreshing()
         }
     }

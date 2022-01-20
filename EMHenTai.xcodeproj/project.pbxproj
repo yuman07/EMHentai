@@ -17,6 +17,7 @@
 		7A1167952797DEA600C200CA /* Book+Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1167942797DEA600C200CA /* Book+Tools.swift */; };
 		7A116BAF2797EEFC00C200CA /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A116BAE2797EEFC00C200CA /* LoginViewController.swift */; };
 		7A1C12B027994BDD00ADD54E /* DBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1C12AF27994BDD00ADD54E /* DBManager.swift */; };
+		7A1C12B327995C5E00ADD54E /* EMDB.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7A1C12B127995C5E00ADD54E /* EMDB.xcdatamodeld */; };
 		7A6C95C727911DC200077093 /* BookListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A6C95C627911DC200077093 /* BookListViewController.swift */; };
 		7A6C95CC27911E4600077093 /* GalleryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A6C95CB27911E4600077093 /* GalleryViewController.swift */; };
 		7A6C95D127911E9A00077093 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A6C95D027911E9A00077093 /* SettingViewController.swift */; };
@@ -44,6 +45,7 @@
 		7A1167942797DEA600C200CA /* Book+Tools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Book+Tools.swift"; sourceTree = "<group>"; };
 		7A116BAE2797EEFC00C200CA /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		7A1C12AF27994BDD00ADD54E /* DBManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBManager.swift; sourceTree = "<group>"; };
+		7A1C12B227995C5E00ADD54E /* EMDB.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = EMDB.xcdatamodel; sourceTree = "<group>"; };
 		7A6C95C627911DC200077093 /* BookListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookListViewController.swift; sourceTree = "<group>"; };
 		7A6C95CB27911E4600077093 /* GalleryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryViewController.swift; sourceTree = "<group>"; };
 		7A6C95D027911E9A00077093 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
@@ -203,6 +205,7 @@
 				7AB967FD279117CD0006466A /* Assets.xcassets */,
 				7AB967FF279117CD0006466A /* LaunchScreen.storyboard */,
 				7AB96802279117CD0006466A /* Info.plist */,
+				7A1C12B127995C5E00ADD54E /* EMDB.xcdatamodeld */,
 			);
 			path = Support;
 			sourceTree = "<group>";
@@ -317,6 +320,7 @@
 				7A1167812796887500C200CA /* GalleryCollectionViewCell.swift in Sources */,
 				7A6C95D327911EB200077093 /* Book.swift in Sources */,
 				7A6C95D727911EF300077093 /* DownloadManager.swift in Sources */,
+				7A1C12B327995C5E00ADD54E /* EMDB.xcdatamodeld in Sources */,
 				7A1167852796970F00C200CA /* SettingManager.swift in Sources */,
 				7A11677A27954C7A00C200CA /* BookListTableViewCell.swift in Sources */,
 				7A1167932797D80B00C200CA /* BookListFooterView.swift in Sources */,
@@ -548,6 +552,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		7A1C12B127995C5E00ADD54E /* EMDB.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				7A1C12B227995C5E00ADD54E /* EMDB.xcdatamodel */,
+			);
+			currentVersion = 7A1C12B227995C5E00ADD54E /* EMDB.xcdatamodel */;
+			path = EMDB.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 7AB967E9279117CC0006466A /* Project object */;
 }

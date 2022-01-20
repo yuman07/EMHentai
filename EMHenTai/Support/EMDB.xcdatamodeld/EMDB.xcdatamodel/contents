@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19574" systemVersion="21C52" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="DownloadBook" representedClassName="DownloadBook" syncable="YES" codeGenerationType="class">
+        <attribute name="archiver_key" optional="YES" attributeType="String"/>
+        <attribute name="category" optional="YES" attributeType="String"/>
+        <attribute name="expunged" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="filecount" optional="YES" attributeType="String"/>
+        <attribute name="filesize" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="gid" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="posted" optional="YES" attributeType="String"/>
+        <attribute name="rating" optional="YES" attributeType="String"/>
+        <attribute name="tags" optional="YES" attributeType="String"/>
+        <attribute name="thumb" optional="YES" attributeType="String"/>
+        <attribute name="title" optional="YES" attributeType="String"/>
+        <attribute name="title_jpn" optional="YES" attributeType="String"/>
+        <attribute name="token" optional="YES" attributeType="String"/>
+        <attribute name="torrentcount" optional="YES" attributeType="String"/>
+        <attribute name="torrents" optional="YES" attributeType="String"/>
+        <attribute name="uploader" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="HistoryBook" representedClassName="HistoryBook" syncable="YES" codeGenerationType="class">
+        <attribute name="archiver_key" optional="YES" attributeType="String"/>
+        <attribute name="category" optional="YES" attributeType="String"/>
+        <attribute name="expunged" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="filecount" optional="YES" attributeType="String"/>
+        <attribute name="filesize" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="gid" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="posted" optional="YES" attributeType="String"/>
+        <attribute name="rating" optional="YES" attributeType="String"/>
+        <attribute name="tags" optional="YES" attributeType="String"/>
+        <attribute name="thumb" optional="YES" attributeType="String"/>
+        <attribute name="title" optional="YES" attributeType="String"/>
+        <attribute name="title_jpn" optional="YES" attributeType="String"/>
+        <attribute name="token" optional="YES" attributeType="String"/>
+        <attribute name="torrentcount" optional="YES" attributeType="String"/>
+        <attribute name="torrents" optional="YES" attributeType="String"/>
+        <attribute name="uploader" optional="YES" attributeType="String"/>
+    </entity>
+    <elements>
+        <element name="HistoryBook" positionX="-36" positionY="9" width="128" height="14"/>
+        <element name="DownloadBook" positionX="0" positionY="45" width="128" height="14"/>
+    </elements>
+</model>

@@ -23,10 +23,10 @@ struct Book: Codable {
     let posted: String
     let expunged: Bool
     let torrentcount: String
-    let torrents: [torrent]
+    let torrents: [Torrent]
 }
 
-struct torrent: Codable {
+struct Torrent: Codable {
     let hash: String
     let added: String
     let name: String
