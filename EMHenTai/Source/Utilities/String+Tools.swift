@@ -10,10 +10,9 @@ import Foundation
 extension String {
     func allIndicesOf(string: String) -> [Int] {
         var indices = [Int]()
-        var searchStartIndex = self.startIndex
-        while searchStartIndex < self.endIndex, let range = self.range(of: string, range: searchStartIndex..<self.endIndex), !range.isEmpty {
-            let index = distance(from: self.startIndex, to: range.lowerBound)
-            indices.append(index)
+        var searchStartIndex = startIndex
+        while searchStartIndex < endIndex, let range = range(of: string, range: searchStartIndex..<endIndex), !range.isEmpty {
+            indices.append(distance(from: startIndex, to: range.lowerBound))
             searchStartIndex = range.upperBound
         }
         return indices

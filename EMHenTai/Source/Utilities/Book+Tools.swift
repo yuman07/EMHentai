@@ -25,7 +25,7 @@ extension Book {
     }
     
     func imagePath(at index: Int) -> String {
-        self.folderPath + "/\(gid)-\(index).jpg"
+        folderPath + "/\(gid)-\(index).jpg"
     }
     
     var fileCountNum: Int {
