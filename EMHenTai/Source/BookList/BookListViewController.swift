@@ -24,6 +24,8 @@ class BookListViewController: UITableViewController {
     var hasNext = true
     var books = [Book]()
     
+    private let footerView = BookListFooterView()
+    
     init(type: BookListType) {
         self.type = type
         super.init(nibName: nil, bundle: nil)
@@ -46,8 +48,6 @@ class BookListViewController: UITableViewController {
             self.refreshData(with: nil)
         }
     }
-    
-    private let footerView = BookListFooterView()
     
     private func setupView() {
         view.backgroundColor = .systemGroupedBackground
@@ -88,7 +88,10 @@ class BookListViewController: UITableViewController {
             refreshData(with: nil)
         }
     }
-    
+}
+
+// MARK: load Data
+extension BookListViewController {
     func refreshData(with searchInfo: SearchInfo?) {
         refreshControl?.beginRefreshing()
         tableView.setContentOffset(CGPoint(x: 0, y: tableView.contentOffset.y - refreshControl!.frame.size.height), animated: true)
@@ -141,7 +144,10 @@ class BookListViewController: UITableViewController {
             }
         }
     }
-    
+}
+
+// MARK: TapNavBarRightItem
+extension BookListViewController {
     @objc
     private func tapNavBarRightItem() {
         switch type {
@@ -155,23 +161,23 @@ class BookListViewController: UITableViewController {
             break
         }
     }
-    
+}
+
+// MARK: AlertVC
+extension BookListViewController {
     private func makeAlertVC(with book: Book) -> UIAlertController {
         let vc = UIAlertController(title: "", message: book.showTitle, preferredStyle: .alert)
         let state = DownloadManager.shared.downloadState(of: book)
         
         switch state {
-        case .before:
+        case .before, .suspend:
             vc.addAction(UIAlertAction(title: "下载", style: .default, handler: { _ in
                 DownloadManager.shared.download(book: book)
+                DBManager.shared.insertIfNotExist(book: book, at: .download)
             }))
         case .ing:
             vc.addAction(UIAlertAction(title: "暂停", style: .default, handler: { _ in
                 DownloadManager.shared.suspend(book: book)
-            }))
-        case .suspend:
-            vc.addAction(UIAlertAction(title: "继续下载", style: .default, handler: { _ in
-                DownloadManager.shared.download(book: book)
             }))
         case .finish:
             break
@@ -190,7 +196,7 @@ class BookListViewController: UITableViewController {
     }
 }
 
-// UITableViewDataSource
+// MARK: UITableViewDataSource
 extension BookListViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return books.count
@@ -209,7 +215,7 @@ extension BookListViewController {
     }
 }
 
-// UITableViewDelegate
+// MARK: UITableViewDelegate
 extension BookListViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)

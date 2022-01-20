@@ -25,8 +25,8 @@ class DBManager {
     private(set) lazy var historyBooks: [Book] = {
         var books = [Book]()
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: DBType.history.rawValue)
-        if let result = try? context.fetch(request) as? [NSManagedObject] {
-            books = result.map { bookFrom(obj: $0) }.reversed()
+        if let objs = try? context.fetch(request) as? [NSManagedObject] {
+            books = objs.map { bookFrom(obj: $0) }.reversed()
         }
         return books
     }()
@@ -40,16 +40,21 @@ class DBManager {
         return books
     }()
     
-    func insert(book: Book, at type: DBType) {
+    func insertIfNotExist(book: Book, at type: DBType) {
         switch type {
         case .history:
             historyBooks.insert(book, at: 0)
         case .download:
             downloadBooks.insert(book, at: 0)
         }
-        let obj = NSEntityDescription.insertNewObject(forEntityName: type.rawValue, into: context)
-        update(obj: obj, with: book)
-        saveDB()
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: type.rawValue)
+        request.predicate = NSPredicate(format: "gid = %d", book.gid)
+        let isExist = ((try? context.fetch(request) as? [NSManagedObject]).map { $0.count > 0 }) ?? false
+        if !isExist {
+            let obj = NSEntityDescription.insertNewObject(forEntityName: type.rawValue, into: context)
+            update(obj: obj, with: book)
+            saveDB()
+        }
     }
     
     func remove(book: Book, at type: DBType) {
@@ -61,8 +66,22 @@ class DBManager {
         }
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: type.rawValue)
         request.predicate = NSPredicate(format: "gid = %d", book.gid)
-        if let content = try? context.fetch(request) as? [NSManagedObject] {
-            for obj in content { context.delete(obj) }
+        if let objs = try? context.fetch(request) as? [NSManagedObject] {
+            for obj in objs { context.delete(obj) }
+            saveDB()
+        }
+    }
+    
+    func removeAll(type: DBType) {
+        switch type {
+        case .history:
+            historyBooks.removeAll()
+        case .download:
+            downloadBooks.removeAll()
+        }
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: type.rawValue)
+        if let objs = try? context.fetch(request) as? [NSManagedObject] {
+            for obj in objs { context.delete(obj) }
             saveDB()
         }
     }

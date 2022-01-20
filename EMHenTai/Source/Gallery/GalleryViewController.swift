@@ -51,7 +51,7 @@ class GalleryViewController: UIViewController {
         backToLastSeenPage()
         DownloadManager.shared.download(book: self.book)
         DBManager.shared.remove(book: book, at: .history)
-        DBManager.shared.insert(book: book, at: .history)
+        DBManager.shared.insertIfNotExist(book: book, at: .history)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
