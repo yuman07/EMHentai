@@ -57,7 +57,7 @@ class DownloadManager {
                 switch response.result {
                 case .success:
                     sema.signal()
-                    if book.downloadedFileCount == book.filecount {
+                    if book.downloadedFileCount == book.fileCountNum {
                         self.lock.lock()
                         self.runningDownload.remove(book.gid)
                         self.lock.unlock()
@@ -99,9 +99,9 @@ class DownloadManager {
         let isRunning = runningDownload.contains(book.gid)
         lock.unlock()
         
-        if book.downloadedFileCount == "0" {
+        if book.downloadedFileCount == 0 {
             return isRunning ? .ing : .before
-        } else if book.downloadedFileCount == book.filecount {
+        } else if book.downloadedFileCount == book.fileCountNum {
             return .finish
         } else {
             return isRunning ? .ing : .suspend

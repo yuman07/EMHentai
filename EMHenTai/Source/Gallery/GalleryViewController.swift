@@ -50,6 +50,7 @@ class GalleryViewController: UIViewController {
         setupNotification()
         backToLastSeenPage()
         DownloadManager.shared.download(book: self.book)
+        DBManager.shared.append(book: book, at: .history)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -114,13 +115,15 @@ class GalleryViewController: UIViewController {
     private func backToLastSeenPage() {
         let lastIndex = self.getLastSeenPageIndex(of: self.book)
         DispatchQueue.main.async {
-            self.collectionView.setContentOffset(CGPoint(x: self.collectionView.bounds.size.width * CGFloat(lastIndex), y: 0), animated: false)
+            self.collectionView.scrollToItem(at: IndexPath(row: lastIndex, section: 0), at: .left, animated: false)
         }
     }
     
     @objc
     private func backToFirstPage() {
-        collectionView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+        if !collectionView.visibleCells.isEmpty {
+            collectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .left, animated: true)
+        }
     }
 
     private func saveLastSeenPageIndex(of book: Book, index: Int) {
@@ -134,7 +137,7 @@ class GalleryViewController: UIViewController {
 
 extension GalleryViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        Int(self.book.filecount) ?? 0
+        book.fileCountNum
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -156,7 +159,7 @@ extension GalleryViewController: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        navigationItem.title = "\(indexPath.row + 1)/\(self.book.filecount)"
+        navigationItem.title = "\(indexPath.row + 1)/\(book.fileCountNum)"
         saveLastSeenPageIndex(of: book, index: indexPath.row)
     }
 }

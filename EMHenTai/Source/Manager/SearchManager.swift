@@ -26,7 +26,7 @@ class SearchManager {
                 runningURL = url
             } else if runningURL! == url {
                 return
-            } else {
+            } else if waitingRequest == nil || info.pageIndex == 0 {
                 waitingRequest = (info, completion)
                 return
             }

@@ -122,9 +122,9 @@ class BookListTableViewCell: UITableViewCell {
         case .before:
             break
         case .ing:
-            progressLabel.text = "下载中：" + "\(book.downloadedFileCount)/\(book.filecount)"
+            progressLabel.text = "下载中：" + "\(book.downloadedFileCount)/\(book.fileCountNum)"
         case .suspend:
-            progressLabel.text = "已暂停：" + "\(book.downloadedFileCount)/\(book.filecount)"
+            progressLabel.text = "已暂停：" + "\(book.downloadedFileCount)/\(book.fileCountNum)"
         case .finish:
             progressLabel.text = "已下载"
         }

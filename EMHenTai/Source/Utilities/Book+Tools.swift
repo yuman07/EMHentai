@@ -28,10 +28,14 @@ extension Book {
         self.folderPath + "/\(gid)-\(index).jpg"
     }
     
-    var downloadedFileCount: String {
+    var fileCountNum: Int {
+        Int(filecount) ?? 0
+    }
+    
+    var downloadedFileCount: Int {
         if let content = try? FileManager.default.contentsOfDirectory(atPath: folderPath) {
-            return "\(content.count)"
+            return content.count
         }
-        return "0"
+        return 0
     }
 }

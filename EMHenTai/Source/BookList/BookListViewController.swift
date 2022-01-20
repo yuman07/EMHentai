@@ -40,6 +40,11 @@ class BookListViewController: UITableViewController {
         setupData()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tableView.reloadData()
+    }
+    
     private let footerView = BookListFooterView()
     
     private func setupView() {
@@ -98,12 +103,16 @@ class BookListViewController: UITableViewController {
                 } else {
                     self.footerView.update(hint: self.hasNext ? .none : .noData)
                 }
+                if !self.tableView.visibleCells.isEmpty {
+                    self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
+                }
                 self.tableView.reloadData()
                 self.refreshControl?.endRefreshing()
             }
-        case .History:
-            refreshControl?.endRefreshing()
-        case .Download:
+        case .History, .Download:
+            books = type == .History ? DBManager.shared.historyBooks : DBManager.shared.downloadBooks
+            hasNext = false
+            footerView.update(hint: books.isEmpty ? .noData : .noMoreData)
             refreshControl?.endRefreshing()
         }
     }
