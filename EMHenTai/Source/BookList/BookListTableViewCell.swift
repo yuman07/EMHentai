@@ -98,7 +98,8 @@ class BookListTableViewCell: UITableViewCell {
     private func setupNoticication() {
         NotificationCenter.default.addObserver(forName: DownloadManager.DownloadPageSuccessNotification,
                                                object: nil,
-                                               queue: .main) { notification in
+                                               queue: .main) { [weak self] notification in
+            guard let self = self else { return }
             guard let gid = notification.object as? Int else { return }
             guard let book = self.book else { return }
             guard book.gid == gid else { return }
@@ -106,7 +107,8 @@ class BookListTableViewCell: UITableViewCell {
         }
         NotificationCenter.default.addObserver(forName: DownloadManager.DownloadStateChangedNotification,
                                                object: nil,
-                                               queue: .main) { notification in
+                                               queue: .main) { [weak self] notification in
+            guard let self = self else { return }
             guard let gid = notification.object as? Int else { return }
             guard let book = self.book else { return }
             guard book.gid == gid else { return }
