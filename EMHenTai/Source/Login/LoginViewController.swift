@@ -42,6 +42,17 @@ class LoginViewController: UIViewController {
     
     private func setupData() {
         guard let url = URL(string: LoginViewController.loginURL) else { return }
+        webView.configuration.websiteDataStore.httpCookieStore.add(self)
         webView.load(URLRequest(url: url))
+    }
+}
+
+extension LoginViewController: WKHTTPCookieStoreObserver {
+    func cookiesDidChange(in cookieStore: WKHTTPCookieStore) {
+        cookieStore.getAllCookies { cookies in
+            for cookie in cookies {
+                HTTPCookieStorage.shared.setCookie(cookie)
+            }
+        }
     }
 }

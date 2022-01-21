@@ -10,7 +10,7 @@ import UIKit
 
 class GalleryViewController: UIViewController {
     
-    private var book: Book!
+    private let book: Book
     var isRotating = false
     var isStartedDownloadFromOutside = false
     
