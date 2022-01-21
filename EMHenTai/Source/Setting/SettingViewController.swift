@@ -93,7 +93,7 @@ extension SettingViewController: UITableViewDataSource {
         case 1:
             return "界面语言(重启生效)"
         case 2:
-            return "磁盘占用"
+            return "存储占用"
         default:
             return nil
         }
