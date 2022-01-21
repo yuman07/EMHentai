@@ -126,7 +126,7 @@ extension SearchViewController: UITableViewDataSource {
         case 4:
             return "分类"
         default:
-            return ""
+            return nil
         }
     }
     
@@ -140,30 +140,31 @@ extension SearchViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell: UITableViewCell!
+        if indexPath.section == 0 {
+            cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(TextFieldTableViewCell.self), for: indexPath)
+        } else {
+            cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(UITableViewCell.self), for: indexPath)
+        }
+        cell.selectionStyle = .none
         
         switch indexPath.section {
         case 0:
-            cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(TextFieldTableViewCell.self), for: indexPath)
             if let cell = cell as? TextFieldTableViewCell {
                 textField = cell.searchTextField
                 textField?.text = searchInfo.keyWord
             }
         case 1:
-            cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(UITableViewCell.self), for: indexPath)
             cell.textLabel?.text = "中文"
             cell.accessoryType = searchInfo.chineseOnly ? .checkmark : .none
         case 2:
-            cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(UITableViewCell.self), for: indexPath)
             var text = SearchSource.allCases[indexPath.row].rawValue
             if (SearchSource.allCases[indexPath.row] == .ExHentai && !SettingManager.shared.isLogin) { text += "(登录后可用)" }
             cell.textLabel?.text = text
             cell.accessoryType = (searchInfo.source == SearchSource.allCases[indexPath.row].rawValue) ? .checkmark : .none
         case 3:
-            cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(UITableViewCell.self), for: indexPath)
             cell.textLabel?.text = SearchViewController.ratings[indexPath.row]
             cell.accessoryType = (searchInfo.rating == indexPath.row) ? .checkmark : .none
         case 4:
-            cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(UITableViewCell.self), for: indexPath)
             cell.textLabel?.text = SearchViewController.categorys[indexPath.row]
             var type = UITableViewCell.AccessoryType.none
             switch indexPath.row {
@@ -192,10 +193,9 @@ extension SearchViewController: UITableViewDataSource {
             }
             cell.accessoryType = type
         default:
-            cell = UITableViewCell()
+            break
         }
         
-        cell.selectionStyle = .none
         return cell
     }
 }

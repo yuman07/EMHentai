@@ -26,6 +26,7 @@ class SettingViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        setupNotification()
     }
     
     private func setupUI() {
@@ -39,6 +40,14 @@ class SettingViewController: UIViewController {
         tableView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor).isActive = true
         tableView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor).isActive = true
         tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+    }
+    
+    private func setupNotification() {
+        NotificationCenter.default.addObserver(forName: SettingManager.LoginStateChangedNotification,
+                                               object: nil,
+                                               queue: .main) { [weak self] _ in
+            self?.tableView.reloadData()
+        }
     }
 }
 
@@ -102,7 +111,7 @@ extension SettingViewController: UITableViewDelegate {
         switch indexPath.section {
         case 0:
             if SettingManager.shared.isLogin {
-                tableView.reloadData()
+                SettingManager.shared.logout()
             } else {
                 navigationController?.pushViewController(LoginViewController(), animated: true)
             }
