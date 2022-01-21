@@ -28,7 +28,7 @@
 		7AB967F5279117CC0006466A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB967F4279117CC0006466A /* AppDelegate.swift */; };
 		7AB967FE279117CD0006466A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7AB967FD279117CD0006466A /* Assets.xcassets */; };
 		7AB96801279117CD0006466A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7AB967FF279117CD0006466A /* LaunchScreen.storyboard */; };
-		7AB9680B279118F90006466A /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB9680A279118F90006466A /* MainViewController.swift */; };
+		7AB9680B279118F90006466A /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB9680A279118F90006466A /* RootViewController.swift */; };
 		7AEDF3FC279138640064DB12 /* SearchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AEDF3FB279138640064DB12 /* SearchManager.swift */; };
 		7AEDF3FE279177720064DB12 /* SearchInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AEDF3FD279177720064DB12 /* SearchInfo.swift */; };
 		93E71501DFDB5FB91ED376A2 /* Pods_EMHenTai.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2104C61E89008033DC6B3C5C /* Pods_EMHenTai.framework */; };
@@ -60,7 +60,7 @@
 		7AB967FD279117CD0006466A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7AB96800279117CD0006466A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7AB96802279117CD0006466A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		7AB9680A279118F90006466A /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		7AB9680A279118F90006466A /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 		7AEDF3FB279138640064DB12 /* SearchManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchManager.swift; sourceTree = "<group>"; };
 		7AEDF3FD279177720064DB12 /* SearchInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchInfo.swift; sourceTree = "<group>"; };
 		B0B243D0240E92FA129A0D9A /* Pods-EMHenTai.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EMHenTai.debug.xcconfig"; path = "Target Support Files/Pods-EMHenTai/Pods-EMHenTai.debug.xcconfig"; sourceTree = "<group>"; };
@@ -200,7 +200,7 @@
 				7A6C95CE27911E5F00077093 /* Gallery */,
 				7A116BAD2797EEDD00C200CA /* Login */,
 				7AB967F4279117CC0006466A /* AppDelegate.swift */,
-				7AB9680A279118F90006466A /* MainViewController.swift */,
+				7AB9680A279118F90006466A /* RootViewController.swift */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -338,7 +338,7 @@
 				7A11677D2795690500C200CA /* String+Tools.swift in Sources */,
 				7AEDF3FC279138640064DB12 /* SearchManager.swift in Sources */,
 				7AEDF3FE279177720064DB12 /* SearchInfo.swift in Sources */,
-				7AB9680B279118F90006466A /* MainViewController.swift in Sources */,
+				7AB9680B279118F90006466A /* RootViewController.swift in Sources */,
 				7A1167892796D41F00C200CA /* TextFieldTableViewCell.swift in Sources */,
 				7A1167952797DEA600C200CA /* Book+Tools.swift in Sources */,
 				7A1C12B027994BDD00ADD54E /* DBManager.swift in Sources */,

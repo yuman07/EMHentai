@@ -16,7 +16,7 @@ extension Book {
         if let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first {
             return path + "/EMDownload"
         } else {
-            return NSHomeDirectory() + "/Documents" + "/EMDownload"
+            return NSHomeDirectory() + "/Documents/EMDownload"
         }
     }
     

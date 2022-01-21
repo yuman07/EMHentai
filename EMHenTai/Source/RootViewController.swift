@@ -1,5 +1,5 @@
 //
-//  MainViewController.swift
+//  RootViewController.swift
 //  EMHenTai
 //
 //  Created by yuman on 2022/1/14.
@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class MainViewController: UITabBarController {
+class RootViewController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemGroupedBackground
