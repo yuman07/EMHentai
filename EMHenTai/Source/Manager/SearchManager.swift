@@ -13,7 +13,7 @@ class SearchManager {
     private init() {}
     
     private let lock = NSLock()
-    private var runningURL: String?
+    private var runningInfo: SearchInfo?
     private var waitingRequest: (info: SearchInfo, completion: ([Book], Bool) -> Void)?
     
     func searchWith(info: SearchInfo, completion: @escaping ([Book], Bool) -> Void) {
@@ -22,11 +22,11 @@ class SearchManager {
         do {
             lock.lock()
             defer { lock.unlock() }
-            if runningURL == nil {
-                runningURL = url
-            } else if runningURL! == url {
+            if runningInfo == nil {
+                runningInfo = info
+            } else if runningInfo!.requestString == url {
                 return
-            } else if waitingRequest == nil || info.pageIndex == 0 {
+            } else if info.pageIndex == 0 || runningInfo!.pageIndex > 0 {
                 waitingRequest = (info, completion)
                 return
             }
@@ -76,7 +76,7 @@ class SearchManager {
     
     private func requestFinish(result: ([Book], Bool), completion: @escaping ([Book], Bool) -> Void) {
         lock.lock()
-        runningURL = nil
+        runningInfo = nil
         if waitingRequest == nil {
             lock.unlock()
             DispatchQueue.main.async {
