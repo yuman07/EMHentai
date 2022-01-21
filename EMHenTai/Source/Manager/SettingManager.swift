@@ -7,6 +7,11 @@
 
 import Foundation
 
+enum UserLanguage: String, CaseIterable {
+    case chineseSimplified = "简体中文"
+    case english = "英文"
+}
+
 class SettingManager {
     static let shared = SettingManager()
     static let LoginStateChangedNotification = NSNotification.Name(rawValue: "EMHenTai.SettingManager.LoginStateChangedNotification")
@@ -25,6 +30,14 @@ class SettingManager {
             if isLogin != oldValue {
                 NotificationCenter.default.post(name: SettingManager.LoginStateChangedNotification, object: nil)
             }
+        }
+    }
+    
+    var currentLanguage: UserLanguage {
+        set { UserDefaults.standard.set(newValue.rawValue, forKey: "SettingManager_currentLanguage") }
+        get {
+            let value = (UserDefaults.standard.object(forKey: "SettingManager_currentLanguage") as? String) ?? ""
+            return UserLanguage(rawValue: value) ?? UserLanguage.chineseSimplified
         }
     }
     

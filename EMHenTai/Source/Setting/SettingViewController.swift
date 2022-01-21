@@ -61,7 +61,7 @@ extension SettingViewController: UITableViewDataSource {
         case 0:
             return 1
         case 1:
-            return 2
+            return UserLanguage.allCases.count
         case 2:
             return 2
         default:
@@ -88,15 +88,22 @@ extension SettingViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(UITableViewCell.self), for: indexPath)
+        cell.accessoryType = .none
+        cell.selectionStyle = .default
+        
         switch indexPath.section {
         case 0:
-            cell.textLabel?.text = SettingManager.shared.isLogin ? "已登录(点击可登出)" : "未登录(点击去登录)"
+            cell.textLabel?.text = SettingManager.shared.isLogin ? "已登录：点击可登出" : "未登录：点击去登录"
             return cell
         case 1:
-            cell.textLabel?.text = indexPath.row == 0 ? "中文" : "英文"
+            cell.textLabel?.text = UserLanguage.allCases[indexPath.row].rawValue
+            cell.accessoryType = (SettingManager.shared.currentLanguage == UserLanguage.allCases[indexPath.row]) ? .checkmark : .none
             return cell
         case 2:
             cell.textLabel?.text = indexPath.row == 0 ? "下载数据" : "历史数据"
+            if indexPath.row == 0 {
+                cell.selectionStyle = .none
+            }
             return cell
         default:
             return cell
@@ -116,6 +123,8 @@ extension SettingViewController: UITableViewDelegate {
                 navigationController?.pushViewController(LoginViewController(), animated: true)
             }
         case 1:
+            SettingManager.shared.currentLanguage = UserLanguage.allCases[indexPath.row]
+            tableView.reloadData()
             break
         case 2:
             break

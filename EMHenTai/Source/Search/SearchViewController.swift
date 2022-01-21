@@ -64,7 +64,7 @@ class SearchViewController: UIViewController {
     
     private func setupUI() {
         navigationItem.title = "搜索"
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(searchAction))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "GO", style: .done, target: self, action: #selector(searchAction))
         
         view.backgroundColor = .systemGroupedBackground
         view.addSubview(tableView)
