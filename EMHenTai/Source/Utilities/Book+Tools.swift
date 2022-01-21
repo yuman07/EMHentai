@@ -12,7 +12,7 @@ extension Book {
 }
 
 extension Book {
-    private static var downloadFolderPath: String {
+    static var downloadFolderPath: String {
         if let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first {
             return path + "/EMDownload"
         } else {

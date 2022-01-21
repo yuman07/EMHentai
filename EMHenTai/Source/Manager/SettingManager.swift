@@ -50,6 +50,31 @@ class SettingManager {
         }
     }
     
+    func calculateFilesSize(completion: @escaping ((downloadSize: Int, historySize: Int)) -> Void) {
+        guard let folders = try? FileManager.default.contentsOfDirectory(atPath: Book.downloadFolderPath), !folders.isEmpty else {
+            DispatchQueue.main.async {
+                completion((0, 0))
+            }
+            return
+        }
+        
+        DispatchQueue.global().async {
+            var downloadSize = 0
+            var historySize = 0
+            for folder in folders {
+                let gid = Int(folder) ?? 0
+                if !DBManager.shared.downloadBooks.filter({ $0.gid == gid }).isEmpty {
+                    downloadSize += FileManager.default.folderSizeAt(path: Book.downloadFolderPath + "/\(folder)")
+                } else if !DBManager.shared.historyBooks.filter({ $0.gid == gid }).isEmpty {
+                    historySize += FileManager.default.folderSizeAt(path: Book.downloadFolderPath + "/\(folder)")
+                }
+            }
+            DispatchQueue.main.async {
+                completion((downloadSize, historySize))
+            }
+        }
+    }
+    
     private func checkLogin() -> Bool {
         guard let cookies = HTTPCookieStorage.shared.cookies else { return false }
         for cookie in cookies {

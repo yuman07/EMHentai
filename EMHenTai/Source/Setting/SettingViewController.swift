@@ -10,6 +10,9 @@ import UIKit
 
 class SettingViewController: UIViewController {
     
+    var downloadSize: Int?
+    var historySize: Int?
+    
     private lazy var tableView: UITableView = {
         let table = UITableView(frame: CGRect.zero, style: .grouped)
         table.estimatedRowHeight = 0
@@ -27,6 +30,16 @@ class SettingViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         setupNotification()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        SettingManager.shared.calculateFilesSize { [weak self] (downloadSize: Int, historySize: Int) in
+            self?.downloadSize = downloadSize
+            self?.historySize = historySize
+            self?.tableView.reloadData()
+        }
     }
     
     private func setupUI() {
@@ -100,10 +113,12 @@ extension SettingViewController: UITableViewDataSource {
             cell.accessoryType = (SettingManager.shared.currentLanguage == UserLanguage.allCases[indexPath.row]) ? .checkmark : .none
             return cell
         case 2:
-            cell.textLabel?.text = indexPath.row == 0 ? "下载数据" : "历史数据"
-            if indexPath.row == 0 {
-                cell.selectionStyle = .none
+            cell.selectionStyle = .none
+            var text = indexPath.row == 0 ? "下载数据" : "历史数据"
+            if let size = (indexPath.row == 0 ? self.downloadSize : self.historySize) {
+                text += "：\(size.diskSizeFormat)"
             }
+            cell.textLabel?.text = text
             return cell
         default:
             return cell
