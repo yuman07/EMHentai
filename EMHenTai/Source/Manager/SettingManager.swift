@@ -8,8 +8,8 @@
 import Foundation
 
 enum UserLanguage: String, CaseIterable {
-    case chineseSimplified = "简体中文"
-    case english = "英文"
+    case english = "英文(English)"
+    case chineseSimplified = "简体中文(Simplified Chinese)"
 }
 
 class SettingManager {

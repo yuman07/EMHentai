@@ -78,7 +78,7 @@ extension SettingViewController: UITableViewDataSource {
         case 0:
             return "登录状态"
         case 1:
-            return "语言(重启生效)"
+            return "界面语言(重启生效)"
         case 2:
             return "磁盘占用"
         default:
