@@ -153,16 +153,15 @@ extension GalleryViewController: UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NSStringFromClass(GalleryCollectionViewCell.self), for: indexPath)
         if let cell = cell as? GalleryCollectionViewCell {
             cell.updateImageWith(filePath: book.imagePath(at: indexPath.row))
+            cell.tapBlock = { [weak self] in
+                self?.changeNavBarHidden()
+            }
         }
         return cell
     }
 }
 
 extension GalleryViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        changeNavBarHidden()
-    }
-    
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         navigationItem.title = "\(indexPath.row + 1)/\(book.fileCountNum)"
         saveLastSeenPageIndex(indexPath.row)

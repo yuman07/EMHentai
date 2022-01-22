@@ -8,18 +8,9 @@
 import Foundation
 
 extension Book {
-    var showTitle: String {
-        if SettingManager.shared.currentLanguage == .english {
-            return title.isEmpty ? title_jpn : title
-        }
-        return title_jpn.isEmpty ? title : title_jpn
-    }
-}
-
-extension Book {
-    static var downloadFolderPath: String {
+    static var downloadFolderPath = {
         NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first.flatMap { $0 + "/EMDownload" } ?? NSHomeDirectory() + "/Documents/EMDownload"
-    }
+    }()
     
     var folderPath: String {
         Book.downloadFolderPath + "/\(gid)"
@@ -27,6 +18,15 @@ extension Book {
     
     func imagePath(at index: Int) -> String {
         folderPath + "/\(gid)-\(index).jpg"
+    }
+}
+
+extension Book {
+    var showTitle: String {
+        if SettingManager.shared.currentLanguage == .english {
+            return title.isEmpty ? title_jpn : title
+        }
+        return title_jpn.isEmpty ? title : title_jpn
     }
     
     var fileCountNum: Int {

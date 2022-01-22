@@ -9,9 +9,7 @@ import Foundation
 import UIKit
 
 class SettingViewController: UIViewController {
-    
-    var downloadSize: Int?
-    var historySize: Int?
+    var fileSize: (download: Int, history: Int)?
     
     private lazy var tableView: UITableView = {
         let table = UITableView(frame: CGRect.zero, style: .grouped)
@@ -36,8 +34,7 @@ class SettingViewController: UIViewController {
         super.viewWillAppear(animated)
         
         SettingManager.shared.calculateFilesSize { [weak self] (downloadSize: Int, historySize: Int) in
-            self?.downloadSize = downloadSize
-            self?.historySize = historySize
+            self?.fileSize = (downloadSize, historySize)
             self?.tableView.reloadData()
         }
     }
@@ -115,7 +112,7 @@ extension SettingViewController: UITableViewDataSource {
         case 2:
             cell.selectionStyle = .none
             var text = indexPath.row == 0 ? "下载数据" : "历史数据"
-            if let size = (indexPath.row == 0 ? self.downloadSize : self.historySize) {
+            if let size = (indexPath.row == 0 ? self.fileSize?.download : self.fileSize?.history) {
                 text += "：\(size.diskSizeFormat)"
             }
             cell.textLabel?.text = text

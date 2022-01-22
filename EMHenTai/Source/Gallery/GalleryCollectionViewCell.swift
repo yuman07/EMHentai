@@ -10,6 +10,8 @@ import UIKit
 
 class GalleryCollectionViewCell: UICollectionViewCell {
     
+    var tapBlock: (() -> Void)?
+    
     private lazy var scrollView: UIScrollView = {
         let view = UIScrollView()
         view.bounces = false
@@ -28,6 +30,7 @@ class GalleryCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
+        setupGesture()
     }
     
     required init?(coder: NSCoder) {
@@ -52,6 +55,15 @@ class GalleryCollectionViewCell: UICollectionViewCell {
         imageView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor).isActive = true
         imageView.widthAnchor.constraint(equalTo: scrollView.widthAnchor).isActive = true
         imageView.heightAnchor.constraint(equalTo: scrollView.heightAnchor).isActive = true
+    }
+    
+    private func setupGesture() {
+        contentView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapAction)))
+    }
+    
+    @objc
+    private func tapAction() {
+        tapBlock?()
     }
     
     func updateImageWith(filePath: String) {

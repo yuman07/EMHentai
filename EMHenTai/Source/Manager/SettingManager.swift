@@ -36,8 +36,7 @@ class SettingManager {
     var currentLanguage: UserLanguage {
         set { UserDefaults.standard.set(newValue.rawValue, forKey: "SettingManager_currentLanguage") }
         get {
-            let value = (UserDefaults.standard.object(forKey: "SettingManager_currentLanguage") as? String) ?? ""
-            return UserLanguage(rawValue: value) ?? UserLanguage.chineseSimplified
+            (UserDefaults.standard.object(forKey: "SettingManager_currentLanguage") as? String).flatMap { UserLanguage(rawValue: $0) } ?? UserLanguage.chineseSimplified
         }
     }
     

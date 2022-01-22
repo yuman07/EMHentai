@@ -13,7 +13,7 @@ class BookListTableViewCell: UITableViewCell {
     
     var book: Book?
     
-    var longPressBlock: (() -> ())?
+    var longPressBlock: (() -> Void)?
     
     private let thumbImageView: UIImageView = {
         let view = UIImageView()
