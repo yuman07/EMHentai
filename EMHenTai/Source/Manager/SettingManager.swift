@@ -59,20 +59,18 @@ class SettingManager {
         }
         
         DispatchQueue.global().async {
-            var downloadSize = 0
-            var historySize = 0
             let downloadBooks = DBManager.shared.booksMap[.download] ?? [Book]()
             let historyBooks = DBManager.shared.booksMap[.history] ?? [Book]()
-            for folder in folders {
-                let gid = Int(folder) ?? 0
-                if !downloadBooks.filter({ $0.gid == gid }).isEmpty {
-                    downloadSize += FileManager.default.folderSizeAt(path: Book.downloadFolderPath + "/\(folder)")
-                } else if !historyBooks.filter({ $0.gid == gid }).isEmpty {
-                    historySize += FileManager.default.folderSizeAt(path: Book.downloadFolderPath + "/\(folder)")
+            let size = folders.reduce(into: (0, 0)) {
+                let gid = Int($1) ?? 0
+                if downloadBooks.contains(where: { $0.gid == gid }) {
+                    $0.0 += FileManager.default.folderSizeAt(path: Book.downloadFolderPath + "/\($1)")
+                } else if historyBooks.contains(where: { $0.gid == gid }) {
+                    $0.1 += FileManager.default.folderSizeAt(path: Book.downloadFolderPath + "/\($1)")
                 }
             }
             DispatchQueue.main.async {
-                completion((downloadSize, historySize))
+                completion(size)
             }
         }
     }

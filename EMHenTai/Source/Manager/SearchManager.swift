@@ -35,7 +35,7 @@ class SearchManager {
         AF.request(url).responseString(queue: .global()) { response in
             switch response.result {
             case .success(let value):
-                let target = info.source + "g/"
+                let target = info.source.rawValue + "g/"
                 let ids = value.allIndicesOf(string: target).map { index -> [Substring] in
                     var count = 0
                     let start = value.index(value.startIndex, offsetBy: index + target.count)
@@ -53,7 +53,7 @@ class SearchManager {
                 }
                 
                 AF.request(
-                    info.source + "api.php",
+                    info.source.rawValue + "api.php",
                     method: .post,
                     parameters: [
                         "method": "gdata",

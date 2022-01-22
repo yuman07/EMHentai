@@ -8,16 +8,17 @@
 import Foundation
 
 extension Book {
-    var showTitle: String { title_jpn.isEmpty ? title : title_jpn }
+    var showTitle: String {
+        if SettingManager.shared.currentLanguage == .english {
+            return title.isEmpty ? title_jpn : title
+        }
+        return title_jpn.isEmpty ? title : title_jpn
+    }
 }
 
 extension Book {
     static var downloadFolderPath: String {
-        if let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first {
-            return path + "/EMDownload"
-        } else {
-            return NSHomeDirectory() + "/Documents/EMDownload"
-        }
+        NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first.flatMap { $0 + "/EMDownload" } ?? NSHomeDirectory() + "/Documents/EMDownload"
     }
     
     var folderPath: String {

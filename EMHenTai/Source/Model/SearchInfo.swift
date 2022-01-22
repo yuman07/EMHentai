@@ -12,10 +12,21 @@ enum SearchSource: String, CaseIterable {
     case ExHentai = "https://exhentai.org/"
 }
 
+enum SearchLanguage: String, CaseIterable {
+    case all = ""
+    case chinese = " language:Chinese"
+    case english = " language:English"
+}
+
 struct SearchInfo {
-    var source: String {
-        set { UserDefaults.standard.set(newValue, forKey: "SearchInfo_source") }
-        get { (UserDefaults.standard.object(forKey: "SearchInfo_source") as? String) ?? SearchSource.EHentai.rawValue }
+    var pageIndex = 0
+    var source: SearchSource {
+        set { UserDefaults.standard.set(newValue.rawValue, forKey: "SearchInfo_source") }
+        get { (UserDefaults.standard.object(forKey: "SearchInfo_source") as? String).flatMap { SearchSource(rawValue: $0) } ?? SearchSource.EHentai }
+    }
+    var language: SearchLanguage {
+        set { UserDefaults.standard.set(newValue.rawValue, forKey: "SearchInfo_language") }
+        get { (UserDefaults.standard.object(forKey: "SearchInfo_language") as? String).flatMap { SearchLanguage(rawValue: $0) } ?? SearchLanguage.all }
     }
     var keyWord: String {
         set { UserDefaults.standard.set(newValue, forKey: "SearchInfo_keyWord") }
@@ -65,18 +76,11 @@ struct SearchInfo {
         set { UserDefaults.standard.set(newValue, forKey: "SearchInfo_misc") }
         get { (UserDefaults.standard.object(forKey: "SearchInfo_misc") as? Bool) ?? true }
     }
-    var chineseOnly: Bool {
-        set { UserDefaults.standard.set(newValue, forKey: "SearchInfo_chineseOnly") }
-        get { (UserDefaults.standard.object(forKey: "SearchInfo_chineseOnly") as? Bool) ?? false }
-    }
-    var pageIndex = 0
 }
 
 extension SearchInfo {
     var requestString: String {
-        var keyWord = self.keyWord + (chineseOnly ? " language:Chinese" : "")
-        keyWord = keyWord.split(separator: " ").joined(separator: "+")
-        var url = source
+        var url = source.rawValue
         url += "?page=\(pageIndex)"
         url += "&f_doujinshi=\(doujinshi ? 1 : 0)"
         url += "&f_manga=\(manga ? 1 : 0)"
@@ -88,16 +92,12 @@ extension SearchInfo {
         url += "&f_cosplay=\(cosplay ? 1 : 0)"
         url += "&f_asianporn=\(asianporn ? 1 : 0)"
         url += "&f_misc=\(misc ? 1 : 0)"
-        url += "&f_search=\(keyWord)"
+        url += "&f_search=\((keyWord + language.rawValue).split(separator: " ").joined(separator: "+"))"
         url += "&f_apply=Apply+Filter&inline_set=dm_l"
         if rating > 0 { url += "&advsearch=1&f_sname=on&f_stags=on&f_sr=on&f_srdd=\(rating + 1)" }
         if URL(string: url) == nil, let encodedURL = url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
             url = encodedURL
         }
         return url
-    }
-    
-    static var currentSource: String {
-        (UserDefaults.standard.object(forKey: "SearchInfo_searchSource") as? String) ?? SearchSource.EHentai.rawValue
     }
 }

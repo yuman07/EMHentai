@@ -18,9 +18,7 @@ class DBManager {
     static let shared = DBManager()
     private init() {}
     
-    var context: NSManagedObjectContext {
-        (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    }
+    var context: NSManagedObjectContext!
     
     private(set) lazy var booksMap: [DBType: [Book]] = {
         var map = [DBType: [Book]]()
@@ -32,6 +30,10 @@ class DBManager {
         }
         return map
     }()
+    
+    func setup() {
+        context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    }
     
     func insertIfNotExist(book: Book, at type: DBType) {
         if let isExist = self.booksMap[type]?.contains(where: { $0.gid == book.gid }), !isExist {
@@ -67,9 +69,7 @@ class DBManager {
     }
     
     private func saveDB() {
-        if context.hasChanges {
-            try? context.save()
-        }
+        if context.hasChanges { try? context.save() }
     }
     
     private func bookFrom(obj: NSManagedObject) -> Book {

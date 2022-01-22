@@ -101,7 +101,7 @@ extension SearchViewController: UITableViewDataSource {
         case 0:
             return 1
         case 1:
-            return 1
+            return SearchLanguage.allCases.count
         case 2:
             return SearchSource.allCases.count
         case 3:
@@ -154,13 +154,24 @@ extension SearchViewController: UITableViewDataSource {
                 textField?.text = searchInfo.keyWord
             }
         case 1:
-            cell.textLabel?.text = "中文"
-            cell.accessoryType = searchInfo.chineseOnly ? .checkmark : .none
+            var text = ""
+            let language = SearchLanguage.allCases[indexPath.row]
+            switch language {
+            case .all:
+                text = "不限"
+            case .chinese:
+                text = "中文"
+            case .english:
+                text = "英文"
+            }
+            cell.textLabel?.text = text
+            cell.accessoryType = (searchInfo.language == language) ? .checkmark : .none
         case 2:
             var text = SearchSource.allCases[indexPath.row].rawValue
-            if (SearchSource.allCases[indexPath.row] == .ExHentai && !SettingManager.shared.isLogin) { text += "(登录后可用)" }
+            let source = SearchSource.allCases[indexPath.row]
+            if (source == .ExHentai && !SettingManager.shared.isLogin) { text += "(登录后可用)" }
             cell.textLabel?.text = text
-            cell.accessoryType = (searchInfo.source == SearchSource.allCases[indexPath.row].rawValue) ? .checkmark : .none
+            cell.accessoryType = (searchInfo.source == source) ? .checkmark : .none
         case 3:
             cell.textLabel?.text = SearchViewController.ratings[indexPath.row]
             cell.accessoryType = (searchInfo.rating == indexPath.row) ? .checkmark : .none
@@ -206,9 +217,9 @@ extension SearchViewController: UITableViewDelegate {
         case 0:
             break
         case 1:
-            searchInfo.chineseOnly = !searchInfo.chineseOnly
+            searchInfo.language = SearchLanguage.allCases[indexPath.row]
         case 2:
-            searchInfo.source = SearchSource.allCases[indexPath.row].rawValue
+            searchInfo.source = SearchSource.allCases[indexPath.row]
         case 3:
             searchInfo.rating = indexPath.row
         case 4:
