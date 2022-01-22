@@ -35,7 +35,6 @@ class GalleryCollectionViewCell: UICollectionViewCell {
     }
     
     private func setupUI() {
-        self.backgroundColor = .black
         contentView.backgroundColor = .black
         contentView.addSubview(scrollView)
         scrollView.addSubview(imageView)

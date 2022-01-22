@@ -11,8 +11,8 @@ import UIKit
 class GalleryViewController: UIViewController {
     
     private let book: Book
-    var isRotating = false
-    var isStartedDownloadFromOutside = false
+    private var isRotating = false
+    private var isStartedDownloadFromOutside = false
     
     private let navBarBackgroundView: UIView = {
         let view = UIView()
@@ -50,7 +50,7 @@ class GalleryViewController: UIViewController {
         setupView()
         setupNotification()
         backToLastSeenPage()
-        if (DownloadManager.shared.downloadState(of: book) == .ing) { isStartedDownloadFromOutside = true }
+        isStartedDownloadFromOutside = DownloadManager.shared.downloadState(of: book) == .ing
         DownloadManager.shared.download(book: book)
         DBManager.shared.remove(book: book, at: .history)
         DBManager.shared.insertIfNotExist(book: book, at: .history)

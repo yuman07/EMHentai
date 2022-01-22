@@ -9,7 +9,7 @@ import Foundation
 import CoreData
 import UIKit
 
-enum DBType: String {
+enum DBType: String, CaseIterable {
     case history = "HistoryBook"
     case download = "DownloadBook"
 }
@@ -22,34 +22,24 @@ class DBManager {
         (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     }
     
-    private(set) lazy var historyBooks: [Book] = {
-        var books = [Book]()
-        let request = NSFetchRequest<NSFetchRequestResult>(entityName: DBType.history.rawValue)
-        if let objs = try? context.fetch(request) as? [NSManagedObject] {
-            books = objs.map { bookFrom(obj: $0) }.reversed()
+    private(set) lazy var booksMap: [DBType: [Book]] = {
+        var map = [DBType: [Book]]()
+        for type in DBType.allCases {
+            map[type] = {
+                let request = NSFetchRequest<NSFetchRequestResult>(entityName: type.rawValue)
+                return (try? context.fetch(request) as? [NSManagedObject]).flatMap { $0.map { bookFrom(obj: $0) }.reversed() } ?? [Book]()
+            }()
         }
-        return books
-    }()
-    
-    private(set) lazy var downloadBooks: [Book] = {
-        var books = [Book]()
-        let request = NSFetchRequest<NSFetchRequestResult>(entityName: DBType.download.rawValue)
-        if let result = try? context.fetch(request) as? [NSManagedObject] {
-            books = result.map { bookFrom(obj: $0) }.reversed()
-        }
-        return books
+        return map
     }()
     
     func insertIfNotExist(book: Book, at type: DBType) {
-        switch type {
-        case .history:
-            historyBooks.insert(book, at: 0)
-        case .download:
-            downloadBooks.insert(book, at: 0)
+        if let isExist = self.booksMap[type]?.contains(where: { $0.gid == book.gid }), !isExist {
+            self.booksMap[type]!.insert(book, at: 0)
         }
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: type.rawValue)
         request.predicate = NSPredicate(format: "gid = %d", book.gid)
-        let isExist = ((try? context.fetch(request) as? [NSManagedObject]).map { $0.count > 0 }) ?? false
+        let isExist = ((try? context.fetch(request) as? [NSManagedObject]).flatMap { $0.count > 0 }) ?? false
         if !isExist {
             let obj = NSEntityDescription.insertNewObject(forEntityName: type.rawValue, into: context)
             update(obj: obj, with: book)
@@ -58,12 +48,7 @@ class DBManager {
     }
     
     func remove(book: Book, at type: DBType) {
-        switch type {
-        case .history:
-            historyBooks.removeAll { $0.gid == book.gid }
-        case .download:
-            downloadBooks.removeAll { $0.gid == book.gid }
-        }
+        self.booksMap[type]?.removeAll { $0.gid == book.gid }
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: type.rawValue)
         request.predicate = NSPredicate(format: "gid = %d", book.gid)
         if let objs = try? context.fetch(request) as? [NSManagedObject] {
@@ -73,12 +58,7 @@ class DBManager {
     }
     
     func removeAll(type: DBType) {
-        switch type {
-        case .history:
-            historyBooks.removeAll()
-        case .download:
-            downloadBooks.removeAll()
-        }
+        self.booksMap[type]?.removeAll()
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: type.rawValue)
         if let objs = try? context.fetch(request) as? [NSManagedObject] {
             for obj in objs { context.delete(obj) }
@@ -93,10 +73,7 @@ class DBManager {
     }
     
     private func bookFrom(obj: NSManagedObject) -> Book {
-        var torrents = [Torrent]()
-        if let data = (obj.value(forKey: "torrents") as? String ?? "").data(using: .utf8), let ts = try? JSONDecoder().decode([Torrent].self, from: data) {
-            torrents = ts
-        }
+        let ts = (obj.value(forKey: "torrents") as? String ?? "").data(using: .utf8).flatMap { try? JSONDecoder().decode([Torrent].self, from: $0) } ?? [Torrent]()
         return Book(gid: obj.value(forKey: "gid") as? Int ?? 0,
                     title: obj.value(forKey: "title") as? String ?? "",
                     title_jpn: obj.value(forKey: "title_jpn") as? String ?? "",
@@ -112,7 +89,7 @@ class DBManager {
                     posted: obj.value(forKey: "posted") as? String ?? "",
                     expunged: obj.value(forKey: "expunged") as? Bool ?? false,
                     torrentcount: obj.value(forKey: "torrentcount") as? String ?? "",
-                    torrents: torrents)
+                    torrents: ts)
     }
     
     private func update(obj: NSManagedObject, with book: Book) {
@@ -131,10 +108,7 @@ class DBManager {
         obj.setValue(book.posted, forKey: "posted")
         obj.setValue(book.expunged, forKey: "expunged")
         obj.setValue(book.torrentcount, forKey: "torrentcount")
-        if let data = try? JSONEncoder().encode(book.torrents), let str = String(data: data, encoding: .utf8) {
-            obj.setValue(str, forKey: "torrents")
-        } else {
-            obj.setValue("", forKey: "torrents")
-        }
+        let ts = (try? JSONEncoder().encode(book.torrents)).flatMap { String(data: $0, encoding: .utf8) } ?? ""
+        obj.setValue(ts, forKey: "torrents")
     }
 }

@@ -115,7 +115,7 @@ extension BookListViewController {
                 self.refreshControl?.endRefreshing()
             }
         case .History, .Download:
-            books = type == .History ? DBManager.shared.historyBooks : DBManager.shared.downloadBooks
+            books = type == .History ? DBManager.shared.booksMap[.history]! : DBManager.shared.booksMap[.download]!
             hasNext = false
             footerView.update(hint: books.isEmpty ? .noData : .noMoreData)
             self.tableView.reloadData()

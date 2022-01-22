@@ -14,13 +14,12 @@ enum SearchSource: String, CaseIterable {
 
 struct SearchInfo {
     var source: String {
-        set { UserDefaults.standard.set(newValue, forKey: "SearchInfo_searchSource") }
-        get { (UserDefaults.standard.object(forKey: "SearchInfo_searchSource") as? String) ?? SearchSource.EHentai.rawValue }
+        set { UserDefaults.standard.set(newValue, forKey: "SearchInfo_source") }
+        get { (UserDefaults.standard.object(forKey: "SearchInfo_source") as? String) ?? SearchSource.EHentai.rawValue }
     }
-    private static var keyWord = ""
     var keyWord: String {
-        set { SearchInfo.keyWord = newValue }
-        get { SearchInfo.keyWord }
+        set { UserDefaults.standard.set(newValue, forKey: "SearchInfo_keyWord") }
+        get { (UserDefaults.standard.object(forKey: "SearchInfo_keyWord") as? String) ?? "" }
     }
     var rating: Int {
         set { UserDefaults.standard.set(newValue, forKey: "SearchInfo_rating") }
