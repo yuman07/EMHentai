@@ -15,9 +15,9 @@ class GalleryCollectionViewCell: UICollectionViewCell {
     private lazy var scrollView: UIScrollView = {
         let view = UIScrollView()
         view.bounces = false
+        view.bouncesZoom = false
         view.delegate = self
         view.maximumZoomScale = 3
-        view.bouncesZoom = false
         return view
     }()
     
@@ -69,6 +69,8 @@ class GalleryCollectionViewCell: UICollectionViewCell {
     func updateImageWith(filePath: String) {
         if let data = try? Data(contentsOf: URL(fileURLWithPath: filePath)) {
             imageView.image = UIImage(data: data)
+        } else {
+            imageView.image = nil
         }
     }
 }

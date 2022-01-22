@@ -37,8 +37,7 @@ class BookListViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupView()
-        setupNavBar()
+        setupUI()
         setupData()
     }
     
@@ -49,7 +48,7 @@ class BookListViewController: UITableViewController {
         }
     }
     
-    private func setupView() {
+    private func setupUI() {
         view.backgroundColor = .systemGroupedBackground
         
         tableView.delegate = self
@@ -63,15 +62,14 @@ class BookListViewController: UITableViewController {
         refreshControl = UIRefreshControl()
         refreshControl?.attributedTitle = NSAttributedString(string: "刷新中...")
         refreshControl?.addTarget(self, action: #selector(setupData), for: .valueChanged)
-    }
-    
-    private func setupNavBar() {
+        
         switch type {
         case .Home:
             navigationItem.title = "主页"
             navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(tapNavBarRightItem))
         case .History:
             navigationItem.title = "历史"
+            navigationItem.rightBarButtonItem = UIBarButtonItem(title: "清除历史", style: .plain, target: self, action: #selector(tapNavBarRightItem))
         case .Download:
             navigationItem.title = "下载"
         }
@@ -104,9 +102,9 @@ extension BookListViewController {
                 self.books = books
                 self.hasNext = !books.isEmpty
                 if isHappenNetError {
-                    self.footerView.update(hint: .netError)
+                    self.footerView.hint = .netError
                 } else {
-                    self.footerView.update(hint: self.hasNext ? .none : .noData)
+                    self.footerView.hint = self.hasNext ? .none : .noData
                 }
                 if !self.tableView.visibleCells.isEmpty {
                     self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
@@ -117,7 +115,7 @@ extension BookListViewController {
         case .History, .Download:
             books = type == .History ? DBManager.shared.booksMap[.history]! : DBManager.shared.booksMap[.download]!
             hasNext = false
-            footerView.update(hint: books.isEmpty ? .noData : .noMoreData)
+            footerView.hint = books.isEmpty ? .noData : .noMoreData
             self.tableView.reloadData()
             refreshControl?.endRefreshing()
         }
@@ -138,9 +136,9 @@ extension BookListViewController {
                 self.tableView.reloadData()
             }
             if isHappenNetError {
-                self.footerView.update(hint: .netError)
+                self.footerView.hint = .netError
             } else {
-                self.footerView.update(hint: self.hasNext ? .none : .noMoreData)
+                self.footerView.hint = self.hasNext ? .none : .noMoreData
             }
         }
     }
@@ -156,6 +154,8 @@ extension BookListViewController {
             searchVC.bookVC = self
             navigationController?.pushViewController(searchVC, animated: true)
         case .History:
+            DBManager.shared.removeAll(type: .history)
+            refreshData(with: nil)
             break
         case .Download:
             break
@@ -199,7 +199,7 @@ extension BookListViewController {
 // MARK: UITableViewDataSource
 extension BookListViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return books.count
+        books.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

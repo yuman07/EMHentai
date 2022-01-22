@@ -13,6 +13,10 @@ class GalleryViewController: UIViewController {
     private let book: Book
     private var isRotating = false
     private var isStartedDownloadFromOutside = false
+    private var lastSeenPageIndex: Int {
+        get { UserDefaults.standard.integer(forKey: "GalleryViewController_lastSeenPageIndex_\(book.gid)") }
+        set { UserDefaults.standard.set(newValue, forKey: "GalleryViewController_lastSeenPageIndex_\(book.gid)") }
+    }
     
     private let navBarBackgroundView: UIView = {
         let view = UIView()
@@ -47,7 +51,7 @@ class GalleryViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupView()
+        setupUI()
         setupNotification()
         backToLastSeenPage()
         isStartedDownloadFromOutside = DownloadManager.shared.downloadState(of: book) == .ing
@@ -63,7 +67,7 @@ class GalleryViewController: UIViewController {
         }
     }
     
-    private func setupView() {
+    private func setupUI() {
         view.backgroundColor = .black
         view.addSubview(collectionView)
         view.addSubview(navBarBackgroundView)
@@ -91,16 +95,16 @@ class GalleryViewController: UIViewController {
         coordinator.animate(alongsideTransition: nil) { _ in
             self.isRotating = false
             self.collectionView.collectionViewLayout.invalidateLayout()
-            self.collectionView.scrollToItem(at: IndexPath(row: currentIndex, section: 0), at: .centeredHorizontally, animated: false)
+            self.collectionView.scrollToItem(at: IndexPath(row: currentIndex, section: 0), at: .left, animated: false)
         }
     }
     
     private func setupNotification() {
         NotificationCenter.default.addObserver(forName: DownloadManager.DownloadPageSuccessNotification,
                                                object: nil,
-                                               queue: .main) { notification in
-            if let gid = notification.object as? Int, gid == self.book.gid {
-                self.collectionView.reloadData()
+                                               queue: .main) { [weak self] notification in
+            if let gid = notification.object as? Int, gid == self?.book.gid {
+                self?.collectionView.reloadData()
             }
         }
     }
@@ -118,9 +122,8 @@ class GalleryViewController: UIViewController {
     }
     
     private func backToLastSeenPage() {
-        let lastIndex = getLastSeenPageIndex()
         DispatchQueue.main.async {
-            self.collectionView.scrollToItem(at: IndexPath(row: lastIndex, section: 0), at: .left, animated: false)
+            self.collectionView.scrollToItem(at: IndexPath(row: self.lastSeenPageIndex, section: 0), at: .left, animated: false)
         }
     }
     
@@ -129,14 +132,6 @@ class GalleryViewController: UIViewController {
         if !collectionView.visibleCells.isEmpty {
             collectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .left, animated: true)
         }
-    }
-
-    private func saveLastSeenPageIndex(_ index: Int) {
-        UserDefaults.standard.set(index, forKey: "GalleryViewController_lastPageIndex_\(book.gid)")
-    }
-    
-    private func getLastSeenPageIndex() -> Int {
-        UserDefaults.standard.integer(forKey: "GalleryViewController_lastPageIndex_\(book.gid)")
     }
 }
 
@@ -164,6 +159,6 @@ extension GalleryViewController: UICollectionViewDataSource {
 extension GalleryViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         navigationItem.title = "\(indexPath.row + 1)/\(book.fileCountNum)"
-        saveLastSeenPageIndex(indexPath.row)
+        lastSeenPageIndex = indexPath.row
     }
 }

@@ -9,6 +9,18 @@ import Foundation
 import UIKit
 
 class SearchViewController: UIViewController {
+    private static let sections = [
+        "关键词",
+        "数据源",
+        "语言",
+        "星级",
+        "分类",
+    ]
+    private static let languages = [
+        "不限",
+        "中文",
+        "英文",
+    ]
     private static let ratings = [
         "不限",
         "至少2星",
@@ -23,7 +35,7 @@ class SearchViewController: UIViewController {
         "Game CG",
         "Western",
         "Non-H",
-        "Image set",
+        "Image Set",
         "Cosplay",
         "Asian Porn",
         "Misc",
@@ -84,16 +96,9 @@ class SearchViewController: UIViewController {
     }
 }
 
-extension SearchViewController: UITextFieldDelegate {
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
-    }
-}
-
 extension SearchViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        5
+        SearchViewController.sections.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -101,9 +106,9 @@ extension SearchViewController: UITableViewDataSource {
         case 0:
             return 1
         case 1:
-            return SearchLanguage.allCases.count
-        case 2:
             return SearchSource.allCases.count
+        case 2:
+            return SearchLanguage.allCases.count
         case 3:
             return SearchViewController.ratings.count
         case 4:
@@ -114,20 +119,7 @@ extension SearchViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        switch section {
-        case 0:
-            return "关键词"
-        case 1:
-            return "语言"
-        case 2:
-            return "数据源"
-        case 3:
-            return "星级"
-        case 4:
-            return "分类"
-        default:
-            return nil
-        }
+        SearchViewController.sections[section]
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -139,12 +131,8 @@ extension SearchViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var cell: UITableViewCell!
-        if indexPath.section == 0 {
-            cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(TextFieldTableViewCell.self), for: indexPath)
-        } else {
-            cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(UITableViewCell.self), for: indexPath)
-        }
+        let cls = indexPath.section == 0 ? TextFieldTableViewCell.self : UITableViewCell.self
+        let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(cls), for: indexPath)
         cell.selectionStyle = .none
         
         switch indexPath.section {
@@ -154,24 +142,14 @@ extension SearchViewController: UITableViewDataSource {
                 textField?.text = searchInfo.keyWord
             }
         case 1:
-            var text = ""
-            let language = SearchLanguage.allCases[indexPath.row]
-            switch language {
-            case .all:
-                text = "不限"
-            case .chinese:
-                text = "中文"
-            case .english:
-                text = "英文"
-            }
-            cell.textLabel?.text = text
-            cell.accessoryType = (searchInfo.language == language) ? .checkmark : .none
-        case 2:
             var text = SearchSource.allCases[indexPath.row].rawValue
             let source = SearchSource.allCases[indexPath.row]
             if (source == .ExHentai && !SettingManager.shared.isLogin) { text += "(登录后可用)" }
             cell.textLabel?.text = text
             cell.accessoryType = (searchInfo.source == source) ? .checkmark : .none
+        case 2:
+            cell.textLabel?.text = SearchViewController.languages[indexPath.row]
+            cell.accessoryType = (searchInfo.language == SearchLanguage.allCases[indexPath.row]) ? .checkmark : .none
         case 3:
             cell.textLabel?.text = SearchViewController.ratings[indexPath.row]
             cell.accessoryType = (searchInfo.rating == indexPath.row) ? .checkmark : .none
@@ -206,7 +184,6 @@ extension SearchViewController: UITableViewDataSource {
         default:
             break
         }
-        
         return cell
     }
 }
@@ -217,9 +194,9 @@ extension SearchViewController: UITableViewDelegate {
         case 0:
             break
         case 1:
-            searchInfo.language = SearchLanguage.allCases[indexPath.row]
-        case 2:
             searchInfo.source = SearchSource.allCases[indexPath.row]
+        case 2:
+            searchInfo.language = SearchLanguage.allCases[indexPath.row]
         case 3:
             searchInfo.rating = indexPath.row
         case 4:

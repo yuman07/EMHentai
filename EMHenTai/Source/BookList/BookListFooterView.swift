@@ -16,6 +16,13 @@ enum BookListFooterHint: String {
 }
 
 class BookListFooterView: UIView {
+    
+    var hint = BookListFooterHint.none {
+        didSet {
+            self.label.text = hint.rawValue
+        }
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
@@ -40,9 +47,5 @@ class BookListFooterView: UIView {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         label.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-    }
-    
-    func update(hint: BookListFooterHint) {
-        self.label.text = hint.rawValue
     }
 }

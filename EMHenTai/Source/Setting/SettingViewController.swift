@@ -43,13 +43,13 @@ class SettingViewController: UIViewController {
         view.backgroundColor = .systemGroupedBackground
         view.addSubview(tableView)
         
-        navigationItem.title = "设置"
-        
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
         tableView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor).isActive = true
         tableView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor).isActive = true
         tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+        
+        navigationItem.title = "设置"
     }
     
     private func setupNotification() {
@@ -104,22 +104,21 @@ extension SettingViewController: UITableViewDataSource {
         switch indexPath.section {
         case 0:
             cell.textLabel?.text = SettingManager.shared.isLogin ? "已登录：点击可登出" : "未登录：点击去登录"
-            return cell
         case 1:
             cell.textLabel?.text = UserLanguage.allCases[indexPath.row].rawValue
             cell.accessoryType = (SettingManager.shared.currentLanguage == UserLanguage.allCases[indexPath.row]) ? .checkmark : .none
-            return cell
         case 2:
-            cell.selectionStyle = .none
             var text = indexPath.row == 0 ? "下载数据" : "历史数据"
             if let size = (indexPath.row == 0 ? self.fileSize?.download : self.fileSize?.history) {
                 text += "：\(size.diskSizeFormat)"
             }
             cell.textLabel?.text = text
-            return cell
+            cell.selectionStyle = .none
         default:
-            return cell
+            break
         }
+        
+        return cell
     }
 }
 
