@@ -69,7 +69,7 @@ class BookListViewController: UITableViewController {
             navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(tapNavBarRightItem))
         case .History:
             navigationItem.title = "历史"
-            navigationItem.rightBarButtonItem = UIBarButtonItem(title: "清除历史", style: .plain, target: self, action: #selector(tapNavBarRightItem))
+            navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "clear"), style: .plain, target: self, action: #selector(tapNavBarRightItem))
         case .Download:
             navigationItem.title = "下载"
         }
