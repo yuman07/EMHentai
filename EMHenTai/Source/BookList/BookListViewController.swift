@@ -187,10 +187,6 @@ extension BookListViewController {
                 DownloadManager.shared.remove(book: book)
             }))
         }
-        
-        vc.addAction(UIAlertAction(title: "详细信息", style: .default, handler: { _ in
-            print("查看详细信息~")
-        }))
         vc.addAction(UIAlertAction(title: "没事", style: .cancel, handler: nil))
         return vc
     }

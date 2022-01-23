@@ -46,6 +46,12 @@ class BookListTableViewCell: UITableViewCell {
         return label
     }()
     
+    private let fileCountLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 12)
+        return label
+    }()
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
@@ -63,6 +69,7 @@ class BookListTableViewCell: UITableViewCell {
         contentView.addSubview(categoryLabel)
         contentView.addSubview(progressLabel)
         contentView.addSubview(scoreLabel)
+        contentView.addSubview(fileCountLabel)
         
         thumbImageView.translatesAutoresizingMaskIntoConstraints = false
         thumbImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8).isActive = true
@@ -87,8 +94,12 @@ class BookListTableViewCell: UITableViewCell {
         progressLabel.leftAnchor.constraint(equalTo: titleLabel.leftAnchor).isActive = true
         
         scoreLabel.translatesAutoresizingMaskIntoConstraints = false
-        scoreLabel.bottomAnchor.constraint(equalTo: thumbImageView.bottomAnchor).isActive = true
-        scoreLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -8).isActive = true
+        scoreLabel.bottomAnchor.constraint(equalTo: fileCountLabel.topAnchor, constant: -8).isActive = true
+        scoreLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -12).isActive = true
+        
+        fileCountLabel.translatesAutoresizingMaskIntoConstraints = false
+        fileCountLabel.bottomAnchor.constraint(equalTo: thumbImageView.bottomAnchor).isActive = true
+        fileCountLabel.rightAnchor.constraint(equalTo: scoreLabel.rightAnchor).isActive = true
     }
     
     private func setupGesture() {
@@ -138,6 +149,7 @@ class BookListTableViewCell: UITableViewCell {
         titleLabel.text = book.showTitle
         categoryLabel.text = book.category
         scoreLabel.text = book.rating
+        fileCountLabel.text = "\(book.fileCountNum)页"
         updateProgress()
     }
     
