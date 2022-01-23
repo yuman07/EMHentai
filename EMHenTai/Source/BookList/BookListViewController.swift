@@ -198,6 +198,7 @@ extension BookListViewController {
             vc.addAction(UIAlertAction(title: "删除", style: .default, handler: { _ in
                 DownloadManager.shared.remove(book: book)
                 DBManager.shared.remove(book: book, at: .download)
+                if self.type == .Download { self.refreshData(with: nil) }
             }))
         }
         
