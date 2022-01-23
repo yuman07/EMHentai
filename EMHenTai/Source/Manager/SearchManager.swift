@@ -47,7 +47,7 @@ class SearchManager {
                     return value[start..<end].split(separator: "/")
                 }
                 
-                if ids.count == 0 {
+                if ids.isEmpty {
                     self.requestFinish(result: ([], false), completion: completion)
                     return
                 }

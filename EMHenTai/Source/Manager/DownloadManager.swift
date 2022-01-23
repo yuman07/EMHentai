@@ -7,7 +7,6 @@
 
 import Foundation
 import Alamofire
-import SwiftUI
 
 enum DownloadState {
     case before
@@ -46,33 +45,7 @@ class DownloadManager {
                                                      attributes: nil)
         }
         
-        let sema = DispatchSemaphore(value: DownloadManager.maxConcurrentOperationCount)
-        getImageString(of: book) { index, imgString in
-            sema.wait()
-            
-            if self.downloadState(of: book) != .ing { sema.signal(); return }
-            AF.download(imgString, to: { _, _ in
-                (URL(fileURLWithPath: book.imagePath(at: index)), [])
-            }).response { response in
-                switch response.result {
-                case .success:
-                    sema.signal()
-                    if book.downloadedFileCount == book.fileCountNum {
-                        self.lock.lock()
-                        self.runningDownload.remove(book.gid)
-                        self.lock.unlock()
-                        NotificationCenter.default.post(name: DownloadManager.DownloadStateChangedNotification,
-                                                        object: book.gid,
-                                                        userInfo: nil)
-                    }
-                    NotificationCenter.default.post(name: DownloadManager.DownloadPageSuccessNotification,
-                                                    object: book.gid,
-                                                    userInfo: nil)
-                case .failure:
-                    sema.signal()
-                }
-            }
-        }
+        downloadGroup(book: book, groupIndex: 0, preImgCount: 0)
     }
     
     func suspend(book: Book) {
@@ -108,13 +81,52 @@ class DownloadManager {
         }
     }
     
-    private func getImageString(of book: Book, completion: @escaping (Int, String) -> Void) {
-        let url = "\(SearchInfo().source.rawValue)g/\(book.gid)/\(book.token)/?inline_set=ts_m"
+    private func downloadGroup(book: Book, groupIndex: Int, preImgCount: Int) {
+        if self.downloadState(of: book) != .ing { return }
+        
+        let groupLock = NSLock()
+        var curImgCount = 0
+        self.getImageString(of: book, groupIndex: groupIndex, preImgCount: preImgCount) { groupImgCount, index, imgString in
+            if self.downloadState(of: book) != .ing { return }
+            
+            AF.download(imgString, to: { _, _ in
+                (URL(fileURLWithPath: book.imagePath(at: index)), [])
+            }).response { response in
+                if FileManager.default.fileExists(atPath: book.imagePath(at: index)) {
+                    if book.downloadedFileCount == book.fileCountNum {
+                        self.lock.lock()
+                        self.runningDownload.remove(book.gid)
+                        self.lock.unlock()
+                        NotificationCenter.default.post(name: DownloadManager.DownloadStateChangedNotification,
+                                                        object: book.gid,
+                                                        userInfo: nil)
+                    }
+                    NotificationCenter.default.post(name: DownloadManager.DownloadPageSuccessNotification,
+                                                    object: book.gid,
+                                                    userInfo: nil)
+                    
+
+                }
+                groupLock.lock()
+                curImgCount += 1
+                if curImgCount == groupImgCount && preImgCount + curImgCount < book.fileCountNum {
+                    groupLock.unlock()
+                    self.downloadGroup(book: book, groupIndex: groupIndex + 1, preImgCount: preImgCount + groupImgCount)
+                }
+                groupLock.unlock()
+            }
+        }
+    }
+    
+    private func getImageString(of book: Book, groupIndex: Int, preImgCount: Int, completion: @escaping (Int, Int, String) -> Void) {
+        var url = "\(SearchInfo().source.rawValue)g/\(book.gid)/\(book.token)/"
+        if groupIndex > 0 { url += "?p=\(groupIndex)" }
+        
         AF.request(url).responseString(queue: .global()) { response in
+            if self.downloadState(of: book) != .ing { return }
+            
             switch response.result {
             case .success(let value):
-                if self.downloadState(of: book) != .ing { return }
-                
                 let urls = value.allIndicesOf(string: SearchInfo().source.rawValue + "s/").map { index -> String in
                     let start = value.index(value.startIndex, offsetBy: index)
                     var end = value.index(after: start)
@@ -122,20 +134,21 @@ class DownloadManager {
                         end = value.index(after: end)
                     }
                     return "\(value[start..<end])"
-                }.enumerated().filter { (index, url) in
-                    !FileManager.default.fileExists(atPath: book.imagePath(at: index))
+                }.enumerated().map { (index, url) -> (Int, String) in
+                    (index, FileManager.default.fileExists(atPath: book.imagePath(at: index + preImgCount)) ? "" : url)
                 }
+                let groupNum = urls.count
                 
                 let sema = DispatchSemaphore(value: DownloadManager.maxConcurrentOperationCount)
                 for (index, pageURL) in urls {
                     sema.wait()
-                    
                     if self.downloadState(of: book) != .ing { sema.signal(); return }
+                    
                     AF.request(pageURL).responseString(queue: .global()) { response in
+                        if self.downloadState(of: book) != .ing { sema.signal(); return }
+                        
                         switch response.result {
                         case .success(let value):
-                            if self.downloadState(of: book) != .ing { sema.signal(); return }
-                            
                             guard let showKey = value.range(of: "showkey=\"").map({ range -> Substring in
                                 let start = range.upperBound
                                 var end = value.index(after: start)
@@ -143,7 +156,7 @@ class DownloadManager {
                                     end = value.index(after: end)
                                 }
                                 return value[start..<end]
-                            }) else { sema.signal(); return }
+                            }) else { sema.signal(); completion(groupNum, index + preImgCount, ""); return }
                             
                             AF.request(
                                 SearchInfo().source.rawValue + "api.php",
@@ -151,16 +164,16 @@ class DownloadManager {
                                 parameters: [
                                     "method": "showpage",
                                     "gid": book.gid,
-                                    "page": (index + 1),
+                                    "page": (index + preImgCount + 1),
                                     "imgkey": pageURL.split(separator: "/").reversed()[1],
                                     "showkey": showKey,
                                 ],
                                 encoding: JSONEncoding.default
                             ).responseDecodable(of: ImagePageResult.self, queue: .global()) { response in
+                                if self.downloadState(of: book) != .ing { sema.signal(); return }
+                                
                                 switch response.result {
                                 case .success(let value):
-                                    if self.downloadState(of: book) != .ing { sema.signal(); return }
-                                    
                                     guard let img = value.i3.range(of: "src=\"").map({ range -> String in
                                         let start = range.upperBound
                                         var end = value.i3.index(after: start)
@@ -168,16 +181,18 @@ class DownloadManager {
                                             end = value.i3.index(after: end)
                                         }
                                         return "\(value.i3[start..<end])"
-                                    }) else { sema.signal(); return }
+                                    }) else { sema.signal(); completion(groupNum, index + preImgCount, ""); return }
                                     
                                     sema.signal()
-                                    completion(index, img)
+                                    completion(groupNum, index + preImgCount, img)
                                 case .failure:
                                     sema.signal()
+                                    completion(groupNum, index + preImgCount, "")
                                 }
                             }
                         case .failure:
                             sema.signal()
+                            completion(groupNum, index + preImgCount, "")
                         }
                     }
                 }
