@@ -119,8 +119,9 @@ class GalleryViewController: UIViewController {
     }
     
     private func backToLastSeenPage() {
+        let lastSeenPageIndex = self.lastSeenPageIndex
         DispatchQueue.main.async {
-            self.collectionView.scrollToItem(at: IndexPath(row: self.lastSeenPageIndex, section: 0), at: .left, animated: false)
+            self.collectionView.scrollToItem(at: IndexPath(row: lastSeenPageIndex, section: 0), at: .left, animated: false)
         }
     }
     

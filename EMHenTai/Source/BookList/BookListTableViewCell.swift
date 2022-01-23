@@ -90,7 +90,7 @@ class BookListTableViewCell: UITableViewCell {
         categoryLabel.leftAnchor.constraint(equalTo: titleLabel.leftAnchor).isActive = true
         
         progressLabel.translatesAutoresizingMaskIntoConstraints = false
-        progressLabel.bottomAnchor.constraint(equalTo: scoreLabel.bottomAnchor).isActive = true
+        progressLabel.bottomAnchor.constraint(equalTo: fileCountLabel.bottomAnchor).isActive = true
         progressLabel.leftAnchor.constraint(equalTo: titleLabel.leftAnchor).isActive = true
         
         scoreLabel.translatesAutoresizingMaskIntoConstraints = false
