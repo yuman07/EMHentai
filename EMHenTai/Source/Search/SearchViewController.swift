@@ -91,6 +91,7 @@ class SearchViewController: UIViewController {
     @objc
     private func searchAction() {
         searchInfo.keyWord = textField?.text ?? ""
+        searchInfo.saveDB()
         bookVC?.refreshData(with: searchInfo)
         navigationController?.popViewController(animated: true)
     }
