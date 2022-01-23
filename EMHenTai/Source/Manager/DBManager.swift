@@ -34,9 +34,7 @@ class DBManager {
     }
     
     func insertIfNotExist(book: Book, at type: DBType) {
-        if !contains(book: book, type: type) {
-            self.booksMap[type]!.insert(book, at: 0)
-        }
+        if !contains(book: book, type: type) { self.booksMap[type]!.insert(book, at: 0) }
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: type.rawValue)
         request.predicate = NSPredicate(format: "gid = %d", book.gid)
         let isExist = ((try? context.fetch(request) as? [NSManagedObject]).flatMap { $0.count > 0 }) ?? false

@@ -47,9 +47,7 @@ class SettingManager {
     
     func calculateFilesSize(completion: @escaping ((downloadSize: Int, historySize: Int)) -> Void) {
         guard let folders = try? FileManager.default.contentsOfDirectory(atPath: Book.downloadFolderPath), !folders.isEmpty else {
-            DispatchQueue.main.async {
-                completion((0, 0))
-            }
+            DispatchQueue.main.async { completion((0, 0)) }
             return
         }
         
@@ -62,9 +60,7 @@ class SettingManager {
                     $0.1 += FileManager.default.folderSizeAt(path: Book.downloadFolderPath + "/\($1)")
                 }
             }
-            DispatchQueue.main.async {
-                completion(size)
-            }
+            DispatchQueue.main.async { completion(size) }
         }
     }
     

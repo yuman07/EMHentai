@@ -13,7 +13,7 @@ class SearchViewController: UIViewController {
         "关键词",
         "数据源",
         "语言",
-        "星级",
+        "评分",
         "分类",
     ]
     private static let languages = [
