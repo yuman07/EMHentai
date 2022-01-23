@@ -184,21 +184,30 @@ extension BookListViewController {
                 self.tableView.reloadData()
             }))
         } else {
-            if state != .finish {
-                if state != .ing {
-                    vc.addAction(UIAlertAction(title: "下载", style: .default, handler: { _ in
-                        DownloadManager.shared.download(book: book)
-                    }))
-                } else {
-                    vc.addAction(UIAlertAction(title: "暂停", style: .default, handler: { _ in
-                        DownloadManager.shared.suspend(book: book)
-                    }))
-                }
+            if state == .before || state == .suspend {
+                vc.addAction(UIAlertAction(title: "下载", style: .default, handler: { _ in
+                    DownloadManager.shared.download(book: book)
+                }))
             }
-            vc.addAction(UIAlertAction(title: "删除", style: .default, handler: { _ in
+            if state == .ing {
+                vc.addAction(UIAlertAction(title: "暂停", style: .default, handler: { _ in
+                    DownloadManager.shared.suspend(book: book)
+                }))
+            }
+            vc.addAction(UIAlertAction(title: "删除下载", style: .default, handler: { _ in
                 DownloadManager.shared.remove(book: book)
                 DBManager.shared.remove(book: book, at: .download)
                 if self.type == .Download { self.refreshData(with: nil) }
+            }))
+        }
+        
+        if type == .History {
+            vc.addAction(UIAlertAction(title: "删除历史", style: .default, handler: { _ in
+                if !DBManager.shared.contains(book: book, type: .download) {
+                    DownloadManager.shared.remove(book: book)
+                }
+                DBManager.shared.remove(book: book, at: .history)
+                self.refreshData(with: nil)
             }))
         }
         
