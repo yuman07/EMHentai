@@ -49,8 +49,8 @@ class LoginViewController: UIViewController {
 
 extension LoginViewController: WKHTTPCookieStoreObserver {
     func cookiesDidChange(in cookieStore: WKHTTPCookieStore) {
-        cookieStore.getAllCookies { cookies in
-            for cookie in cookies {
+        cookieStore.getAllCookies {
+            for cookie in $0 {
                 HTTPCookieStorage.shared.setCookie(cookie)
             }
         }

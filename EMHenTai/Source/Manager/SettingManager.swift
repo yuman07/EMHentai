@@ -42,11 +42,7 @@ class SettingManager {
     
     func logout() {
         guard let cookies = HTTPCookieStorage.shared.cookies else { return }
-        for cookie in cookies {
-            if cookie.name == "ipb_pass_hash" {
-                HTTPCookieStorage.shared.deleteCookie(cookie)
-            }
-        }
+        cookies.filter { $0.name == "ipb_pass_hash" }.forEach { HTTPCookieStorage.shared.deleteCookie($0) }
     }
     
     func calculateFilesSize(completion: @escaping ((downloadSize: Int, historySize: Int)) -> Void) {
@@ -58,13 +54,11 @@ class SettingManager {
         }
         
         DispatchQueue.global().async {
-            let downloadBooks = DBManager.shared.booksMap[.download] ?? [Book]()
-            let historyBooks = DBManager.shared.booksMap[.history] ?? [Book]()
             let size = folders.reduce(into: (0, 0)) {
                 let gid = Int($1) ?? 0
-                if downloadBooks.contains(where: { $0.gid == gid }) {
+                if DBManager.shared.booksMap[.download]!.contains(where: { $0.gid == gid }) {
                     $0.0 += FileManager.default.folderSizeAt(path: Book.downloadFolderPath + "/\($1)")
-                } else if historyBooks.contains(where: { $0.gid == gid }) {
+                } else if DBManager.shared.booksMap[.history]!.contains(where: { $0.gid == gid }) {
                     $0.1 += FileManager.default.folderSizeAt(path: Book.downloadFolderPath + "/\($1)")
                 }
             }

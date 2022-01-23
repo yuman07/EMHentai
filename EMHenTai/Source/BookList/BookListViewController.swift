@@ -113,7 +113,7 @@ extension BookListViewController {
                 self.refreshControl?.endRefreshing()
             }
         case .History, .Download:
-            books = type == .History ? DBManager.shared.booksMap[.history]! : DBManager.shared.booksMap[.download]!
+            books = (type == .History) ? DBManager.shared.booksMap[.history]! : DBManager.shared.booksMap[.download]!
             hasNext = false
             footerView.hint = books.isEmpty ? .noData : .noMoreData
             self.tableView.reloadData()
@@ -154,9 +154,17 @@ extension BookListViewController {
             searchVC.bookVC = self
             navigationController?.pushViewController(searchVC, animated: true)
         case .History:
-            DBManager.shared.removeAll(type: .history)
-            refreshData(with: nil)
-            break
+            guard !DBManager.shared.booksMap[.history]!.isEmpty else { return }
+            let vc = UIAlertController(title: "提示", message: "确定要清除所有历史记录吗？(不会影响已下载数据)", preferredStyle: .alert)
+            vc.addAction(UIAlertAction(title: "清除", style: .default, handler: { _ in
+                DBManager.shared.booksMap[.history]!
+                    .filter { !DBManager.shared.contains(book: $0, type: .download) }
+                    .forEach { DownloadManager.shared.remove(book: $0) }
+                DBManager.shared.removeAll(type: .history)
+                self.refreshData(with: nil)
+            }))
+            vc.addAction(UIAlertAction(title: "取消", style: .cancel, handler: nil))
+            present(vc, animated: true, completion: nil)
         case .Download:
             break
         }
@@ -169,24 +177,34 @@ extension BookListViewController {
         let vc = UIAlertController(title: "", message: book.showTitle, preferredStyle: .alert)
         let state = DownloadManager.shared.downloadState(of: book)
         
-        switch state {
-        case .before, .suspend:
+        if !DBManager.shared.contains(book: book, type: .download) {
             vc.addAction(UIAlertAction(title: "下载", style: .default, handler: { _ in
                 DownloadManager.shared.download(book: book)
                 DBManager.shared.insertIfNotExist(book: book, at: .download)
+                self.tableView.reloadData()
             }))
-        case .ing:
-            vc.addAction(UIAlertAction(title: "暂停", style: .default, handler: { _ in
-                DownloadManager.shared.suspend(book: book)
-            }))
-        case .finish:
-            break
-        }
-        if state != .before {
+        } else {
+            if state != .finish {
+                if state != .ing {
+                    vc.addAction(UIAlertAction(title: "下载", style: .default, handler: { _ in
+                        DownloadManager.shared.download(book: book)
+                    }))
+                } else {
+                    vc.addAction(UIAlertAction(title: "暂停", style: .default, handler: { _ in
+                        DownloadManager.shared.suspend(book: book)
+                    }))
+                }
+            }
             vc.addAction(UIAlertAction(title: "删除", style: .default, handler: { _ in
                 DownloadManager.shared.remove(book: book)
+                DBManager.shared.remove(book: book, at: .download)
             }))
         }
+        
+        vc.addAction(UIAlertAction(title: "搜索相关Tag", style: .default, handler: { _ in
+            
+        }))
+        
         vc.addAction(UIAlertAction(title: "没事", style: .cancel, handler: nil))
         return vc
     }

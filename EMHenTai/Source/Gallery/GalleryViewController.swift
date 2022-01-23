@@ -12,7 +12,6 @@ class GalleryViewController: UIViewController {
     
     private let book: Book
     private var isRotating = false
-    private var isStartedDownloadFromOutside = false
     private var lastSeenPageIndex: Int {
         get { UserDefaults.standard.integer(forKey: "GalleryViewController_lastSeenPageIndex_\(book.gid)") }
         set { UserDefaults.standard.set(newValue, forKey: "GalleryViewController_lastSeenPageIndex_\(book.gid)") }
@@ -54,7 +53,6 @@ class GalleryViewController: UIViewController {
         setupUI()
         setupNotification()
         backToLastSeenPage()
-        isStartedDownloadFromOutside = DownloadManager.shared.downloadState(of: book) == .ing
         DownloadManager.shared.download(book: book)
         DBManager.shared.remove(book: book, at: .history)
         DBManager.shared.insertIfNotExist(book: book, at: .history)
@@ -62,7 +60,7 @@ class GalleryViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        if !isStartedDownloadFromOutside {
+        if !DBManager.shared.contains(book: book, type: .download) {
             DownloadManager.shared.suspend(book: book)
         }
     }

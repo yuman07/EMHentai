@@ -21,14 +21,12 @@ class DBManager {
     var context: NSManagedObjectContext!
     
     private(set) lazy var booksMap: [DBType: [Book]] = {
-        var map = [DBType: [Book]]()
-        for type in DBType.allCases {
+        DBType.allCases.reduce(into: [DBType: [Book]]()) { map, type in
             map[type] = {
                 let request = NSFetchRequest<NSFetchRequestResult>(entityName: type.rawValue)
                 return (try? context.fetch(request) as? [NSManagedObject]).flatMap { $0.map { bookFrom(obj: $0) }.reversed() } ?? [Book]()
             }()
         }
-        return map
     }()
     
     func setup() {
@@ -36,7 +34,7 @@ class DBManager {
     }
     
     func insertIfNotExist(book: Book, at type: DBType) {
-        if let isExist = self.booksMap[type]?.contains(where: { $0.gid == book.gid }), !isExist {
+        if !contains(book: book, type: type) {
             self.booksMap[type]!.insert(book, at: 0)
         }
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: type.rawValue)
@@ -66,6 +64,10 @@ class DBManager {
             for obj in objs { context.delete(obj) }
             saveDB()
         }
+    }
+    
+    func contains(book: Book, type: DBType) -> Bool {
+        self.booksMap[type]!.contains(where: { $0.gid == book.gid })
     }
     
     private func saveDB() {
