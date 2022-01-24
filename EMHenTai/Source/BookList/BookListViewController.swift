@@ -211,9 +211,13 @@ extension BookListViewController {
             }))
         }
         
-        vc.addAction(UIAlertAction(title: "搜索相关Tag", style: .default, handler: { _ in
-            
-        }))
+        if !book.tags.isEmpty {
+            vc.addAction(UIAlertAction(title: "搜索相关Tag", style: .default, handler: { _ in
+                let tagVC = TagViewController(book: book)
+                tagVC.bookVC = self
+                self.navigationController?.pushViewController(tagVC, animated: true)
+            }))
+        }
         
         vc.addAction(UIAlertAction(title: "没事", style: .cancel, handler: nil))
         return vc
