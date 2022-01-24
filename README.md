@@ -9,16 +9,6 @@ A simple, pure Swift, easy to use, EHentai Viewer For iOS
 
 
 
-## Install
-
-Download ZIP / git clone
-
-cd EMHentai
-
-pod install
-
-
-
 ## Feature
 
 - [x] 查看Ehentai上的本子
@@ -29,6 +19,20 @@ pod install
 - [x] Tag翻译
 - [x] E-hentai/ExHentai切换
 - [ ] 多语言支持
+
+
+
+## Install
+
+因为考虑到Ehentai的法律风险，这里就不提供直接的IPA安装包了。
+
+有Mac的同学可以直接使用Xcode安装（无需开发者账号）：
+
+Download ZIP / git clone
+
+cd EMHentai
+
+pod install
 
 
 
