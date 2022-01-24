@@ -22,12 +22,7 @@ extension Book {
 }
 
 extension Book {
-    var showTitle: String {
-        if SettingManager.shared.currentLanguage == .english {
-            return title.isEmpty ? title_jpn : title
-        }
-        return title_jpn.isEmpty ? title : title_jpn
-    }
+    var showTitle: String { title_jpn.isEmpty ? title : title_jpn }
     
     var fileCountNum: Int {
         Int(filecount) ?? 0

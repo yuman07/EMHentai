@@ -34,7 +34,6 @@ class TranslateManager {
     }()
     
     func translate(word: String) -> String {
-        guard SettingManager.shared.currentLanguage != .english else { return "" }
         guard let value = dict[word] else { return "" }
         return "(\(value))"
     }

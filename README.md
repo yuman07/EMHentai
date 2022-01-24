@@ -1,15 +1,14 @@
 # EMHentai
 
 
-## Abstract
 
-A simple, pure Swift, easy to use, EHentai Viewer For iOS
+## 简介
 
 一个简单，纯Swift，容易使用的Ehentai的iOS APP
 
 
 
-## Feature
+## 功能
 
 - [x] 查看Ehentai上的本子
 - [x] 高级搜索
@@ -18,11 +17,13 @@ A simple, pure Swift, easy to use, EHentai Viewer For iOS
 - [x] 相关Tag搜索
 - [x] Tag翻译
 - [x] E-hentai/ExHentai切换
-- [ ] 多语言支持
+- [x] 适配iPad
+- [x] 适配暗黑模式
+- [x] 支持多滚动方向(左到右，右到左，上到下)
 
 
 
-## Install
+## 安装
 
 因为考虑到Ehentai的法律风险，这里就不提供直接的IPA安装包了。
 
@@ -36,7 +37,7 @@ pod install
 
 
 
-## Other
+## 其他
 
 欢迎提PR或者建议
 
@@ -44,7 +45,7 @@ pod install
 
 
 
-## Thx
+## 感谢
 
 本项目部分UI设计参考了[@Dai-Hentai](https://github.com/DaidoujiChen/Dai-Hentai)
 

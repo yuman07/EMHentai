@@ -71,7 +71,7 @@ extension SettingViewController: UITableViewDataSource {
         case 0:
             return 1
         case 1:
-            return UserLanguage.allCases.count
+            return 3
         case 2:
             return 2
         default:
@@ -105,8 +105,7 @@ extension SettingViewController: UITableViewDataSource {
         case 0:
             cell.textLabel?.text = SettingManager.shared.isLogin ? "已登录：点击可登出" : "未登录：点击去登录"
         case 1:
-            cell.textLabel?.text = UserLanguage.allCases[indexPath.row].rawValue
-            cell.accessoryType = (SettingManager.shared.currentLanguage == UserLanguage.allCases[indexPath.row]) ? .checkmark : .none
+            break
         case 2:
             var text = indexPath.row == 0 ? "下载数据" : "历史数据"
             if let size = (indexPath.row == 0 ? self.fileSize?.download : self.fileSize?.history) {
@@ -134,8 +133,6 @@ extension SettingViewController: UITableViewDelegate {
                 navigationController?.pushViewController(LoginViewController(), animated: true)
             }
         case 1:
-            SettingManager.shared.currentLanguage = UserLanguage.allCases[indexPath.row]
-            tableView.reloadData()
             break
         case 2:
             break
