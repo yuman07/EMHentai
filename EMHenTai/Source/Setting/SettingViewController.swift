@@ -63,7 +63,7 @@ class SettingViewController: UIViewController {
 
 extension SettingViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        3
+        2
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -71,8 +71,6 @@ extension SettingViewController: UITableViewDataSource {
         case 0:
             return 1
         case 1:
-            return 3
-        case 2:
             return 2
         default:
             return 0
@@ -88,8 +86,6 @@ extension SettingViewController: UITableViewDataSource {
         case 0:
             return "登录状态"
         case 1:
-            return "界面语言(重启生效)"
-        case 2:
             return "存储占用"
         default:
             return nil
@@ -105,8 +101,6 @@ extension SettingViewController: UITableViewDataSource {
         case 0:
             cell.textLabel?.text = SettingManager.shared.isLogin ? "已登录：点击可登出" : "未登录：点击去登录"
         case 1:
-            break
-        case 2:
             var text = indexPath.row == 0 ? "下载数据" : "历史数据"
             if let size = (indexPath.row == 0 ? self.fileSize?.download : self.fileSize?.history) {
                 text += "：\(size.diskSizeFormat)"
@@ -133,8 +127,6 @@ extension SettingViewController: UITableViewDelegate {
                 navigationController?.pushViewController(LoginViewController(), animated: true)
             }
         case 1:
-            break
-        case 2:
             break
         default:
             break
