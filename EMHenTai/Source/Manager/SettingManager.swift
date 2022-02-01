@@ -30,7 +30,7 @@ class SettingManager {
     
     func logout() {
         guard let cookies = HTTPCookieStorage.shared.cookies else { return }
-        cookies.filter { $0.name == "ipb_pass_hash" }.forEach { HTTPCookieStorage.shared.deleteCookie($0) }
+        cookies.forEach { HTTPCookieStorage.shared.deleteCookie($0) }
     }
     
     func calculateFilesSize(completion: @escaping ((downloadSize: Int, historySize: Int)) -> Void) {

@@ -9,6 +9,7 @@ import Foundation
 import UIKit
 import WebKit
 
+// Guide: https://nicebowl.fun/11
 class LoginViewController: UIViewController {
     private static let loginURL = "https://forums.e-hentai.org/index.php?act=Login&CODE=01"
     
