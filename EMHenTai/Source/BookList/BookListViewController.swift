@@ -58,9 +58,11 @@ class BookListViewController: UITableViewController {
         tableView.tableFooterView = footerView
         tableView.register(BookListTableViewCell.self, forCellReuseIdentifier: NSStringFromClass(BookListTableViewCell.self))
         
-        refreshControl = UIRefreshControl()
-        refreshControl?.attributedTitle = NSAttributedString(string: "刷新中...")
-        refreshControl?.addTarget(self, action: #selector(setupData), for: .valueChanged)
+        if type == .Home {
+            refreshControl = UIRefreshControl()
+            refreshControl?.attributedTitle = NSAttributedString(string: "刷新中...")
+            refreshControl?.addTarget(self, action: #selector(setupData), for: .valueChanged)
+        }
         
         switch type {
         case .Home:
@@ -80,7 +82,7 @@ class BookListViewController: UITableViewController {
             guard let self = self, searchInfo.pageIndex == 0 else { return }
             self.footerView.hint = .none
             self.refreshControl?.beginRefreshing()
-            self.tableView.setContentOffset(CGPoint(x: 0, y: self.tableView.contentOffset.y - self.refreshControl!.frame.size.height), animated: true)
+            self.tableView.setContentOffset(CGPoint(x: 0, y: -self.refreshControl!.frame.size.height), animated: false)
         }
         SearchManager.shared.searchFinishCallback = { [weak self] searchInfo, books, isHappenedNetError in
             guard let self = self else { return }
