@@ -31,12 +31,12 @@ class TranslateManager {
     private var dictEn = [String: String]()
     private var dictCn = [String: String]()
     
-    func translateEn(en: String) -> String {
+    func translateEn(_ en: String) -> String {
         guard let value = dictEn[en] else { return "" }
         return "(\(value))"
     }
     
-    func translateCn(cn: String) -> String {
+    func translateCn(_ cn: String) -> String {
         dictCn[cn] ?? cn
     }
 }

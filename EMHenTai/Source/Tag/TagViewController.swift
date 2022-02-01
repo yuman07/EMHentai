@@ -67,7 +67,7 @@ extension TagViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(UITableViewCell.self), for: indexPath)
         let tag = book.tags[indexPath.row]
-        cell.textLabel?.text = tag + TranslateManager.shared.translateEn(en: tag)
+        cell.textLabel?.text = tag + TranslateManager.shared.translateEn(tag)
         return cell
     }
 }

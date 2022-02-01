@@ -50,7 +50,7 @@ extension SearchInfo {
         url += "&f_cosplay=\(cosplay ? 1 : 0)"
         url += "&f_asianporn=\(asianporn ? 1 : 0)"
         url += "&f_misc=\(misc ? 1 : 0)"
-        url += "&f_search=\((keyWord + language.rawValue).split(separator: " ").map({ TranslateManager.shared.translateCn(cn: "\($0)") }).joined(separator: "+"))"
+        url += "&f_search=\((keyWord + language.rawValue).split(separator: " ").map({ TranslateManager.shared.translateCn("\($0)") }).joined(separator: "+"))"
         url += "&f_apply=Apply+Filter&inline_set=dm_l"
         if rating > 0 { url += "&advsearch=1&f_sname=on&f_stags=on&f_sr=on&f_srdd=\(rating + 1)" }
         if URL(string: url) == nil, let encodedURL = url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
