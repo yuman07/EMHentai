@@ -78,6 +78,7 @@ class BookListViewController: UITableViewController {
         guard type == .Home else { return }
         SearchManager.shared.searchStartCallback = { [weak self] searchInfo in
             guard let self = self, searchInfo.pageIndex == 0 else { return }
+            self.footerView.hint = .none
             self.refreshControl?.beginRefreshing()
             self.tableView.setContentOffset(CGPoint(x: 0, y: self.tableView.contentOffset.y - self.refreshControl!.frame.size.height), animated: true)
         }
@@ -91,8 +92,8 @@ class BookListViewController: UITableViewController {
                 }
             } else if self.hasNext {
                 self.books += books
-                self.searchInfo?.pageIndex += 1
             }
+            self.searchInfo = searchInfo
             self.tableView.reloadData()
             self.refreshControl?.endRefreshing()
             if isHappenedNetError {
@@ -122,7 +123,6 @@ extension BookListViewController {
         switch type {
         case .Home:
             guard let searchInfo = searchInfo else { return }
-            self.searchInfo = searchInfo
             SearchManager.shared.searchWith(info: searchInfo)
         case .History, .Download:
             books = (type == .History) ? DBManager.shared.booksMap[.history]! : DBManager.shared.booksMap[.download]!
