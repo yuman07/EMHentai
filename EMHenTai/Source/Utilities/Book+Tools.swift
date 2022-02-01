@@ -8,9 +8,9 @@
 import Foundation
 
 extension Book {
-    static var downloadFolderPath = {
+    static var downloadFolderPath: String {
         NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first.flatMap { $0 + "/EMDownload" } ?? NSHomeDirectory() + "/Documents/EMDownload"
-    }()
+    }
     
     var folderPath: String {
         Book.downloadFolderPath + "/\(gid)"
@@ -22,7 +22,9 @@ extension Book {
 }
 
 extension Book {
-    var showTitle: String { title_jpn.isEmpty ? title : title_jpn }
+    var showTitle: String {
+        title_jpn.isEmpty ? title : title_jpn
+    }
     
     var fileCountNum: Int {
         Int(filecount) ?? 0
