@@ -16,7 +16,14 @@ class SearchManager {
     private var runningInfo: SearchInfo?
     private var waitingRequest: (info: SearchInfo, completion: ([Book], Bool) -> Void)?
     
-    func searchWith(info: SearchInfo, completion: @escaping ([Book], Bool) -> Void) {
+    var searchStartCallback: ((_ searchInfo: SearchInfo) -> Void)?
+    var searchFinishCallback: ((_ searchInfo: SearchInfo, _ books: [Book], _ isHappenedNetError: Bool) -> Void)?
+    
+    func searchWith(info: SearchInfo) {
+        searchWith(info: info) { self.searchFinishCallback?(info, $0, $1) }
+    }
+    
+    private func searchWith(info: SearchInfo, completion: @escaping ([Book], Bool) -> Void) {
         let url = info.requestString
         
         do {
@@ -31,6 +38,9 @@ class SearchManager {
                 return
             }
         }
+        
+        info.saveDB()
+        searchStartCallback?(info)
         
         AF.request(url).responseString(queue: .global()) { response in
             switch response.result {

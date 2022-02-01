@@ -13,8 +13,6 @@ class TagViewController: UITableViewController {
     private let book: Book
     private var selectedTags = [String]()
     
-    weak var bookVC: BookListViewController?
-    
     init(book: Book) {
         self.book = book
         super.init(style: .plain)
@@ -52,9 +50,11 @@ class TagViewController: UITableViewController {
     private func searchAction() {
         var searchInfo = SearchInfo()
         searchInfo.keyWord = selectedTags.joined(separator: " ")
-        searchInfo.saveDB()
-        bookVC?.refreshData(with: searchInfo)
-        navigationController?.popViewController(animated: true)
+        SearchManager.shared.searchWith(info: searchInfo)
+        navigationController?.popViewController(animated: false)
+        if let rootVC = UIApplication.shared.keyWindow?.rootViewController as? UITabBarController {
+            rootVC.selectedIndex = 0
+        }        
     }
 }
 

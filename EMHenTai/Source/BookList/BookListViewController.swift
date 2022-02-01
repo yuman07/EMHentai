@@ -15,20 +15,18 @@ enum BookListType {
 }
 
 class BookListViewController: UITableViewController {
-    let type: BookListType
-    var searchInfo = SearchInfo() {
-        didSet {
-            hasNext = true
-        }
-    }
-    var hasNext = true
-    var books = [Book]()
+    private let type: BookListType
+    
+    private var searchInfo: SearchInfo?
+    private var books = [Book]()
+    private var hasNext = true
     
     private let footerView = BookListFooterView()
     
     init(type: BookListType) {
         self.type = type
         super.init(nibName: nil, bundle: nil)
+        hidesBottomBarWhenPushed = false
     }
     
     required init?(coder: NSCoder) {
@@ -38,6 +36,7 @@ class BookListViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        setupSearchCallBack()
         setupData()
     }
     
@@ -75,11 +74,40 @@ class BookListViewController: UITableViewController {
         }
     }
     
+    private func setupSearchCallBack() {
+        guard type == .Home else { return }
+        SearchManager.shared.searchStartCallback = { [weak self] searchInfo in
+            guard let self = self, searchInfo.pageIndex == 0 else { return }
+            self.refreshControl?.beginRefreshing()
+            self.tableView.setContentOffset(CGPoint(x: 0, y: self.tableView.contentOffset.y - self.refreshControl!.frame.size.height), animated: true)
+        }
+        SearchManager.shared.searchFinishCallback = { [weak self] searchInfo, books, isHappenedNetError in
+            guard let self = self else { return }
+            self.hasNext = !books.isEmpty
+            if searchInfo.pageIndex == 0 {
+                self.books = books
+                if !self.tableView.visibleCells.isEmpty {
+                    self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
+                }
+            } else if self.hasNext {
+                self.books += books
+                self.searchInfo?.pageIndex += 1
+            }
+            self.tableView.reloadData()
+            self.refreshControl?.endRefreshing()
+            if isHappenedNetError {
+                self.footerView.hint = .netError
+            } else {
+                self.footerView.hint = self.hasNext ? .none : .noMoreData
+            }
+        }
+    }
+    
     @objc
     private func setupData() {
         switch type {
         case .Home:
-            refreshData(with: searchInfo)
+            refreshData(with: SearchInfo())
         case .History:
             refreshData(with: nil)
         case .Download:
@@ -90,57 +118,25 @@ class BookListViewController: UITableViewController {
 
 // MARK: load Data
 extension BookListViewController {
-    func refreshData(with searchInfo: SearchInfo?) {
-        refreshControl?.beginRefreshing()
-        tableView.setContentOffset(CGPoint(x: 0, y: tableView.contentOffset.y - refreshControl!.frame.size.height), animated: true)
+    private func refreshData(with searchInfo: SearchInfo?) {
         switch type {
         case .Home:
-            guard let searchInfo = searchInfo else { refreshControl?.endRefreshing(); return }
+            guard let searchInfo = searchInfo else { return }
             self.searchInfo = searchInfo
-            SearchManager.shared.searchWith(info: searchInfo) { [weak self] books, isHappenNetError in
-                guard let self = self else { return }
-                self.books = books
-                self.hasNext = !books.isEmpty
-                if isHappenNetError {
-                    self.footerView.hint = .netError
-                } else {
-                    self.footerView.hint = self.hasNext ? .none : .noData
-                }
-                if !self.tableView.visibleCells.isEmpty {
-                    self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
-                }
-                self.tableView.reloadData()
-                self.refreshControl?.endRefreshing()
-            }
+            SearchManager.shared.searchWith(info: searchInfo)
         case .History, .Download:
             books = (type == .History) ? DBManager.shared.booksMap[.history]! : DBManager.shared.booksMap[.download]!
             hasNext = false
             footerView.hint = books.isEmpty ? .noData : .noMoreData
             self.tableView.reloadData()
-            refreshControl?.endRefreshing()
         }
     }
     
-    func loadMoreData() {
-        guard type == .Home, hasNext else { return }
+    private func loadMoreData() {
+        guard type == .Home, let searchInfo = searchInfo, hasNext else { return }
         var nextInfo = searchInfo
         nextInfo.pageIndex += 1
-        SearchManager.shared.searchWith(info: nextInfo) { [weak self] books, isHappenNetError in
-            guard let self = self else { return }
-            if books.isEmpty {
-                self.hasNext = false
-            } else {
-                self.hasNext = true
-                self.books += books
-                self.searchInfo.pageIndex += 1
-                self.tableView.reloadData()
-            }
-            if isHappenNetError {
-                self.footerView.hint = .netError
-            } else {
-                self.footerView.hint = self.hasNext ? .none : .noMoreData
-            }
-        }
+        SearchManager.shared.searchWith(info: nextInfo)
     }
 }
 
@@ -150,9 +146,7 @@ extension BookListViewController {
     private func tapNavBarRightItem() {
         switch type {
         case .Home:
-            let searchVC = SearchViewController()
-            searchVC.bookVC = self
-            navigationController?.pushViewController(searchVC, animated: true)
+            navigationController?.pushViewController(SearchViewController(), animated: true)
         case .History:
             guard !DBManager.shared.booksMap[.history]!.isEmpty else { return }
             let vc = UIAlertController(title: "提示", message: "确定要清除所有历史记录吗？(不会影响已下载数据)", preferredStyle: .alert)
@@ -213,9 +207,7 @@ extension BookListViewController {
         
         if !book.tags.isEmpty {
             vc.addAction(UIAlertAction(title: "搜索相关Tag", style: .default, handler: { _ in
-                let tagVC = TagViewController(book: book)
-                tagVC.bookVC = self
-                self.navigationController?.pushViewController(tagVC, animated: true)
+                self.navigationController?.pushViewController(TagViewController(book: book), animated: true)
             }))
         }
         
