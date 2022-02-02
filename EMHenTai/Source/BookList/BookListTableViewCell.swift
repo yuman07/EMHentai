@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import Combine
 import Kingfisher
 
 class BookListTableViewCell: UITableViewCell {
@@ -14,6 +15,8 @@ class BookListTableViewCell: UITableViewCell {
     var book: Book?
     
     var longPressBlock: (() -> Void)?
+    
+    private var cancelToken: AnyCancellable?
     
     private let thumbImageView: UIImageView = {
         let view = UIImageView()
@@ -107,24 +110,15 @@ class BookListTableViewCell: UITableViewCell {
     }
     
     private func setupNoticication() {
-        NotificationCenter.default.addObserver(forName: DownloadManager.DownloadPageSuccessNotification,
-                                               object: nil,
-                                               queue: .main) { [weak self] notification in
-            guard let self = self else { return }
-            guard let gid = notification.object as? Int else { return }
-            guard let book = self.book else { return }
-            guard book.gid == gid else { return }
-            self.updateProgress()
-        }
-        NotificationCenter.default.addObserver(forName: DownloadManager.DownloadStateChangedNotification,
-                                               object: nil,
-                                               queue: .main) { [weak self] notification in
-            guard let self = self else { return }
-            guard let gid = notification.object as? Int else { return }
-            guard let book = self.book else { return }
-            guard book.gid == gid else { return }
-            self.updateProgress()
-        }
+        cancelToken = NotificationCenter.default.publisher(for: DownloadManager.DownloadPageSuccessNotification)
+            .merge(with: NotificationCenter.default.publisher(for: DownloadManager.DownloadStateChangedNotification))
+            .sink { [weak self] notification in
+                guard let self = self else { return }
+                guard let gid = notification.object as? Int else { return }
+                guard let book = self.book else { return }
+                guard book.gid == gid else { return }
+                self.updateProgress()
+            }
     }
     
     private func updateProgress() {
