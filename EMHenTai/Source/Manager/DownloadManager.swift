@@ -125,79 +125,86 @@ class DownloadManager {
         AF.request(url).responseString(queue: .global()) { response in
             if self.downloadState(of: book) != .ing { return }
             
+            var value = ""
             switch response.result {
-            case .success(let value):
-                let urls = value.allIndicesOf(string: SearchInfo().source.rawValue + "s/").map { index -> String in
-                    let start = value.index(value.startIndex, offsetBy: index)
-                    var end = value.index(after: start)
-                    while value[end] != "\"" && end < value.endIndex {
-                        end = value.index(after: end)
-                    }
-                    return "\(value[start..<end])"
-                }.enumerated().map { (index, url) -> (Int, String) in
-                    (index, FileManager.default.fileExists(atPath: book.imagePath(at: index + preImgCount)) ? "" : url)
+            case .success(let html):
+                value = html
+            case .failure:
+                if let data = response.data {
+                    value = String(data: data, encoding: .isoLatin1) ?? ""
                 }
-                let groupNum = urls.count
+            }
+            
+            guard !value.isEmpty else { return }
+            
+            let urls = value.allIndicesOf(string: SearchInfo().source.rawValue + "s/").map { index -> String in
+                let start = value.index(value.startIndex, offsetBy: index)
+                var end = value.index(after: start)
+                while value[end] != "\"" && end < value.endIndex {
+                    end = value.index(after: end)
+                }
+                return "\(value[start..<end])"
+            }.enumerated().map { (index, url) -> (Int, String) in
+                (index, FileManager.default.fileExists(atPath: book.imagePath(at: index + preImgCount)) ? "" : url)
+            }
+            let groupNum = urls.count
+            
+            let sema = DispatchSemaphore(value: DownloadManager.maxConcurrentOperationCount)
+            for (index, pageURL) in urls {
+                sema.wait()
+                if self.downloadState(of: book) != .ing { sema.signal(); return }
                 
-                let sema = DispatchSemaphore(value: DownloadManager.maxConcurrentOperationCount)
-                for (index, pageURL) in urls {
-                    sema.wait()
+                AF.request(pageURL).responseString(queue: .global()) { response in
                     if self.downloadState(of: book) != .ing { sema.signal(); return }
                     
-                    AF.request(pageURL).responseString(queue: .global()) { response in
-                        if self.downloadState(of: book) != .ing { sema.signal(); return }
-                        
-                        switch response.result {
-                        case .success(let value):
-                            guard let showKey = value.range(of: "showkey=\"").map({ range -> Substring in
-                                let start = range.upperBound
-                                var end = value.index(after: start)
-                                while value[end] != "\"" && end < value.endIndex {
-                                    end = value.index(after: end)
-                                }
-                                return value[start..<end]
-                            }) else { sema.signal(); completion(groupNum, index + preImgCount, ""); return }
-                            
-                            AF.request(
-                                SearchInfo().source.rawValue + "api.php",
-                                method: .post,
-                                parameters: [
-                                    "method": "showpage",
-                                    "gid": book.gid,
-                                    "page": (index + preImgCount + 1),
-                                    "imgkey": pageURL.split(separator: "/").reversed()[1],
-                                    "showkey": showKey,
-                                ],
-                                encoding: JSONEncoding.default
-                            ).responseDecodable(of: ImagePageResult.self, queue: .global()) { response in
-                                if self.downloadState(of: book) != .ing { sema.signal(); return }
-                                
-                                switch response.result {
-                                case .success(let value):
-                                    guard let img = value.i3.range(of: "src=\"").map({ range -> String in
-                                        let start = range.upperBound
-                                        var end = value.i3.index(after: start)
-                                        while value.i3[end] != "\"" && end < value.i3.endIndex {
-                                            end = value.i3.index(after: end)
-                                        }
-                                        return "\(value.i3[start..<end])"
-                                    }) else { sema.signal(); completion(groupNum, index + preImgCount, ""); return }
-                                    
-                                    sema.signal()
-                                    completion(groupNum, index + preImgCount, img)
-                                case .failure:
-                                    sema.signal()
-                                    completion(groupNum, index + preImgCount, "")
-                                }
+                    switch response.result {
+                    case .success(let value):
+                        guard let showKey = value.range(of: "showkey=\"").map({ range -> Substring in
+                            let start = range.upperBound
+                            var end = value.index(after: start)
+                            while value[end] != "\"" && end < value.endIndex {
+                                end = value.index(after: end)
                             }
-                        case .failure:
-                            sema.signal()
-                            completion(groupNum, index + preImgCount, "")
+                            return value[start..<end]
+                        }) else { sema.signal(); completion(groupNum, index + preImgCount, ""); return }
+                        
+                        AF.request(
+                            SearchInfo().source.rawValue + "api.php",
+                            method: .post,
+                            parameters: [
+                                "method": "showpage",
+                                "gid": book.gid,
+                                "page": (index + preImgCount + 1),
+                                "imgkey": pageURL.split(separator: "/").reversed()[1],
+                                "showkey": showKey,
+                            ],
+                            encoding: JSONEncoding.default
+                        ).responseDecodable(of: ImagePageResult.self, queue: .global()) { response in
+                            if self.downloadState(of: book) != .ing { sema.signal(); return }
+                            
+                            switch response.result {
+                            case .success(let value):
+                                guard let img = value.i3.range(of: "src=\"").map({ range -> String in
+                                    let start = range.upperBound
+                                    var end = value.i3.index(after: start)
+                                    while value.i3[end] != "\"" && end < value.i3.endIndex {
+                                        end = value.i3.index(after: end)
+                                    }
+                                    return "\(value.i3[start..<end])"
+                                }) else { sema.signal(); completion(groupNum, index + preImgCount, ""); return }
+                                
+                                sema.signal()
+                                completion(groupNum, index + preImgCount, img)
+                            case .failure:
+                                sema.signal()
+                                completion(groupNum, index + preImgCount, "")
+                            }
                         }
+                    case .failure:
+                        sema.signal()
+                        completion(groupNum, index + preImgCount, "")
                     }
                 }
-            case .failure:
-                break
             }
         }
     }
