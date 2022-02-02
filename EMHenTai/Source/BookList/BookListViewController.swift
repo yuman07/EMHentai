@@ -81,8 +81,8 @@ class BookListViewController: UITableViewController {
         SearchManager.shared.searchStartCallback = { [weak self] searchInfo in
             guard let self = self, searchInfo.pageIndex == 0 else { return }
             self.footerView.hint = .none
+            self.tableView.setContentOffset(CGPoint(x: 0, y: -self.refreshControl!.frame.size.height * 3), animated: false)
             self.refreshControl?.beginRefreshing()
-            self.tableView.setContentOffset(CGPoint(x: 0, y: -self.refreshControl!.frame.size.height), animated: false)
         }
         SearchManager.shared.searchFinishCallback = { [weak self] searchInfo, books, isHappenedNetError in
             guard let self = self else { return }
