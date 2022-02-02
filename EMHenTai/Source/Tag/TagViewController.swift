@@ -52,9 +52,7 @@ class TagViewController: UITableViewController {
         searchInfo.keyWord = selectedTags.joined(separator: " ")
         SearchManager.shared.searchWith(info: searchInfo)
         navigationController?.popViewController(animated: false)
-        if let rootVC = UIApplication.shared.keyWindow?.rootViewController as? UITabBarController {
-            rootVC.selectedIndex = 0
-        }        
+        (UIApplication.shared.keyWindow?.rootViewController as? UITabBarController)?.selectedIndex = 0   
     }
 }
 
