@@ -130,9 +130,7 @@ class DownloadManager {
             case .success(let html):
                 value = html
             case .failure:
-                if let data = response.data {
-                    value = String(data: data, encoding: .isoLatin1) ?? ""
-                }
+                value = response.data.flatMap { String(data: $0, encoding: .isoLatin1) } ?? ""
             }
             
             guard !value.isEmpty else { return }
