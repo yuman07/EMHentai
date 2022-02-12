@@ -26,6 +26,10 @@ extension Book {
         title_jpn.isEmpty ? title : title_jpn
     }
     
+    var originWebURLString: String {
+        "\(SearchInfo().source.rawValue)g/\(gid)/\(token)/"
+    }
+    
     var fileCountNum: Int {
         Int(filecount) ?? 0
     }

@@ -119,7 +119,7 @@ class DownloadManager {
     }
     
     private func getImageString(of book: Book, groupIndex: Int, preImgCount: Int, completion: @escaping (Int, Int, String) -> Void) {
-        var url = "\(SearchInfo().source.rawValue)g/\(book.gid)/\(book.token)/"
+        var url = book.originWebURLString
         if groupIndex > 0 { url += "?p=\(groupIndex)" }
         
         AF.request(url).responseString(queue: .global()) { response in
