@@ -74,15 +74,14 @@ class SearchManager {
         
         guard !ids.isEmpty else { return ([], false) }
         
-        guard let value = try? await AF.request(
-            info.source.rawValue + "api.php",
-            method: .post,
-            parameters: [
-                "method": "gdata",
-                "gidlist": ids
-            ],
-            encoding: JSONEncoding.default
-        ).serializingDecodable(Gmetadata.self).value else { return ([], true) }
+        guard let value = try? await AF
+                .request(info.source.rawValue + "api.php",
+                         method: .post,
+                         parameters: ["method": "gdata", "gidlist": ids],
+                         encoding: JSONEncoding.default)
+                .serializingDecodable(Gmetadata.self)
+                .value
+        else { return ([], true) }
         
         return (value.gmetadata, false)
     }
