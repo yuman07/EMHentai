@@ -11,13 +11,14 @@
 ## 功能
 
 - [x] 查看Ehentai上的本子
+- [x] 按语言搜索
+- [x] 相关Tag搜索
 - [x] 高级搜索
 - [x] 历史记录
 - [x] 下载
-- [x] 相关Tag搜索
 - [x] Tag翻译
 - [x] E-hentai/ExHentai切换
-- [x] 适配iPad
+- [x] 适配iPhone/iPad
 - [x] 适配暗黑模式
 - [x] 适配横竖屏
 
