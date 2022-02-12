@@ -7,6 +7,7 @@
 
 import UIKit
 import CoreData
+import Kingfisher
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -18,13 +19,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         container.loadPersistentStores { _, _ in }
         return container
     }()
-
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
-        DBManager.shared.setup()
+    
+    private func setupKingfisher() {
+        let c = KingfisherManager.shared.downloader.sessionConfiguration
+        c.httpCookieStorage = HTTPCookieStorage.shared
+        KingfisherManager.shared.downloader.sessionConfiguration = c
+    }
+    
+    private func setupUI() {
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.rootViewController = RootViewController()
         window?.makeKeyAndVisible()
+    }
+    
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        // Override point for customization after application launch.
+        DBManager.shared.setup()
+        setupKingfisher()
+        setupUI()
         return true
     }
 }

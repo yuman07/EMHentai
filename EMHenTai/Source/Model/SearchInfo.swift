@@ -53,10 +53,7 @@ extension SearchInfo {
         url += "&f_search=\((keyWord + language.rawValue).split(separator: " ").map({ TranslateManager.shared.translateCn("\($0)") }).joined(separator: "+"))"
         url += "&f_apply=Apply+Filter&inline_set=dm_l"
         if rating > 0 { url += "&advsearch=1&f_sname=on&f_stags=on&f_sr=on&f_srdd=\(rating + 1)" }
-        if URL(string: url) == nil, let encodedURL = url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
-            url = encodedURL
-        }
-        return url
+        return url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? url
     }
     
     func saveDB() {
