@@ -88,21 +88,21 @@ class DBManager {
     
     private func bookFrom(obj: NSManagedObject) -> Book {
         Book(gid: obj.value(forKey: "gid") as? Int ?? 0,
-                    title: obj.value(forKey: "title") as? String ?? "",
-                    title_jpn: obj.value(forKey: "title_jpn") as? String ?? "",
-                    category: obj.value(forKey: "category") as? String ?? "",
-                    thumb: obj.value(forKey: "thumb") as? String ?? "",
-                    uploader: obj.value(forKey: "uploader") as? String ?? "",
-                    filecount: obj.value(forKey: "filecount") as? String ?? "",
-                    filesize: obj.value(forKey: "filesize") as? Int ?? 0,
-                    tags: (obj.value(forKey: "tags") as? String ?? "").components(separatedBy: ","),
-                    token: obj.value(forKey: "token") as? String ?? "",
-                    rating: obj.value(forKey: "rating") as? String ?? "",
-                    archiver_key: obj.value(forKey: "archiver_key") as? String ?? "",
-                    posted: obj.value(forKey: "posted") as? String ?? "",
-                    expunged: obj.value(forKey: "expunged") as? Bool ?? false,
-                    torrentcount: obj.value(forKey: "torrentcount") as? String ?? "",
-                    torrents: (obj.value(forKey: "torrents") as? String ?? "").data(using: .utf8).flatMap { try? JSONDecoder().decode([Torrent].self, from: $0) } ?? [Torrent]())
+             title: obj.value(forKey: "title") as? String ?? "",
+             title_jpn: obj.value(forKey: "title_jpn") as? String ?? "",
+             category: obj.value(forKey: "category") as? String ?? "",
+             thumb: obj.value(forKey: "thumb") as? String ?? "",
+             uploader: obj.value(forKey: "uploader") as? String ?? "",
+             filecount: obj.value(forKey: "filecount") as? String ?? "",
+             filesize: obj.value(forKey: "filesize") as? Int ?? 0,
+             tags: (obj.value(forKey: "tags") as? String ?? "").components(separatedBy: ","),
+             token: obj.value(forKey: "token") as? String ?? "",
+             rating: obj.value(forKey: "rating") as? String ?? "",
+             archiver_key: obj.value(forKey: "archiver_key") as? String ?? "",
+             posted: obj.value(forKey: "posted") as? String ?? "",
+             expunged: obj.value(forKey: "expunged") as? Bool ?? false,
+             torrentcount: obj.value(forKey: "torrentcount") as? String ?? "",
+             torrents: (obj.value(forKey: "torrents") as? String ?? "").data(using: .utf8).flatMap { try? JSONDecoder().decode([Torrent].self, from: $0) } ?? [Torrent]())
     }
     
     private func update(obj: NSManagedObject, with book: Book) {
