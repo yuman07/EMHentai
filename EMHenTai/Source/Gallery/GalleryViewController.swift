@@ -82,7 +82,7 @@ class GalleryViewController: UIViewController {
         navBarBackgroundView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor).isActive = true
         navBarBackgroundView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "回到第一页", style: .plain, target: self, action: #selector(backToFirstPage))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "回到首页", style: .plain, target: self, action: #selector(backToFirstPage))
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {

@@ -11,7 +11,7 @@ import UIKit
 class BookListFooterView: UIView {
     enum HintType: String {
         case empty = " "
-        case noData = "没有数据"
+        case noData = "无数据"
         case noMoreData = "没有更多数据了"
         case netError = "网络错误：请检查网络连接或VPN设置"
     }
