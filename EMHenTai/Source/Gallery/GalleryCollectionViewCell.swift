@@ -67,11 +67,7 @@ class GalleryCollectionViewCell: UICollectionViewCell {
     }
     
     func updateImageWith(filePath: String) {
-        if let data = try? Data(contentsOf: URL(fileURLWithPath: filePath)) {
-            imageView.image = UIImage(data: data)
-        } else {
-            imageView.image = nil
-        }
+        imageView.image = (try? Data(contentsOf: URL(fileURLWithPath: filePath))).flatMap { UIImage(data: $0) }
     }
 }
 
