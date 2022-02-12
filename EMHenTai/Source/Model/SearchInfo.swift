@@ -7,21 +7,21 @@
 
 import Foundation
 
-enum SearchSource: String, CaseIterable {
-    case EHentai = "https://e-hentai.org/"
-    case ExHentai = "https://exhentai.org/"
-}
-
-enum SearchLanguage: String, CaseIterable {
-    case all = ""
-    case chinese = " language:Chinese"
-    case english = " language:English"
-}
-
 struct SearchInfo {
+    enum Source: String, CaseIterable {
+        case EHentai = "https://e-hentai.org/"
+        case ExHentai = "https://exhentai.org/"
+    }
+    
+    enum Language: String, CaseIterable {
+        case all = ""
+        case chinese = " language:Chinese"
+        case english = " language:English"
+    }
+    
     var pageIndex = 0
     var source = SearchInfo.currentSource
-    var language = (UserDefaults.standard.object(forKey: "SearchInfo_language") as? String).flatMap { SearchLanguage(rawValue: $0) } ?? SearchLanguage.all
+    var language = (UserDefaults.standard.object(forKey: "SearchInfo_language") as? String).flatMap { SearchInfo.Language(rawValue: $0) } ?? SearchInfo.Language.all
     var keyWord = (UserDefaults.standard.object(forKey: "SearchInfo_keyWord") as? String) ?? ""
     var rating = (UserDefaults.standard.object(forKey: "SearchInfo_rating") as? Int) ?? 0
     var doujinshi = (UserDefaults.standard.object(forKey: "SearchInfo_doujinshi") as? Bool) ?? true
@@ -37,8 +37,8 @@ struct SearchInfo {
 }
 
 extension SearchInfo {
-    static var currentSource: SearchSource {
-        (UserDefaults.standard.object(forKey: "SearchInfo_source") as? String).flatMap { SearchSource(rawValue: $0) } ?? SearchSource.EHentai
+    static var currentSource: SearchInfo.Source {
+        (UserDefaults.standard.object(forKey: "SearchInfo_source") as? String).flatMap { SearchInfo.Source(rawValue: $0) } ?? SearchInfo.Source.EHentai
     }
     
     var requestString: String {

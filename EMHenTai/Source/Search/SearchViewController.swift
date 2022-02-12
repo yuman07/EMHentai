@@ -105,9 +105,9 @@ extension SearchViewController: UITableViewDataSource {
         case 0:
             return 1
         case 1:
-            return SearchSource.allCases.count
+            return SearchInfo.Source.allCases.count
         case 2:
-            return SearchLanguage.allCases.count
+            return SearchInfo.Language.allCases.count
         case 3:
             return SearchViewController.ratings.count
         case 4:
@@ -141,14 +141,14 @@ extension SearchViewController: UITableViewDataSource {
                 textField?.text = searchInfo.keyWord
             }
         case 1:
-            var text = SearchSource.allCases[indexPath.row].rawValue
-            let source = SearchSource.allCases[indexPath.row]
+            var text = SearchInfo.Source.allCases[indexPath.row].rawValue
+            let source = SearchInfo.Source.allCases[indexPath.row]
             if (source == .ExHentai && !SettingManager.shared.isLogin) { text += "(登录后可用)" }
             cell.textLabel?.text = text
             cell.accessoryType = (searchInfo.source == source) ? .checkmark : .none
         case 2:
             cell.textLabel?.text = SearchViewController.languages[indexPath.row]
-            cell.accessoryType = (searchInfo.language == SearchLanguage.allCases[indexPath.row]) ? .checkmark : .none
+            cell.accessoryType = (searchInfo.language == SearchInfo.Language.allCases[indexPath.row]) ? .checkmark : .none
         case 3:
             cell.textLabel?.text = SearchViewController.ratings[indexPath.row]
             cell.accessoryType = (searchInfo.rating == indexPath.row) ? .checkmark : .none
@@ -193,9 +193,9 @@ extension SearchViewController: UITableViewDelegate {
         case 0:
             break
         case 1:
-            searchInfo.source = SearchSource.allCases[indexPath.row]
+            searchInfo.source = SearchInfo.Source.allCases[indexPath.row]
         case 2:
-            searchInfo.language = SearchLanguage.allCases[indexPath.row]
+            searchInfo.language = SearchInfo.Language.allCases[indexPath.row]
         case 3:
             searchInfo.rating = indexPath.row
         case 4:
