@@ -9,30 +9,41 @@ import Foundation
 import Alamofire
 
 class SearchManager {
+    private actor TaskInfo {
+        var runningInfo: SearchInfo?
+        var waitingInfo: SearchInfo?
+        
+        func checkNewInfo(_ info: SearchInfo) -> Bool {
+            if runningInfo == nil {
+                runningInfo = info
+                return true
+            } else if runningInfo!.requestString != info.requestString && (info.pageIndex == 0 || runningInfo!.pageIndex > 0) {
+                waitingInfo = info
+                return false
+            }
+            return false
+        }
+        
+        func getNextInfo() -> SearchInfo? {
+            runningInfo = nil
+            if let next = waitingInfo {
+                waitingInfo = nil
+                return next
+            }
+            return nil
+        }
+    }
+    
     static let shared = SearchManager()
     private init() {}
     
-    private let lock = NSLock()
-    private var runningInfo: SearchInfo?
-    private var waitingInfo: SearchInfo?
-    
+    private let taskInfo = TaskInfo()
     var searchStartCallback: ((_ searchInfo: SearchInfo) -> Void)?
     var searchFinishCallback: ((_ searchInfo: SearchInfo, _ books: [Book], _ isHappenedNetError: Bool) -> Void)?
     
     func searchWith(info: SearchInfo) {
         Task {
-            do {
-                lock.lock()
-                defer { lock.unlock() }
-                if runningInfo == nil {
-                    runningInfo = info
-                } else if runningInfo!.requestString == info.requestString {
-                    return
-                } else if info.pageIndex == 0 || runningInfo!.pageIndex > 0 {
-                    waitingInfo = info
-                    return
-                }
-            }
+            guard await taskInfo.checkNewInfo(info) else { return }
             
             info.saveDB()
             DispatchQueue.main.async {
@@ -41,17 +52,11 @@ class SearchManager {
             
             let value = await p_searchWith(info: info)
             
-            do {
-                lock.lock()
-                defer { lock.unlock() }
-                runningInfo = nil
-                if let next = waitingInfo {
-                    waitingInfo = nil
-                    searchWith(info: next)
-                } else {
-                    DispatchQueue.main.async {
-                        self.searchFinishCallback?(info, value.0, value.1)
-                    }
+            if let next = await taskInfo.getNextInfo() {
+                searchWith(info: next)
+            } else {
+                DispatchQueue.main.async {
+                    self.searchFinishCallback?(info, value.0, value.1)
                 }
             }
         }
