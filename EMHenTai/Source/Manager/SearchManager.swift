@@ -7,7 +7,6 @@
 
 import Foundation
 import Alamofire
-import SwiftUI
 
 class SearchManager {
     static let shared = SearchManager()
