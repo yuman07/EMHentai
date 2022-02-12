@@ -21,8 +21,7 @@ class TranslateManager {
                   let data = dic["data"] as? [String: [String: String]] else { continue }
             
             for (key, value) in data {
-                guard !key.isEmpty else { continue }
-                guard let name = value["name"], !name.isEmpty, key.lowercased() != name.lowercased() else { continue }
+                guard !key.isEmpty, let name = value["name"], !name.isEmpty, key.lowercased() != name.lowercased() else { continue }
                 dictEn[key] = name
                 dictCn[name] = key
             }
