@@ -20,7 +20,7 @@ class SearchManager {
             }
             guard runningInfo.requestString != info.requestString else { return false }
             
-            if (info.pageIndex == 0) || (waitingInfo == nil || waitingInfo!.pageIndex > 0) {
+            if (info.pageIndex == 0) || (runningInfo.pageIndex > 0 && (waitingInfo == nil || waitingInfo!.pageIndex > 0)) {
                 self.waitingInfo = info
                 return false
             }

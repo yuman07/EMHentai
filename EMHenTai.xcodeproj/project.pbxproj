@@ -505,7 +505,6 @@
 			baseConfigurationReference = B0B243D0240E92FA129A0D9A /* Pods-EMHenTai.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = V9YTC5D8QQ;
@@ -536,7 +535,6 @@
 			baseConfigurationReference = 1E7F3C881E1ABE71764FBE29 /* Pods-EMHenTai.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = V9YTC5D8QQ;
