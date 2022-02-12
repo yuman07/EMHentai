@@ -87,8 +87,7 @@ class DBManager {
     }
     
     private func bookFrom(obj: NSManagedObject) -> Book {
-        let ts = (obj.value(forKey: "torrents") as? String ?? "").data(using: .utf8).flatMap { try? JSONDecoder().decode([Torrent].self, from: $0) } ?? [Torrent]()
-        return Book(gid: obj.value(forKey: "gid") as? Int ?? 0,
+        Book(gid: obj.value(forKey: "gid") as? Int ?? 0,
                     title: obj.value(forKey: "title") as? String ?? "",
                     title_jpn: obj.value(forKey: "title_jpn") as? String ?? "",
                     category: obj.value(forKey: "category") as? String ?? "",
@@ -103,7 +102,7 @@ class DBManager {
                     posted: obj.value(forKey: "posted") as? String ?? "",
                     expunged: obj.value(forKey: "expunged") as? Bool ?? false,
                     torrentcount: obj.value(forKey: "torrentcount") as? String ?? "",
-                    torrents: ts)
+                    torrents: (obj.value(forKey: "torrents") as? String ?? "").data(using: .utf8).flatMap { try? JSONDecoder().decode([Torrent].self, from: $0) } ?? [Torrent]())
     }
     
     private func update(obj: NSManagedObject, with book: Book) {
@@ -122,7 +121,6 @@ class DBManager {
         obj.setValue(book.posted, forKey: "posted")
         obj.setValue(book.expunged, forKey: "expunged")
         obj.setValue(book.torrentcount, forKey: "torrentcount")
-        let ts = (try? JSONEncoder().encode(book.torrents)).flatMap { String(data: $0, encoding: .utf8) } ?? ""
-        obj.setValue(ts, forKey: "torrents")
+        obj.setValue((try? JSONEncoder().encode(book.torrents)).flatMap { String(data: $0, encoding: .utf8) } ?? "", forKey: "torrents")
     }
 }
