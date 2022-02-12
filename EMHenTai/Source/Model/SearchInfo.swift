@@ -20,7 +20,7 @@ enum SearchLanguage: String, CaseIterable {
 
 struct SearchInfo {
     var pageIndex = 0
-    var source = (UserDefaults.standard.object(forKey: "SearchInfo_source") as? String).flatMap { SearchSource(rawValue: $0) } ?? SearchSource.EHentai
+    var source = SearchInfo.currentSource
     var language = (UserDefaults.standard.object(forKey: "SearchInfo_language") as? String).flatMap { SearchLanguage(rawValue: $0) } ?? SearchLanguage.all
     var keyWord = (UserDefaults.standard.object(forKey: "SearchInfo_keyWord") as? String) ?? ""
     var rating = (UserDefaults.standard.object(forKey: "SearchInfo_rating") as? Int) ?? 0
@@ -37,6 +37,10 @@ struct SearchInfo {
 }
 
 extension SearchInfo {
+    static var currentSource: SearchSource {
+        (UserDefaults.standard.object(forKey: "SearchInfo_source") as? String).flatMap { SearchSource(rawValue: $0) } ?? SearchSource.EHentai
+    }
+    
     var requestString: String {
         var url = source.rawValue
         url += "?page=\(pageIndex)"

@@ -135,7 +135,7 @@ class DownloadManager {
             
             guard !value.isEmpty else { return }
             
-            let urls = value.allIndicesOf(string: SearchInfo().source.rawValue + "s/").map { index -> String in
+            let urls = value.allIndicesOf(string: SearchInfo.currentSource.rawValue + "s/").map { index -> String in
                 let start = value.index(value.startIndex, offsetBy: index)
                 var end = value.index(after: start)
                 while value[end] != "\"" && end < value.endIndex {
@@ -167,7 +167,7 @@ class DownloadManager {
                         }) else { sema.signal(); completion(groupNum, index + preImgCount, ""); return }
                         
                         AF.request(
-                            SearchInfo().source.rawValue + "api.php",
+                            SearchInfo.currentSource.rawValue + "api.php",
                             method: .post,
                             parameters: [
                                 "method": "showpage",

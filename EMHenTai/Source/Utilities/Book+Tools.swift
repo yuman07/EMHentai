@@ -19,15 +19,13 @@ extension Book {
     func imagePath(at index: Int) -> String {
         folderPath + "/\(gid)-\(index).jpg"
     }
-}
-
-extension Book {
+    
     var showTitle: String {
         title_jpn.isEmpty ? title : title_jpn
     }
     
     var originWebURLString: String {
-        "\(SearchInfo().source.rawValue)g/\(gid)/\(token)/"
+        "\(SearchInfo.currentSource.rawValue)g/\(gid)/\(token)/"
     }
     
     var fileCountNum: Int {
