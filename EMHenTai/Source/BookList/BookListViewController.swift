@@ -128,6 +128,7 @@ extension BookListViewController {
             SearchManager.shared.searchWith(info: searchInfo)
         case .History, .Download:
             books = (type == .History) ? DBManager.shared.booksMap[.history]! : DBManager.shared.booksMap[.download]!
+            if (type == .History) { navigationItem.rightBarButtonItem?.isEnabled = !books.isEmpty }
             hasNext = false
             footerView.hint = books.isEmpty ? .noData : .noMoreData
             self.tableView.reloadData()
