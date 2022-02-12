@@ -9,12 +9,12 @@ import Foundation
 import CoreData
 import UIKit
 
-enum DBType: String, CaseIterable {
-    case history = "HistoryBook"
-    case download = "DownloadBook"
-}
-
 class DBManager {
+    enum DBType: String, CaseIterable {
+        case history = "HistoryBook"
+        case download = "DownloadBook"
+    }
+    
     static let shared = DBManager()
     private init() {}
     
