@@ -72,12 +72,12 @@ class DownloadManager {
         let isRunning = runningDownload.contains(book.gid)
         lock.unlock()
         
-        if book.downloadedFileCount == 0 {
-            return isRunning ? .ing : .before
-        } else if book.downloadedFileCount == book.fileCountNum {
+        if book.downloadedFileCount == book.fileCountNum {
             return .finish
+        } else if isRunning {
+            return .ing
         } else {
-            return isRunning ? .ing : .suspend
+            return book.downloadedFileCount == 0 ? .before : .suspend
         }
     }
     
