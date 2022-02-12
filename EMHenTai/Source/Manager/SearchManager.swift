@@ -7,6 +7,7 @@
 
 import Foundation
 import Alamofire
+import SwiftUI
 
 class SearchManager {
     static let shared = SearchManager()
@@ -72,7 +73,7 @@ class SearchManager {
             return value[start..<end].split(separator: "/")
         }
         
-        if ids.isEmpty { return ([], false) }
+        guard !ids.isEmpty else { return ([], false) }
         
         guard let value = try? await AF.request(
             info.source.rawValue + "api.php",

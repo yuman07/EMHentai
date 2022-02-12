@@ -8,14 +8,14 @@
 import Foundation
 import Alamofire
 
-enum DownloadState {
-    case before
-    case ing
-    case suspend
-    case finish
-}
-
 class DownloadManager {
+    enum DownloadState {
+        case before
+        case ing
+        case suspend
+        case finish
+    }
+    
     static let shared = DownloadManager()
     private init() {}
     private static let maxConcurrentOperationCount = 6
@@ -35,36 +35,24 @@ class DownloadManager {
             return
         }
         
-        NotificationCenter.default.post(name: DownloadManager.DownloadStateChangedNotification,
-                                        object: book.gid,
-                                        userInfo: nil)
-        
-        if !FileManager.default.fileExists(atPath: book.folderPath) {
-            try? FileManager.default.createDirectory(at: URL(fileURLWithPath: book.folderPath),
-                                                     withIntermediateDirectories: true,
-                                                     attributes: nil)
-        }
-        
-        downloadGroup(book: book, groupIndex: 0, preImgCount: 0)
+        NotificationCenter.default.post(name: DownloadManager.DownloadStateChangedNotification, object: book.gid, userInfo: nil)
+        try? FileManager.default.createDirectory(at: URL(fileURLWithPath: book.folderPath), withIntermediateDirectories: true, attributes: nil)
+        downloadGroup(book: book, groupIndex: 0, finishImgCount: 0)
     }
     
     func suspend(book: Book) {
         lock.lock()
         runningDownload.remove(book.gid)
         lock.unlock()
-        NotificationCenter.default.post(name: DownloadManager.DownloadStateChangedNotification,
-                                        object: book.gid,
-                                        userInfo: nil)
+        NotificationCenter.default.post(name: DownloadManager.DownloadStateChangedNotification, object: book.gid, userInfo: nil)
     }
     
     func remove(book: Book) {
         lock.lock()
         runningDownload.remove(book.gid)
-        try? FileManager.default.removeItem(atPath: book.folderPath)
         lock.unlock()
-        NotificationCenter.default.post(name: DownloadManager.DownloadStateChangedNotification,
-                                        object: book.gid,
-                                        userInfo: nil)
+        try? FileManager.default.removeItem(atPath: book.folderPath)
+        NotificationCenter.default.post(name: DownloadManager.DownloadStateChangedNotification, object: book.gid, userInfo: nil)
     }
     
     func downloadState(of book: Book) -> DownloadState {
@@ -81,44 +69,38 @@ class DownloadManager {
         }
     }
     
-    private func downloadGroup(book: Book, groupIndex: Int, preImgCount: Int) {
+    private func downloadGroup(book: Book, groupIndex: Int, finishImgCount: Int) {
         if self.downloadState(of: book) != .ing { return }
         
-        let groupLock = NSLock()
         var curImgCount = 0
-        self.getImageString(of: book, groupIndex: groupIndex, preImgCount: preImgCount) { groupImgCount, index, imgString in
+        let curImgLock = NSLock()
+        self.getImageString(of: book, groupIndex: groupIndex, finishImgCount: finishImgCount) { groupImgCount, index, imgString in
             if self.downloadState(of: book) != .ing { return }
             
             AF.download(imgString, to: { _, _ in
                 (URL(fileURLWithPath: book.imagePath(at: index)), [])
-            }).response { response in
+            }).response { _ in
                 if FileManager.default.fileExists(atPath: book.imagePath(at: index)) {
                     if book.downloadedFileCount == book.fileCountNum {
                         self.lock.lock()
                         self.runningDownload.remove(book.gid)
                         self.lock.unlock()
-                        NotificationCenter.default.post(name: DownloadManager.DownloadStateChangedNotification,
-                                                        object: book.gid,
-                                                        userInfo: nil)
+                        NotificationCenter.default.post(name: DownloadManager.DownloadStateChangedNotification, object: book.gid, userInfo: nil)
                     }
-                    NotificationCenter.default.post(name: DownloadManager.DownloadPageSuccessNotification,
-                                                    object: book.gid,
-                                                    userInfo: nil)
-                    
-
+                    NotificationCenter.default.post(name: DownloadManager.DownloadPageSuccessNotification, object: book.gid, userInfo: nil)
                 }
-                groupLock.lock()
+                
+                curImgLock.lock()
+                defer { curImgLock.unlock() }
                 curImgCount += 1
-                if curImgCount == groupImgCount && preImgCount + curImgCount < book.fileCountNum {
-                    groupLock.unlock()
-                    self.downloadGroup(book: book, groupIndex: groupIndex + 1, preImgCount: preImgCount + groupImgCount)
+                if curImgCount == groupImgCount && finishImgCount + curImgCount < book.fileCountNum {
+                    self.downloadGroup(book: book, groupIndex: groupIndex + 1, finishImgCount: finishImgCount + curImgCount)
                 }
-                groupLock.unlock()
             }
         }
     }
     
-    private func getImageString(of book: Book, groupIndex: Int, preImgCount: Int, completion: @escaping (Int, Int, String) -> Void) {
+    private func getImageString(of book: Book, groupIndex: Int, finishImgCount: Int, completion: @escaping (Int, Int, String) -> Void) {
         var url = book.originWebURLString
         if groupIndex > 0 { url += "?p=\(groupIndex)" }
         
@@ -142,8 +124,8 @@ class DownloadManager {
                     end = value.index(after: end)
                 }
                 return "\(value[start..<end])"
-            }.enumerated().map { (index, url) -> (Int, String) in
-                (index, FileManager.default.fileExists(atPath: book.imagePath(at: index + preImgCount)) ? "" : url)
+            }.enumerated().map { (index, url) in
+                (index, FileManager.default.fileExists(atPath: book.imagePath(at: index + finishImgCount)) ? "" : url)
             }
             let groupNum = urls.count
             
@@ -164,7 +146,7 @@ class DownloadManager {
                                 end = value.index(after: end)
                             }
                             return value[start..<end]
-                        }) else { sema.signal(); completion(groupNum, index + preImgCount, ""); return }
+                        }) else { sema.signal(); completion(groupNum, index + finishImgCount, ""); return }
                         
                         AF.request(
                             SearchInfo.currentSource.rawValue + "api.php",
@@ -172,12 +154,12 @@ class DownloadManager {
                             parameters: [
                                 "method": "showpage",
                                 "gid": book.gid,
-                                "page": (index + preImgCount + 1),
+                                "page": (index + finishImgCount + 1),
                                 "imgkey": pageURL.split(separator: "/").reversed()[1],
                                 "showkey": showKey,
                             ],
                             encoding: JSONEncoding.default
-                        ).responseDecodable(of: ImagePageResult.self, queue: .global()) { response in
+                        ).responseDecodable(of: GroupModel.self, queue: .global()) { response in
                             if self.downloadState(of: book) != .ing { sema.signal(); return }
                             
                             switch response.result {
@@ -189,18 +171,18 @@ class DownloadManager {
                                         end = value.i3.index(after: end)
                                     }
                                     return "\(value.i3[start..<end])"
-                                }) else { sema.signal(); completion(groupNum, index + preImgCount, ""); return }
+                                }) else { sema.signal(); completion(groupNum, index + finishImgCount, ""); return }
                                 
                                 sema.signal()
-                                completion(groupNum, index + preImgCount, img)
+                                completion(groupNum, index + finishImgCount, img)
                             case .failure:
                                 sema.signal()
-                                completion(groupNum, index + preImgCount, "")
+                                completion(groupNum, index + finishImgCount, "")
                             }
                         }
                     case .failure:
                         sema.signal()
-                        completion(groupNum, index + preImgCount, "")
+                        completion(groupNum, index + finishImgCount, "")
                     }
                 }
             }
@@ -208,6 +190,6 @@ class DownloadManager {
     }
 }
 
-private struct ImagePageResult: Codable {
+private struct GroupModel: Codable {
     let i3: String
 }
