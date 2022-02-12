@@ -29,38 +29,56 @@ class DBManager {
         }
     }()
     
+    private var queueMap: [DBType: DispatchQueue] = {
+        DBType.allCases.reduce(into: [DBType: DispatchQueue]()) {
+            $0[$1] = DispatchQueue(label: "EMHenTai.DBManager.\($1)")
+        }
+    }()
+    
     func setup() {
         context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     }
     
     func insertIfNotExist(book: Book, at type: DBType) {
         if !contains(book: book, type: type) { self.booksMap[type]!.insert(book, at: 0) }
-        let request = NSFetchRequest<NSFetchRequestResult>(entityName: type.rawValue)
-        request.predicate = NSPredicate(format: "gid = %d", book.gid)
-        let isExist = ((try? context.fetch(request) as? [NSManagedObject]).flatMap { $0.count > 0 }) ?? false
-        if !isExist {
-            let obj = NSEntityDescription.insertNewObject(forEntityName: type.rawValue, into: context)
-            update(obj: obj, with: book)
-            saveDB()
+        
+        queueMap[type]!.async { [weak self] in
+            guard let self = self else { return }
+            let request = NSFetchRequest<NSFetchRequestResult>(entityName: type.rawValue)
+            request.predicate = NSPredicate(format: "gid = %d", book.gid)
+            let isExist = ((try? self.context.fetch(request) as? [NSManagedObject]).flatMap { $0.count > 0 }) ?? false
+            if !isExist {
+                let obj = NSEntityDescription.insertNewObject(forEntityName: type.rawValue, into: self.context)
+                self.update(obj: obj, with: book)
+                self.saveDB()
+            }
         }
     }
     
     func remove(book: Book, at type: DBType) {
         self.booksMap[type]?.removeAll { $0.gid == book.gid }
-        let request = NSFetchRequest<NSFetchRequestResult>(entityName: type.rawValue)
-        request.predicate = NSPredicate(format: "gid = %d", book.gid)
-        if let objs = try? context.fetch(request) as? [NSManagedObject] {
-            for obj in objs { context.delete(obj) }
-            saveDB()
+        
+        queueMap[type]!.async { [weak self] in
+            guard let self = self else { return }
+            let request = NSFetchRequest<NSFetchRequestResult>(entityName: type.rawValue)
+            request.predicate = NSPredicate(format: "gid = %d", book.gid)
+            if let objs = try? self.context.fetch(request) as? [NSManagedObject] {
+                for obj in objs { self.context.delete(obj) }
+                self.saveDB()
+            }
         }
     }
     
     func removeAll(type: DBType) {
         self.booksMap[type]?.removeAll()
-        let request = NSFetchRequest<NSFetchRequestResult>(entityName: type.rawValue)
-        if let objs = try? context.fetch(request) as? [NSManagedObject] {
-            for obj in objs { context.delete(obj) }
-            saveDB()
+        
+        queueMap[type]!.async { [weak self] in
+            guard let self = self else { return }
+            let request = NSFetchRequest<NSFetchRequestResult>(entityName: type.rawValue)
+            if let objs = try? self.context.fetch(request) as? [NSManagedObject] {
+                for obj in objs { self.context.delete(obj) }
+                self.saveDB()
+            }
         }
     }
     
