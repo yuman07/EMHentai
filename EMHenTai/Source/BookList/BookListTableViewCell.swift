@@ -140,7 +140,9 @@ class BookListTableViewCell: UITableViewCell {
     @objc
     private func downloadStatusChanged(notification: Notification) {
         guard let gid = notification.object as? Int, let book = self.book, book.gid == gid else { return }
-        updateProgress()
+        DispatchQueue.main.async { [weak self] in
+            self?.updateProgress()
+        }
     }
     
     @objc
