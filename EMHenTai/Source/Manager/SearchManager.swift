@@ -45,8 +45,7 @@ class SearchManager {
                 lock.lock()
                 defer { lock.unlock() }
                 runningInfo = nil
-                if waitingInfo != nil {
-                    let next = waitingInfo!
+                if let next = waitingInfo {
                     waitingInfo = nil
                     searchWith(info: next)
                 } else {

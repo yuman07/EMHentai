@@ -11,20 +11,24 @@ class SettingManager {
     static let shared = SettingManager()
     static let LoginStateChangedNotification = NSNotification.Name(rawValue: "EMHenTai.SettingManager.LoginStateChangedNotification")
     
-    private init() {
-        NotificationCenter.default.addObserver(forName: NSNotification.Name.NSHTTPCookieManagerCookiesChanged,
-                                               object: nil,
-                                               queue: .main) { [weak self] _ in
-            guard let self = self else { return }
-            self.isLogin = self.checkLogin()
-        }
-    }
-    
     lazy var isLogin = checkLogin() {
         didSet {
             if isLogin != oldValue {
                 NotificationCenter.default.post(name: SettingManager.LoginStateChangedNotification, object: nil)
             }
+        }
+    }
+    
+    private init() {
+        setupNotification()
+    }
+    
+    private func setupNotification() {
+        NotificationCenter.default.addObserver(forName: NSNotification.Name.NSHTTPCookieManagerCookiesChanged,
+                                               object: nil,
+                                               queue: .main) { [weak self] _ in
+            guard let self = self else { return }
+            self.isLogin = self.checkLogin()
         }
     }
     

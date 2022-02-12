@@ -9,16 +9,17 @@ import Foundation
 
 class TranslateManager {
     static let shared = TranslateManager()
-    private static let jsonName = "tag-v6.3917.1.json"  // https://github.com/EhTagTranslation/Database/releases    db.text.json
+    private static let jsonName = "tag-v6.3917.1.json"    // https://github.com/EhTagTranslation/Database/releases    db.text.json
     private init () {
-        guard let url = Bundle.main.url(forResource: TranslateManager.jsonName, withExtension: nil) else { return }
-        guard let data = try? Data(contentsOf: url) else { return }
-        guard let obj = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else { return }
-        guard let content = obj["data"] as? [[String: Any]] else { return }
+        guard let url = Bundle.main.url(forResource: TranslateManager.jsonName, withExtension: nil),
+              let data = try? Data(contentsOf: url),
+              let obj = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+              let content = obj["data"] as? [[String: Any]] else { return }
         
         for dic in content {
-            guard let namespace = dic["namespace"] as? String, namespace != "rows" else { continue }
-            guard let data = dic["data"] as? [String: [String: String]] else { continue }
+            guard let namespace = dic["namespace"] as? String, namespace != "rows",
+                  let data = dic["data"] as? [String: [String: String]] else { continue }
+            
             for (key, value) in data {
                 guard !key.isEmpty else { continue }
                 guard let name = value["name"], !name.isEmpty, key.lowercased() != name.lowercased() else { continue }

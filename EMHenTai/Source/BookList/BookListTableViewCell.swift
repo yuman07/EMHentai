@@ -113,10 +113,7 @@ class BookListTableViewCell: UITableViewCell {
         cancelToken = NotificationCenter.default.publisher(for: DownloadManager.DownloadPageSuccessNotification)
             .merge(with: NotificationCenter.default.publisher(for: DownloadManager.DownloadStateChangedNotification))
             .sink { [weak self] notification in
-                guard let self = self else { return }
-                guard let gid = notification.object as? Int else { return }
-                guard let book = self.book else { return }
-                guard book.gid == gid else { return }
+                guard let self = self, let gid = notification.object as? Int, let book = self.book, book.gid == gid else { return }
                 self.updateProgress()
             }
     }

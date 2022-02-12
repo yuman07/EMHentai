@@ -229,7 +229,8 @@ extension BookListViewController {
         if let cell = cell as? BookListTableViewCell, indexPath.row < books.count {
             let book = books[indexPath.row]
             cell.updateWith(book: book)
-            cell.longPressBlock = {
+            cell.longPressBlock = { [weak self] in
+                guard let self = self else { return }
                 self.present(self.makeAlertVC(with: book), animated: true, completion: nil)
             }
         }
