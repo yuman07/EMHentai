@@ -14,13 +14,17 @@ class SearchManager {
         var waitingInfo: SearchInfo?
         
         func checkNewInfo(_ info: SearchInfo) -> Bool {
-            if runningInfo == nil {
-                runningInfo = info
+            guard let runningInfo = runningInfo else {
+                self.runningInfo = info
                 return true
-            } else if runningInfo!.requestString != info.requestString && (info.pageIndex == 0 || runningInfo!.pageIndex > 0) {
-                waitingInfo = info
+            }
+            guard runningInfo.requestString != info.requestString else { return false }
+            
+            if (info.pageIndex == 0) || (waitingInfo == nil || waitingInfo!.pageIndex > 0) {
+                self.waitingInfo = info
                 return false
             }
+            
             return false
         }
         
