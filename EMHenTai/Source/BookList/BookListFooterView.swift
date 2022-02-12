@@ -16,7 +16,7 @@ class BookListFooterView: UIView {
         case netError = "网络错误：请检查网络连接或VPN设置"
     }
     
-    var hint = BookListFooterView.HintType.empty {
+    var hint = HintType.empty {
         didSet {
             self.label.text = hint.rawValue
         }
@@ -33,7 +33,7 @@ class BookListFooterView: UIView {
     
     private let label: UILabel = {
         let label = UILabel()
-        label.text = BookListFooterView.HintType.empty.rawValue
+        label.text = HintType.empty.rawValue
         label.font = UIFont.systemFont(ofSize: 14)
         label.sizeToFit()
         return label

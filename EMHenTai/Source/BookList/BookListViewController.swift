@@ -8,22 +8,22 @@
 import Foundation
 import UIKit
 
-enum BookListType {
-    case Home
-    case History
-    case Download
-}
-
 class BookListViewController: UITableViewController {
-    private let type: BookListType
+    enum ListType {
+        case Home
+        case History
+        case Download
+    }
+    
+    private let type: ListType
     
     private var searchInfo: SearchInfo?
     private var books = [Book]()
-    private var hasNext = true
+    private var hasMore = true
     
     private let footerView = BookListFooterView()
     
-    init(type: BookListType) {
+    init(type: ListType) {
         self.type = type
         super.init(nibName: nil, bundle: nil)
         hidesBottomBarWhenPushed = false
@@ -80,19 +80,18 @@ class BookListViewController: UITableViewController {
         guard type == .Home else { return }
         SearchManager.shared.searchStartCallback = { [weak self] searchInfo in
             guard let self = self, searchInfo.pageIndex == 0 else { return }
-            self.footerView.hint = .empty
             self.tableView.setContentOffset(CGPoint(x: 0, y: -self.refreshControl!.frame.size.height * 3), animated: false)
             self.refreshControl?.beginRefreshing()
         }
         SearchManager.shared.searchFinishCallback = { [weak self] searchInfo, books, isHappenedNetError in
             guard let self = self else { return }
-            self.hasNext = !books.isEmpty
+            self.hasMore = !books.isEmpty
             if searchInfo.pageIndex == 0 {
                 self.books = books
                 if !self.tableView.visibleCells.isEmpty {
                     self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
                 }
-            } else if self.hasNext {
+            } else {
                 self.books += books
             }
             self.searchInfo = searchInfo
@@ -100,7 +99,7 @@ class BookListViewController: UITableViewController {
             self.refreshControl?.endRefreshing()
             if isHappenedNetError {
                 self.footerView.hint = .netError
-            } else if !self.hasNext {
+            } else if !self.hasMore {
                 self.footerView.hint = self.books.isEmpty ? .noData : .noMoreData
             } else {
                 self.footerView.hint = .empty
@@ -131,14 +130,14 @@ extension BookListViewController {
         case .History, .Download:
             books = (type == .History) ? DBManager.shared.booksMap[.history]! : DBManager.shared.booksMap[.download]!
             if (type == .History) { navigationItem.rightBarButtonItem?.isEnabled = !books.isEmpty }
-            hasNext = false
+            hasMore = false
             footerView.hint = books.isEmpty ? .noData : .noMoreData
             self.tableView.reloadData()
         }
     }
     
     private func loadMoreData() {
-        guard type == .Home, let searchInfo = searchInfo, hasNext else { return }
+        guard type == .Home, let searchInfo = searchInfo, hasMore else { return }
         var nextInfo = searchInfo
         nextInfo.pageIndex += 1
         SearchManager.shared.searchWith(info: nextInfo)

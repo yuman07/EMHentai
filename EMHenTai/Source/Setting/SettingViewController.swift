@@ -34,8 +34,9 @@ class SettingViewController: UIViewController {
         super.viewWillAppear(animated)
         
         SettingManager.shared.calculateFilesSize { [weak self] (downloadSize: Int, historySize: Int) in
-            self?.fileSize = (downloadSize, historySize)
-            self?.tableView.reloadData()
+            guard let self = self else { return }
+            self.fileSize = (downloadSize, historySize)
+            self.tableView.reloadData()
         }
     }
     
