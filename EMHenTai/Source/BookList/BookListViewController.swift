@@ -101,7 +101,7 @@ class BookListViewController: UITableViewController {
             if isHappenedNetError {
                 self.footerView.hint = .netError
             } else {
-                self.footerView.hint = self.hasNext ? .empty : .noMoreData
+                self.footerView.hint = self.books.isEmpty ? .noData : .noMoreData
             }
         }
     }
