@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import Kingfisher
 
 class BookListTableViewCell: UITableViewCell {
     
