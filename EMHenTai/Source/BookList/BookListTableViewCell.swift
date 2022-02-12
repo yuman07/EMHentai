@@ -7,16 +7,12 @@
 
 import Foundation
 import UIKit
-import Combine
-import Kingfisher
 
 class BookListTableViewCell: UITableViewCell {
     
     var book: Book?
     
     var longPressBlock: (() -> Void)?
-    
-    private var cancelToken: AnyCancellable?
     
     private let thumbImageView: UIImageView = {
         let view = UIImageView()
@@ -110,14 +106,11 @@ class BookListTableViewCell: UITableViewCell {
     }
     
     private func setupNoticication() {
-        cancelToken = NotificationCenter.default.publisher(for: DownloadManager.DownloadPageSuccessNotification)
-            .merge(with: NotificationCenter.default.publisher(for: DownloadManager.DownloadStateChangedNotification))
-            .sink { [weak self] notification in
-                guard let self = self, let gid = notification.object as? Int, let book = self.book, book.gid == gid else { return }
-                self.updateProgress()
-            }
+        NotificationCenter.default.addObserver(self, selector: #selector(updateProgress), name: DownloadManager.DownloadPageSuccessNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateProgress), name: DownloadManager.DownloadStateChangedNotification, object: nil)
     }
     
+    @objc
     private func updateProgress() {
         progressLabel.text = ""
         guard let book = self.book else { return }
