@@ -106,11 +106,10 @@ class BookListTableViewCell: UITableViewCell {
     }
     
     private func setupNoticication() {
-        NotificationCenter.default.addObserver(self, selector: #selector(updateProgress), name: DownloadManager.DownloadPageSuccessNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(updateProgress), name: DownloadManager.DownloadStateChangedNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(downloadStatusChanged(notification:)), name: DownloadManager.DownloadPageSuccessNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(downloadStatusChanged(notification:)), name: DownloadManager.DownloadStateChangedNotification, object: nil)
     }
     
-    @objc
     private func updateProgress() {
         progressLabel.text = ""
         guard let book = self.book else { return }
@@ -135,6 +134,12 @@ class BookListTableViewCell: UITableViewCell {
         categoryLabel.text = book.category
         scoreLabel.text = book.rating
         fileCountLabel.text = "\(book.fileCountNum)页"
+        updateProgress()
+    }
+    
+    @objc
+    private func downloadStatusChanged(notification: Notification) {
+        guard let gid = notification.object as? Int, let book = self.book, book.gid == gid else { return }
         updateProgress()
     }
     
