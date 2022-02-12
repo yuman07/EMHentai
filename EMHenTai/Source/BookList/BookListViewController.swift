@@ -80,7 +80,7 @@ class BookListViewController: UITableViewController {
         guard type == .Home else { return }
         SearchManager.shared.searchStartCallback = { [weak self] searchInfo in
             guard let self = self, searchInfo.pageIndex == 0 else { return }
-            self.footerView.hint = .none
+            self.footerView.hint = .empty
             self.tableView.setContentOffset(CGPoint(x: 0, y: -self.refreshControl!.frame.size.height * 3), animated: false)
             self.refreshControl?.beginRefreshing()
         }
@@ -101,7 +101,7 @@ class BookListViewController: UITableViewController {
             if isHappenedNetError {
                 self.footerView.hint = .netError
             } else {
-                self.footerView.hint = self.hasNext ? .none : .noMoreData
+                self.footerView.hint = self.hasNext ? .empty : .noMoreData
             }
         }
     }
