@@ -20,18 +20,14 @@ class DBManager {
     
     var context: NSManagedObjectContext!
     
+    private var queue = DispatchQueue(label: "EMHenTai.DBManager.Queue")
+    
     private(set) lazy var booksMap: [DBType: [Book]] = {
         DBType.allCases.reduce(into: [DBType: [Book]]()) { map, type in
             map[type] = {
                 let request = NSFetchRequest<NSFetchRequestResult>(entityName: type.rawValue)
                 return (try? context.fetch(request) as? [NSManagedObject]).flatMap { $0.map { bookFrom(obj: $0) }.reversed() } ?? [Book]()
             }()
-        }
-    }()
-    
-    private var queueMap: [DBType: DispatchQueue] = {
-        DBType.allCases.reduce(into: [DBType: DispatchQueue]()) {
-            $0[$1] = DispatchQueue(label: "EMHenTai.DBManager.\($1)")
         }
     }()
     
@@ -42,7 +38,7 @@ class DBManager {
     func insertIfNotExist(book: Book, at type: DBType) {
         if !contains(book: book, type: type) { self.booksMap[type]!.insert(book, at: 0) }
         
-        queueMap[type]!.async { [weak self] in
+        queue.async { [weak self] in
             guard let self = self else { return }
             let request = NSFetchRequest<NSFetchRequestResult>(entityName: type.rawValue)
             request.predicate = NSPredicate(format: "gid = %d", book.gid)
@@ -58,7 +54,7 @@ class DBManager {
     func remove(book: Book, at type: DBType) {
         self.booksMap[type]?.removeAll { $0.gid == book.gid }
         
-        queueMap[type]!.async { [weak self] in
+        queue.async { [weak self] in
             guard let self = self else { return }
             let request = NSFetchRequest<NSFetchRequestResult>(entityName: type.rawValue)
             request.predicate = NSPredicate(format: "gid = %d", book.gid)
@@ -72,7 +68,7 @@ class DBManager {
     func removeAll(type: DBType) {
         self.booksMap[type]?.removeAll()
         
-        queueMap[type]!.async { [weak self] in
+        queue.async { [weak self] in
             guard let self = self else { return }
             let request = NSFetchRequest<NSFetchRequestResult>(entityName: type.rawValue)
             if let objs = try? self.context.fetch(request) as? [NSManagedObject] {
