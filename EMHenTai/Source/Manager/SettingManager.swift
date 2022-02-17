@@ -58,11 +58,21 @@ class SettingManager {
     
     private func checkLogin() -> Bool {
         guard let cookies = HTTPCookieStorage.shared.cookies else { return false }
+        var igneous: String?
+        var memberID: String?
+        var passHash: String?
         for cookie in cookies {
-            if let expiresDate = cookie.expiresDate, Date() < expiresDate, cookie.name == "ipb_pass_hash" {
-                return true
+            guard let expiresDate = cookie.expiresDate, expiresDate > Date() && !cookie.value.isEmpty && cookie.value.lowercased() != "null" else { continue }
+            if cookie.name == "igneous" && cookie.value != "mystery" {
+                igneous = cookie.value
+            }
+            if cookie.name ==  "ipb_member_id" {
+                memberID = cookie.value
+            }
+            if cookie.name == "ipb_pass_hash" {
+                passHash = cookie.value
             }
         }
-        return false
+        return igneous != nil && memberID != nil && passHash != nil
     }
 }
