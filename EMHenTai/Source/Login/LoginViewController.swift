@@ -10,8 +10,8 @@ import UIKit
 import WebKit
 
 // Guide: https://nicebowl.fun/11
-class LoginViewController: UIViewController {
-    private static let loginURL = "https://forums.e-hentai.org/index.php?act=Login&CODE=01"
+class LoginViewController: UIViewController, WKNavigationDelegate {
+    private static let loginURL = "https://forums.e-hentai.org/index.php?act=Login"
     
     private let webView = WKWebView()
     
@@ -43,17 +43,14 @@ class LoginViewController: UIViewController {
     
     private func setupData() {
         guard let url = URL(string: LoginViewController.loginURL) else { return }
-        webView.configuration.websiteDataStore.httpCookieStore.add(self)
+        SettingManager.shared.logout()
+        webView.navigationDelegate = self
         webView.load(URLRequest(url: url))
     }
-}
-
-extension LoginViewController: WKHTTPCookieStoreObserver {
-    func cookiesDidChange(in cookieStore: WKHTTPCookieStore) {
-        cookieStore.getAllCookies {
-            for cookie in $0 {
-                HTTPCookieStorage.shared.setCookie(cookie)
-            }
+    
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        webView.configuration.websiteDataStore.httpCookieStore.getAllCookies { cookies in
+            cookies.forEach { HTTPCookieStorage.shared.setCookie($0) }
         }
     }
 }
