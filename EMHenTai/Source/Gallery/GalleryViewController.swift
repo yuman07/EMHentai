@@ -17,6 +17,8 @@ class GalleryViewController: UIViewController {
         set { UserDefaults.standard.set(newValue, forKey: "GalleryViewController_lastSeenPageIndex_\(book.gid)") }
     }
     
+    private var token: NSObjectProtocol?
+    
     private let navBarBackgroundView: UIView = {
         let view = UIView()
         view.backgroundColor = .systemGroupedBackground
@@ -46,6 +48,12 @@ class GalleryViewController: UIViewController {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        if let token = self.token {
+            NotificationCenter.default.removeObserver(token)
+        }
     }
     
     override func viewDidLoad() {
@@ -98,9 +106,9 @@ class GalleryViewController: UIViewController {
     }
     
     private func setupNotification() {
-        NotificationCenter.default.addObserver(forName: DownloadManager.DownloadPageSuccessNotification,
-                                               object: nil,
-                                               queue: .main) { [weak self] notification in
+        self.token = NotificationCenter.default.addObserver(forName: DownloadManager.DownloadPageSuccessNotification,
+                                                            object: nil,
+                                                            queue: .main) { [weak self] notification in
             guard let self = self, let gid = notification.object as? Int, gid == self.book.gid else { return }
             self.collectionView.reloadData()
         }
