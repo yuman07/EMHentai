@@ -63,7 +63,7 @@ class WebViewController: UIViewController {
         vc.completionWithItemsHandler = { _, _, _, _ in
             vc.dismiss(animated: true, completion: nil)
         }
-        self.present(vc, animated: true, completion: nil)
+        present(vc, animated: true, completion: nil)
     }
 }
 
