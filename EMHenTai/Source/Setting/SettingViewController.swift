@@ -36,7 +36,7 @@ class SettingViewController: UIViewController {
         SettingManager.shared.calculateFilesSize { [weak self] (downloadSize: Int, historySize: Int) in
             guard let self = self else { return }
             self.fileSize = (downloadSize, historySize)
-            self.tableView.reloadData()
+            self.tableView.reloadSections([1], with: .none)
         }
     }
     
@@ -59,7 +59,7 @@ class SettingViewController: UIViewController {
                                                        object: nil,
                                                        queue: .main) { [weak self] _ in
             guard let self = self else { NotificationCenter.default.removeObserver(token!); return }
-            self.tableView.reloadData()
+            self.tableView.reloadSections([0], with: .none)
         }
     }
 }

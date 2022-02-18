@@ -225,6 +225,6 @@ extension SearchViewController: UITableViewDelegate {
             break
         }
         searchInfo.keyWord = textField?.text ?? ""
-        tableView.reloadData()
+        tableView.reloadSections([indexPath.section], with: .none)
     }
 }

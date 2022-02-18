@@ -87,7 +87,7 @@ class DownloadManager {
                         self.lock.unlock()
                         NotificationCenter.default.post(name: DownloadManager.DownloadStateChangedNotification, object: book.gid, userInfo: nil)
                     }
-                    NotificationCenter.default.post(name: DownloadManager.DownloadPageSuccessNotification, object: book.gid, userInfo: nil)
+                    NotificationCenter.default.post(name: DownloadManager.DownloadPageSuccessNotification, object: (book.gid, index), userInfo: nil)
                 }
                 
                 curImgLock.lock()

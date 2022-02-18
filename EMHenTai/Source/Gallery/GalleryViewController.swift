@@ -103,8 +103,8 @@ class GalleryViewController: UIViewController {
                                                        object: nil,
                                                        queue: .main) { [weak self] notification in
             guard let self = self else { NotificationCenter.default.removeObserver(token!); return }
-            guard let gid = notification.object as? Int, gid == self.book.gid else { return }
-            self.collectionView.reloadData()
+            guard let (gid, index) = notification.object as? (Int, Int), gid == self.book.gid else { return }
+            self.collectionView.reloadItems(at: [IndexPath(row: index, section: 0)])
         }
     }
     

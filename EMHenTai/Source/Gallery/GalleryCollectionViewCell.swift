@@ -59,7 +59,7 @@ class GalleryCollectionViewCell: UICollectionViewCell {
     }
     
     private func setupGesture() {
-        let oneTap = UITapGestureRecognizer(target: self, action: #selector(tapAction))
+        let oneTap = UITapGestureRecognizer(target: self, action: #selector(oneTapAction))
         let doubleTap = UITapGestureRecognizer(target: self, action: #selector(doubleTapAction))
         oneTap.require(toFail: doubleTap)
         doubleTap.numberOfTapsRequired = 2
@@ -68,7 +68,7 @@ class GalleryCollectionViewCell: UICollectionViewCell {
     }
     
     @objc
-    private func tapAction() {
+    private func oneTapAction() {
         tapBlock?()
     }
     
