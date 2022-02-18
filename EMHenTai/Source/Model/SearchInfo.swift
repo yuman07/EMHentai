@@ -26,16 +26,16 @@ struct SearchInfo: Codable {
     }
     
     enum Catetory: String, CaseIterable, Codable {
-        case doujinshi = "doujinshi"
-        case manga = "manga"
-        case artistcg = "artistcg"
-        case gamecg = "gamecg"
-        case western = "western"
+        case doujinshi
+        case manga
+        case artistcg
+        case gamecg
+        case western
         case non_h = "non-h"
-        case imageset = "imageset"
-        case cosplay = "cosplay"
-        case asianporn = "asianporn"
-        case misc = "misc"
+        case imageset
+        case cosplay
+        case asianporn
+        case misc
     }
     
     static var currentSource = {
