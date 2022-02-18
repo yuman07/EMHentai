@@ -25,7 +25,7 @@ struct SearchInfo: Codable {
         case atLeast4
     }
     
-    enum Catetory: String, CaseIterable, Codable {
+    enum Category: String, CaseIterable, Codable {
         case doujinshi
         case manga
         case artistcg
@@ -47,7 +47,7 @@ struct SearchInfo: Codable {
     var source = Source.EHentai
     var language = Language.all
     var rating = Rating.all
-    var catetories = Catetory.allCases
+    var categories = Category.allCases
     
     init() {
         if let data = UserDefaults.standard.object(forKey: "EMHenTai.SearchInfo.shared") as? Data,
@@ -61,8 +61,8 @@ extension SearchInfo {
     var requestString: String {
         var url = source.rawValue
         url += "?page=\(pageIndex)"
-        for category in Catetory.allCases {
-            url += "&f_\(category.rawValue)=\(catetories.contains(category) ? 1 : 0)"
+        for category in Category.allCases {
+            url += "&f_\(category.rawValue)=\(categories.contains(category) ? 1 : 0)"
         }
         url += "&f_search=\((keyWord + language.rawValue).split(separator: " ").map({ TranslateManager.shared.translateCn("\($0)") }).joined(separator: "+"))"
         url += "&f_apply=Apply+Filter&inline_set=dm_l"
@@ -115,7 +115,7 @@ extension SearchInfo.Rating: searchVCItemProtocol {
     }
 }
 
-extension SearchInfo.Catetory: searchVCItemProtocol {
+extension SearchInfo.Category: searchVCItemProtocol {
     var searchItemTitle: String {
         switch self {
         case .doujinshi:

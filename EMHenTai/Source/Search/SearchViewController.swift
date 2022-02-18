@@ -91,7 +91,7 @@ extension SearchViewController: UITableViewDataSource {
         case 3:
             return SearchInfo.Rating.allCases.count
         case 4:
-            return SearchInfo.Catetory.allCases.count
+            return SearchInfo.Category.allCases.count
         default:
             return 0
         }
@@ -133,9 +133,9 @@ extension SearchViewController: UITableViewDataSource {
             cell.textLabel?.text = rating.searchItemTitle
             cell.accessoryType = (searchInfo.rating == rating) ? .checkmark : .none
         case 4:
-            let category = SearchInfo.Catetory.allCases[indexPath.row]
+            let category = SearchInfo.Category.allCases[indexPath.row]
             cell.textLabel?.text = category.searchItemTitle
-            cell.accessoryType = searchInfo.catetories.contains(category) ? .checkmark : .none
+            cell.accessoryType = searchInfo.categories.contains(category) ? .checkmark : .none
         default:
             break
         }
@@ -155,11 +155,11 @@ extension SearchViewController: UITableViewDelegate {
         case 3:
             searchInfo.rating = SearchInfo.Rating.allCases[indexPath.row]
         case 4:
-            let category = SearchInfo.Catetory.allCases[indexPath.row]
-            if searchInfo.catetories.contains(category) {
-                searchInfo.catetories.removeAll(where: { $0 == category })
+            let category = SearchInfo.Category.allCases[indexPath.row]
+            if searchInfo.categories.contains(category) {
+                searchInfo.categories.removeAll(where: { $0 == category })
             } else {
-                searchInfo.catetories.append(category)
+                searchInfo.categories.append(category)
             }
         default:
             break
