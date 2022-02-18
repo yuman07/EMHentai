@@ -69,7 +69,7 @@ class SettingManager {
         var memberIDExist = false
         var passHashExist = false
         for cookie in cookies {
-            guard let expiresDate = cookie.expiresDate, expiresDate > Date() && !cookie.value.isEmpty && cookie.value.lowercased() != "null" else { continue }
+            guard let expiresDate = cookie.expiresDate, expiresDate > Date() && !cookie.value.isEmpty else { continue }
             if cookie.name ==  "ipb_member_id" {
                 memberIDExist = true
             }
