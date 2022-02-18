@@ -6,12 +6,13 @@
 //
 
 import Foundation
+import WebKit
 
 class SettingManager {
     static let shared = SettingManager()
     static let LoginStateChangedNotification = NSNotification.Name(rawValue: "EMHenTai.SettingManager.LoginStateChangedNotification")
     
-    let loginURL = "https://forums.e-hentai.org/index.php?act=Login"
+    let loginURL = URL(string: "https://forums.e-hentai.org/index.php?act=Login")!
     
     lazy var isLogin = checkLogin() {
         didSet {
@@ -36,8 +37,12 @@ class SettingManager {
     }
     
     func logout() {
-        guard let cookies = HTTPCookieStorage.shared.cookies else { return }
-        cookies.forEach { HTTPCookieStorage.shared.deleteCookie($0) }
+        if let cookies = HTTPCookieStorage.shared.cookies {
+            cookies.forEach { HTTPCookieStorage.shared.deleteCookie($0) }
+        }
+        WKWebsiteDataStore.default().httpCookieStore.getAllCookies { cookies in
+            cookies.forEach { WKWebsiteDataStore.default().httpCookieStore.delete($0, completionHandler: nil) }
+        }
     }
     
     func calculateFilesSize(completion: @escaping ((downloadSize: Int, historySize: Int)) -> Void) {
@@ -61,21 +66,17 @@ class SettingManager {
     
     private func checkLogin() -> Bool {
         guard let cookies = HTTPCookieStorage.shared.cookies else { return false }
-        var igneous: String?
-        var memberID: String?
-        var passHash: String?
+        var memberIDExist = false
+        var passHashExist = false
         for cookie in cookies {
             guard let expiresDate = cookie.expiresDate, expiresDate > Date() && !cookie.value.isEmpty && cookie.value.lowercased() != "null" else { continue }
-            if cookie.name == "igneous" && cookie.value != "mystery" {
-                igneous = cookie.value
-            }
             if cookie.name ==  "ipb_member_id" {
-                memberID = cookie.value
+                memberIDExist = true
             }
             if cookie.name == "ipb_pass_hash" {
-                passHash = cookie.value
+                passHashExist = true
             }
         }
-        return igneous != nil && memberID != nil && passHash != nil
+        return memberIDExist && passHashExist
     }
 }
