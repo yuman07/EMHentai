@@ -11,10 +11,9 @@ import WebKit
 
 class WebViewController: UIViewController {
     private let webView = WKWebView()
-    
-    let url: URL
-    let needSyncCookieToApp: Bool
-    let shareItem: (shareTitle: String?, shareImage: UIImage?)?
+    private let url: URL
+    private let needSyncCookieToApp: Bool
+    private let shareItem: (shareTitle: String?, shareImage: UIImage?)?
     
     init(url: URL, needSyncCookieToApp: Bool = false, shareItem: (shareTitle: String?, shareImage: UIImage?)? = nil) {
         self.url = url
