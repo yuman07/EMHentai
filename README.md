@@ -18,6 +18,7 @@
 - [x] 下载
 - [x] Tag翻译
 - [x] E-hentai/ExHentai切换
+- [x] 分享功能
 - [x] 适配iPhone/iPad
 - [x] 适配暗黑模式
 - [x] 适配横竖屏

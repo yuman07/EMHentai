@@ -14,10 +14,12 @@ class WebViewController: UIViewController {
     
     let url: URL
     let needSyncCookieToApp: Bool
+    let shareItem: (shareTitle: String?, shareImage: UIImage?)?
     
-    init(url: URL, needSyncCookieToApp: Bool = false) {
+    init(url: URL, needSyncCookieToApp: Bool = false, shareItem: (shareTitle: String?, shareImage: UIImage?)? = nil) {
         self.url = url
         self.needSyncCookieToApp = needSyncCookieToApp
+        self.shareItem = shareItem
         super.init(nibName: nil, bundle: nil)
         hidesBottomBarWhenPushed = true
     }
@@ -42,10 +44,26 @@ class WebViewController: UIViewController {
         webView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         webView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         webView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        
+        if shareItem != nil {
+            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(shareAction))
+        }
     }
     
     private func setupData() {
         webView.load(URLRequest(url: url))
+    }
+    
+    @objc
+    func shareAction() {
+        guard let shareItem = shareItem else { return }
+        let title = shareItem.shareTitle ?? self.title ?? self.url.absoluteString
+        let image = shareItem.shareImage ?? UIApplication.shared.APPIcon ?? UIImage()
+        let vc = UIActivityViewController(activityItems: [title, image, self.url], applicationActivities: nil)
+        vc.completionWithItemsHandler = { _, _, _, _ in
+            vc.dismiss(animated: true, completion: nil)
+        }
+        self.present(vc, animated: true, completion: nil)
     }
 }
 

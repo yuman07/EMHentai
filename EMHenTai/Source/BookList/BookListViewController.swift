@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import Kingfisher
 
 class BookListViewController: UITableViewController {
     enum ListType {
@@ -217,7 +218,7 @@ extension BookListViewController {
         
         if let url = URL(string: book.originWebURLString) {
             vc.addAction(UIAlertAction(title: "打开原网页", style: .default, handler: { _ in
-                self.navigationController?.pushViewController(WebViewController(url: url), animated: true)
+                self.navigationController?.pushViewController(WebViewController(url: url, shareItem: (book.showTitle, ImageCache.default.retrieveImageInMemoryCache(forKey: book.thumb))), animated: true)
             }))
         }
         
