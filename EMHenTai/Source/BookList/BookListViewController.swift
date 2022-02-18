@@ -183,21 +183,24 @@ extension BookListViewController {
                 self.tableView.reloadData()
             }))
         } else {
-            if state == .before || state == .suspend {
+            switch state {
+            case .before, .suspend:
                 vc.addAction(UIAlertAction(title: "下载", style: .default, handler: { _ in
                     DownloadManager.shared.download(book: book)
                 }))
-            }
-            if state == .ing {
+            case .ing:
                 vc.addAction(UIAlertAction(title: "暂停", style: .default, handler: { _ in
                     DownloadManager.shared.suspend(book: book)
                 }))
+            case .finish:
+                if type != .History {
+                    vc.addAction(UIAlertAction(title: "删除下载", style: .default, handler: { _ in
+                        DownloadManager.shared.remove(book: book)
+                        DBManager.shared.remove(book: book, at: .download)
+                        if self.type == .Download { self.refreshData(with: nil) }
+                    }))
+                }
             }
-            vc.addAction(UIAlertAction(title: "删除下载", style: .default, handler: { _ in
-                DownloadManager.shared.remove(book: book)
-                DBManager.shared.remove(book: book, at: .download)
-                if self.type == .Download { self.refreshData(with: nil) }
-            }))
         }
         
         if type == .History {
