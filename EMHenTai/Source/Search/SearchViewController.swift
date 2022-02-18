@@ -8,6 +8,10 @@
 import Foundation
 import UIKit
 
+protocol searchVCItemProtocol {
+    var searchItemTitle: String { get }
+}
+
 class SearchViewController: UIViewController {
     private static let sections = [
         "关键词",
@@ -15,28 +19,6 @@ class SearchViewController: UIViewController {
         "语言",
         "评分",
         "分类",
-    ]
-    private static let languages = [
-        "不限",
-        "中文",
-    ]
-    private static let ratings = [
-        "不限",
-        "至少2分",
-        "至少3分",
-        "至少4分",
-    ]
-    private static let categorys = [
-        "Doujinshi",
-        "Manga",
-        "Artist CG",
-        "Game CG",
-        "Western",
-        "Non-H",
-        "Image Set",
-        "Cosplay",
-        "Asian Porn",
-        "Misc",
     ]
     
     private var searchInfo = SearchInfo()
@@ -107,9 +89,9 @@ extension SearchViewController: UITableViewDataSource {
         case 2:
             return SearchInfo.Language.allCases.count
         case 3:
-            return SearchViewController.ratings.count
+            return SearchInfo.Rating.allCases.count
         case 4:
-            return SearchViewController.categorys.count
+            return SearchInfo.Catetory.allCases.count
         default:
             return 0
         }
@@ -139,45 +121,23 @@ extension SearchViewController: UITableViewDataSource {
                 textField?.text = searchInfo.keyWord
             }
         case 1:
-            var text = SearchInfo.Source.allCases[indexPath.row].rawValue
             let source = SearchInfo.Source.allCases[indexPath.row]
+            var text = source.searchItemTitle
             if (source == .ExHentai && !SettingManager.shared.isLogin) { text += "(登录后可用)" }
             cell.textLabel?.text = text
             cell.accessoryType = (searchInfo.source == source) ? .checkmark : .none
         case 2:
-            cell.textLabel?.text = SearchViewController.languages[indexPath.row]
-            cell.accessoryType = (searchInfo.language == SearchInfo.Language.allCases[indexPath.row]) ? .checkmark : .none
+            let language = SearchInfo.Language.allCases[indexPath.row]
+            cell.textLabel?.text = language.searchItemTitle
+            cell.accessoryType = (searchInfo.language == language) ? .checkmark : .none
         case 3:
-            cell.textLabel?.text = SearchViewController.ratings[indexPath.row]
-            cell.accessoryType = (searchInfo.rating == indexPath.row) ? .checkmark : .none
+            let rating = SearchInfo.Rating.allCases[indexPath.row]
+            cell.textLabel?.text = rating.searchItemTitle
+            cell.accessoryType = (searchInfo.rating == rating) ? .checkmark : .none
         case 4:
-            cell.textLabel?.text = SearchViewController.categorys[indexPath.row]
-            var type = UITableViewCell.AccessoryType.none
-            switch indexPath.row {
-            case 0:
-                type = searchInfo.doujinshi ? .checkmark : .none
-            case 1:
-                type = searchInfo.manga ? .checkmark : .none
-            case 2:
-                type = searchInfo.artistcg ? .checkmark : .none
-            case 3:
-                type = searchInfo.gamecg ? .checkmark : .none
-            case 4:
-                type = searchInfo.western ? .checkmark : .none
-            case 5:
-                type = searchInfo.non_h ? .checkmark : .none
-            case 6:
-                type = searchInfo.imageset ? .checkmark : .none
-            case 7:
-                type = searchInfo.cosplay ? .checkmark : .none
-            case 8:
-                type = searchInfo.asianporn ? .checkmark : .none
-            case 9:
-                type = searchInfo.misc ? .checkmark : .none
-            default:
-                break
-            }
-            cell.accessoryType = type
+            let category = SearchInfo.Catetory.allCases[indexPath.row]
+            cell.textLabel?.text = category.searchItemTitle
+            cell.accessoryType = searchInfo.catetories.contains(category) ? .checkmark : .none
         default:
             break
         }
@@ -195,31 +155,13 @@ extension SearchViewController: UITableViewDelegate {
         case 2:
             searchInfo.language = SearchInfo.Language.allCases[indexPath.row]
         case 3:
-            searchInfo.rating = indexPath.row
+            searchInfo.rating = SearchInfo.Rating.allCases[indexPath.row]
         case 4:
-            switch indexPath.row {
-            case 0:
-                searchInfo.doujinshi = !searchInfo.doujinshi
-            case 1:
-                searchInfo.manga = !searchInfo.manga
-            case 2:
-                searchInfo.artistcg = !searchInfo.artistcg
-            case 3:
-                searchInfo.gamecg = !searchInfo.gamecg
-            case 4:
-                searchInfo.western = !searchInfo.western
-            case 5:
-                searchInfo.non_h = !searchInfo.non_h
-            case 6:
-                searchInfo.imageset = !searchInfo.imageset
-            case 7:
-                searchInfo.cosplay = !searchInfo.cosplay
-            case 8:
-                searchInfo.asianporn = !searchInfo.asianporn
-            case 9:
-                searchInfo.misc = !searchInfo.misc
-            default:
-                break
+            let category = SearchInfo.Catetory.allCases[indexPath.row]
+            if searchInfo.catetories.contains(category) {
+                searchInfo.catetories.removeAll(where: { $0 == category })
+            } else {
+                searchInfo.catetories.append(category)
             }
         default:
             break
