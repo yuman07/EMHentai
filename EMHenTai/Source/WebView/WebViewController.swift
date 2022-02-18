@@ -1,22 +1,24 @@
 //
-//  LoginViewController.swift
+//  WebViewController.swift
 //  EMHenTai
 //
-//  Created by yuman on 2022/1/19.
+//  Created by yuman on 2022/2/18.
 //
 
 import Foundation
 import UIKit
 import WebKit
 
-// Guide: https://nicebowl.fun/11
-class LoginViewController: UIViewController, WKNavigationDelegate {
-    private static let loginURL = "https://forums.e-hentai.org/index.php?act=Login"
-    
+class WebViewController: UIViewController {
     private let webView = WKWebView()
     
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+    let url: URL
+    let needSyncCookieToApp: Bool
+    
+    init(url: URL, needSyncCookieToApp: Bool = false) {
+        self.url = url
+        self.needSyncCookieToApp = needSyncCookieToApp
+        super.init(nibName: nil, bundle: nil)
         hidesBottomBarWhenPushed = true
     }
     
@@ -34,21 +36,22 @@ class LoginViewController: UIViewController, WKNavigationDelegate {
         view.backgroundColor = .systemGroupedBackground
         view.addSubview(webView)
         
+        webView.navigationDelegate = self
         webView.translatesAutoresizingMaskIntoConstraints = false
         webView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
-        webView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor).isActive = true
-        webView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor).isActive = true
-        webView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+        webView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        webView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        webView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
     
     private func setupData() {
-        guard let url = URL(string: LoginViewController.loginURL) else { return }
-        SettingManager.shared.logout()
-        webView.navigationDelegate = self
         webView.load(URLRequest(url: url))
     }
-    
+}
+
+extension WebViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        guard needSyncCookieToApp else { return }
         webView.configuration.websiteDataStore.httpCookieStore.getAllCookies { cookies in
             cookies.forEach { HTTPCookieStorage.shared.setCookie($0) }
         }

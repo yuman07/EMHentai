@@ -216,8 +216,8 @@ extension BookListViewController {
         }
         
         if let url = URL(string: book.originWebURLString) {
-            vc.addAction(UIAlertAction(title: "在浏览器中打开", style: .default, handler: { _ in
-                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            vc.addAction(UIAlertAction(title: "打开原网页", style: .default, handler: { _ in
+                self.navigationController?.pushViewController(WebViewController(url: url), animated: true)
             }))
         }
         

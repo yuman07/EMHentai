@@ -11,6 +11,8 @@ class SettingManager {
     static let shared = SettingManager()
     static let LoginStateChangedNotification = NSNotification.Name(rawValue: "EMHenTai.SettingManager.LoginStateChangedNotification")
     
+    let loginURL = "https://forums.e-hentai.org/index.php?act=Login"
+    
     lazy var isLogin = checkLogin() {
         didSet {
             if isLogin != oldValue {
