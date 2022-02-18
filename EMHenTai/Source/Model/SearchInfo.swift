@@ -7,39 +7,46 @@
 
 import Foundation
 
-struct SearchInfo {
-    enum Source: String, CaseIterable {
+struct SearchInfo: Codable {
+    enum Source: String, CaseIterable, Codable {
         case EHentai = "https://e-hentai.org/"
         case ExHentai = "https://exhentai.org/"
     }
     
-    enum Language: String, CaseIterable {
+    enum Language: String, CaseIterable, Codable {
         case all = ""
         case chinese = " language:Chinese"
     }
     
+    static var currentSource = {
+        SearchInfo().source
+    }()
+    
     var pageIndex = 0
-    var source = SearchInfo.currentSource
-    var language = (UserDefaults.standard.object(forKey: "SearchInfo_language") as? String).flatMap { SearchInfo.Language(rawValue: $0) } ?? SearchInfo.Language.all
-    var keyWord = (UserDefaults.standard.object(forKey: "SearchInfo_keyWord") as? String) ?? ""
-    var rating = (UserDefaults.standard.object(forKey: "SearchInfo_rating") as? Int) ?? 0
-    var doujinshi = (UserDefaults.standard.object(forKey: "SearchInfo_doujinshi") as? Bool) ?? true
-    var manga = (UserDefaults.standard.object(forKey: "SearchInfo_manga") as? Bool) ?? true
-    var artistcg = (UserDefaults.standard.object(forKey: "SearchInfo_artistcg") as? Bool) ?? true
-    var gamecg = (UserDefaults.standard.object(forKey: "SearchInfo_gamecg") as? Bool) ?? true
-    var western = (UserDefaults.standard.object(forKey: "SearchInfo_western") as? Bool) ?? true
-    var non_h = (UserDefaults.standard.object(forKey: "SearchInfo_non_h") as? Bool) ?? true
-    var imageset = (UserDefaults.standard.object(forKey: "SearchInfo_imageset") as? Bool) ?? true
-    var cosplay = (UserDefaults.standard.object(forKey: "SearchInfo_cosplay") as? Bool) ?? true
-    var asianporn = (UserDefaults.standard.object(forKey: "SearchInfo_asianporn") as? Bool) ?? true
-    var misc = (UserDefaults.standard.object(forKey: "SearchInfo_misc") as? Bool) ?? true
+    var source = Source.EHentai
+    var language = Language.all
+    var keyWord = ""
+    var rating = 0
+    var doujinshi = true
+    var manga = true
+    var artistcg = true
+    var gamecg = true
+    var western = true
+    var non_h = true
+    var imageset = true
+    var cosplay = true
+    var asianporn = true
+    var misc = true
+    
+    init() {
+        if let data = UserDefaults.standard.object(forKey: "EMHenTai.SearchInfo.shared") as? Data,
+           let info = try? JSONDecoder().decode(SearchInfo.self, from: data) {
+            self = info
+        }
+    }
 }
 
 extension SearchInfo {
-    static var currentSource: SearchInfo.Source {
-        (UserDefaults.standard.object(forKey: "SearchInfo_source") as? String).flatMap { SearchInfo.Source(rawValue: $0) } ?? SearchInfo.Source.EHentai
-    }
-    
     var requestString: String {
         var url = source.rawValue
         url += "?page=\(pageIndex)"
@@ -60,19 +67,9 @@ extension SearchInfo {
     }
     
     func saveDB() {
-        UserDefaults.standard.set(source.rawValue, forKey: "SearchInfo_source")
-        UserDefaults.standard.set(language.rawValue, forKey: "SearchInfo_language")
-        UserDefaults.standard.set(keyWord, forKey: "SearchInfo_keyWord")
-        UserDefaults.standard.set(rating, forKey: "SearchInfo_rating")
-        UserDefaults.standard.set(doujinshi, forKey: "SearchInfo_doujinshi")
-        UserDefaults.standard.set(manga, forKey: "SearchInfo_manga")
-        UserDefaults.standard.set(artistcg, forKey: "SearchInfo_artistcg")
-        UserDefaults.standard.set(gamecg, forKey: "SearchInfo_gamecg")
-        UserDefaults.standard.set(western, forKey: "SearchInfo_western")
-        UserDefaults.standard.set(non_h, forKey: "SearchInfo_non_h")
-        UserDefaults.standard.set(imageset, forKey: "SearchInfo_imageset")
-        UserDefaults.standard.set(cosplay, forKey: "SearchInfo_cosplay")
-        UserDefaults.standard.set(asianporn, forKey: "SearchInfo_asianporn")
-        UserDefaults.standard.set(misc, forKey: "SearchInfo_misc")
+        if let data = try? JSONEncoder().encode(self) {
+            SearchInfo.currentSource = self.source
+            UserDefaults.standard.set(data, forKey: "EMHenTai.SearchInfo.shared")
+        }
     }
 }

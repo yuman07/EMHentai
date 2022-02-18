@@ -49,7 +49,7 @@ class SearchManager {
         Task {
             guard await taskInfo.checkNewInfo(info) else { return }
             
-            info.saveDB()
+            if info.pageIndex == 0 { info.saveDB() }
             DispatchQueue.main.async {
                 self.searchStartCallback?(info)
             }

@@ -174,7 +174,6 @@ extension BookListViewController {
 extension BookListViewController {
     private func makeAlertVC(with book: Book) -> UIAlertController {
         let vc = UIAlertController(title: "", message: book.showTitle, preferredStyle: .alert)
-        let state = DownloadManager.shared.downloadState(of: book)
         
         if !DBManager.shared.contains(book: book, type: .download) {
             vc.addAction(UIAlertAction(title: "下载", style: .default, handler: { _ in
@@ -183,7 +182,7 @@ extension BookListViewController {
                 self.tableView.reloadData()
             }))
         } else {
-            switch state {
+            switch DownloadManager.shared.downloadState(of: book) {
             case .before, .suspend:
                 vc.addAction(UIAlertAction(title: "下载", style: .default, handler: { _ in
                     DownloadManager.shared.download(book: book)
