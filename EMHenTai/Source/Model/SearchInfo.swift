@@ -16,7 +16,6 @@ struct SearchInfo {
     enum Language: String, CaseIterable {
         case all = ""
         case chinese = " language:Chinese"
-        case english = " language:English"
     }
     
     var pageIndex = 0

@@ -19,14 +19,12 @@ class SearchViewController: UIViewController {
     private static let languages = [
         "不限",
         "中文",
-        "英文",
     ]
     private static let ratings = [
         "不限",
-        "至少2星",
-        "至少3星",
-        "至少4星",
-        "满星",
+        "至少2分",
+        "至少3分",
+        "至少4分",
     ]
     private static let categorys = [
         "Doujinshi",
