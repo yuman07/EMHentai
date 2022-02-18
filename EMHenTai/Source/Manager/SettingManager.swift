@@ -24,10 +24,11 @@ class SettingManager {
     }
     
     private func setupNotification() {
-        NotificationCenter.default.addObserver(forName: NSNotification.Name.NSHTTPCookieManagerCookiesChanged,
-                                               object: nil,
-                                               queue: .main) { [weak self] _ in
-            guard let self = self else { return }
+        var token: NSObjectProtocol?
+        token = NotificationCenter.default.addObserver(forName: NSNotification.Name.NSHTTPCookieManagerCookiesChanged,
+                                                       object: nil,
+                                                       queue: .main) { [weak self] _ in
+            guard let self = self else { NotificationCenter.default.removeObserver(token!); return }
             self.isLogin = self.checkLogin()
         }
     }

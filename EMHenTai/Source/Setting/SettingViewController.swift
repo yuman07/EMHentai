@@ -54,10 +54,12 @@ class SettingViewController: UIViewController {
     }
     
     private func setupNotification() {
-        NotificationCenter.default.addObserver(forName: SettingManager.LoginStateChangedNotification,
-                                               object: nil,
-                                               queue: .main) { [weak self] _ in
-            self?.tableView.reloadData()
+        var token: NSObjectProtocol?
+        token = NotificationCenter.default.addObserver(forName: SettingManager.LoginStateChangedNotification,
+                                                       object: nil,
+                                                       queue: .main) { [weak self] _ in
+            guard let self = self else { NotificationCenter.default.removeObserver(token!); return }
+            self.tableView.reloadData()
         }
     }
 }
