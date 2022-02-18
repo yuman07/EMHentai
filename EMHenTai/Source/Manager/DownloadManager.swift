@@ -101,7 +101,7 @@ class DownloadManager {
     }
     
     private func getImageString(of book: Book, groupIndex: Int, finishImgCount: Int, completion: @escaping (Int, Int, String) -> Void) {
-        var url = book.originWebURLString
+        var url = book.currentWebURLString
         if groupIndex > 0 { url += "?p=\(groupIndex)" }
         
         AF.request(url).responseString(queue: .global()) { response in

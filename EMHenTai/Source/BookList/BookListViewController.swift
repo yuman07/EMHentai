@@ -216,7 +216,7 @@ extension BookListViewController {
             }))
         }
         
-        if let url = URL(string: book.originWebURLString) {
+        if let url = URL(string: SettingManager.shared.isLogin ? book.ExWebURLString : book.EWebURLString) {
             vc.addAction(UIAlertAction(title: "打开原网页", style: .default, handler: { _ in
                 self.navigationController?.pushViewController(WebViewController(url: url, shareItem: (book.showTitle, ImageCache.default.retrieveImageInMemoryCache(forKey: book.thumb))), animated: true)
             }))

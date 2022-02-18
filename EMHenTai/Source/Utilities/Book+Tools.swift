@@ -24,8 +24,16 @@ extension Book {
         title_jpn.isEmpty ? title : title_jpn
     }
     
-    var originWebURLString: String {
+    var currentWebURLString: String {
         "\(SearchInfo.currentSource.rawValue)g/\(gid)/\(token)/"
+    }
+    
+    var EWebURLString: String {
+        "\(SearchInfo.Source.EHentai.rawValue)g/\(gid)/\(token)/"
+    }
+    
+    var ExWebURLString: String {
+        "\(SearchInfo.Source.ExHentai.rawValue)g/\(gid)/\(token)/"
     }
     
     var fileCountNum: Int {
