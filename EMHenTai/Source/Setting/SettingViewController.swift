@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 class SettingViewController: UIViewController {
-    var fileSize: (download: Int, history: Int)?
+    private var fileSize: (download: Int, history: Int)?
     
     private lazy var tableView: UITableView = {
         let table = UITableView(frame: CGRect.zero, style: .grouped)

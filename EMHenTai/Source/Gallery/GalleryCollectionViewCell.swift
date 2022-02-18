@@ -18,6 +18,7 @@ class GalleryCollectionViewCell: UICollectionViewCell {
         view.bouncesZoom = false
         view.delegate = self
         view.maximumZoomScale = 3
+        view.contentInsetAdjustmentBehavior = .never
         return view
     }()
     
@@ -58,12 +59,22 @@ class GalleryCollectionViewCell: UICollectionViewCell {
     }
     
     private func setupGesture() {
-        contentView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapAction)))
+        let oneTap = UITapGestureRecognizer(target: self, action: #selector(tapAction))
+        let doubleTap = UITapGestureRecognizer(target: self, action: #selector(doubleTapAction))
+        oneTap.require(toFail: doubleTap)
+        doubleTap.numberOfTapsRequired = 2
+        contentView.addGestureRecognizer(oneTap)
+        contentView.addGestureRecognizer(doubleTap)
     }
     
     @objc
     private func tapAction() {
         tapBlock?()
+    }
+    
+    @objc
+    private func doubleTapAction() {
+        scrollView.setZoomScale(scrollView.zoomScale > 1 ? 1 : 2, animated: true)
     }
     
     func updateImageWith(filePath: String) {
