@@ -122,9 +122,7 @@ extension SearchViewController: UITableViewDataSource {
             }
         case 1:
             let source = SearchInfo.Source.allCases[indexPath.row]
-            var text = source.searchItemTitle
-            if (source == .ExHentai && !SettingManager.shared.isLogin) { text += "(登录后可用)" }
-            cell.textLabel?.text = text
+            cell.textLabel?.text = source.searchItemTitle
             cell.accessoryType = (searchInfo.source == source) ? .checkmark : .none
         case 2:
             let language = SearchInfo.Language.allCases[indexPath.row]

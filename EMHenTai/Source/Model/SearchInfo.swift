@@ -84,7 +84,7 @@ extension SearchInfo.Source: searchVCItemProtocol {
         case .EHentai:
             return "E-Hentai"
         case .ExHentai:
-            return "ExHentai"
+            return "ExHentai" + (SettingManager.shared.isLogin ? "" : "(登录后可用)")
         }
     }
 }
