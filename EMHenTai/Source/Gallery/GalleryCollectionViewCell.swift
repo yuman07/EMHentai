@@ -78,6 +78,7 @@ class GalleryCollectionViewCell: UICollectionViewCell {
     }
     
     func updateImageWith(filePath: String) {
+        scrollView.setZoomScale(1, animated: false)
         imageView.image = (try? Data(contentsOf: URL(fileURLWithPath: filePath))).flatMap { UIImage(data: $0) }
     }
 }
