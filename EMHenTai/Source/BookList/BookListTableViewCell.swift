@@ -112,18 +112,20 @@ class BookListTableViewCell: UITableViewCell {
     }
     
     private func updateProgress() {
-        progressLabel.text = ""
-        guard let book = self.book, DBManager.shared.contains(book: book, type: .download) else { return }
-        
-        switch DownloadManager.shared.downloadState(of: book) {
-        case .before:
-            break
-        case .ing:
-            progressLabel.text = "下载中：" + "\(book.downloadedFileCount)/\(book.fileCountNum)"
-        case .suspend:
-            progressLabel.text = "已暂停：" + "\(book.downloadedFileCount)/\(book.fileCountNum)"
-        case .finish:
-            progressLabel.text = "已下载"
+        Task {
+            progressLabel.text = ""
+            guard let book = self.book, DBManager.shared.contains(book: book, type: .download) else { return }
+            
+            switch await DownloadManager.shared.downloadState(of: book) {
+            case .before:
+                break
+            case .ing:
+                progressLabel.text = "下载中：" + "\(book.downloadedFileCount)/\(book.fileCountNum)"
+            case .suspend:
+                progressLabel.text = "已暂停：" + "\(book.downloadedFileCount)/\(book.fileCountNum)"
+            case .finish:
+                progressLabel.text = "已下载"
+            }
         }
     }
     

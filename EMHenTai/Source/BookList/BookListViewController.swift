@@ -186,60 +186,63 @@ extension BookListViewController {
 
 // MARK: AlertVC
 extension BookListViewController {
-    private func makeAlertVC(with book: Book) -> UIAlertController {
-        let vc = UIAlertController(title: "", message: book.showTitle, preferredStyle: .alert)
-        
-        if !DBManager.shared.contains(book: book, type: .download) {
-            vc.addAction(UIAlertAction(title: "下载", style: .default, handler: { _ in
-                DownloadManager.shared.download(book: book)
-                DBManager.shared.insertIfNotExist(book: book, at: .download)
-                self.tableView.reloadData()
-            }))
-        } else {
-            switch DownloadManager.shared.downloadState(of: book) {
-            case .before, .suspend:
+    private func showAlertVC(with book: Book) {
+        Task {
+            let vc = UIAlertController(title: "", message: book.showTitle, preferredStyle: .alert)
+            
+            if !DBManager.shared.contains(book: book, type: .download) {
                 vc.addAction(UIAlertAction(title: "下载", style: .default, handler: { _ in
                     DownloadManager.shared.download(book: book)
+                    DBManager.shared.insertIfNotExist(book: book, at: .download)
+                    self.tableView.reloadData()
                 }))
-            case .ing:
-                vc.addAction(UIAlertAction(title: "暂停", style: .default, handler: { _ in
-                    DownloadManager.shared.suspend(book: book)
-                }))
-            case .finish:
-                if type != .History {
-                    vc.addAction(UIAlertAction(title: "删除下载", style: .default, handler: { _ in
-                        DownloadManager.shared.remove(book: book)
-                        DBManager.shared.remove(book: book, at: .download)
-                        if self.type == .Download { self.refreshData(with: nil) }
+            } else {
+                switch await DownloadManager.shared.downloadState(of: book) {
+                case .before, .suspend:
+                    vc.addAction(UIAlertAction(title: "下载", style: .default, handler: { _ in
+                        DownloadManager.shared.download(book: book)
                     }))
+                case .ing:
+                    vc.addAction(UIAlertAction(title: "暂停", style: .default, handler: { _ in
+                        DownloadManager.shared.suspend(book: book)
+                    }))
+                case .finish:
+                    if type != .History {
+                        vc.addAction(UIAlertAction(title: "删除下载", style: .default, handler: { _ in
+                            DownloadManager.shared.remove(book: book)
+                            DBManager.shared.remove(book: book, at: .download)
+                            if self.type == .Download { self.refreshData(with: nil) }
+                        }))
+                    }
                 }
             }
+            
+            if type == .History {
+                vc.addAction(UIAlertAction(title: "删除历史", style: .default, handler: { _ in
+                    if !DBManager.shared.contains(book: book, type: .download) {
+                        DownloadManager.shared.remove(book: book)
+                    }
+                    DBManager.shared.remove(book: book, at: .history)
+                    self.refreshData(with: nil)
+                }))
+            }
+            
+            if !book.tags.isEmpty {
+                vc.addAction(UIAlertAction(title: "搜索相关Tag", style: .default, handler: { _ in
+                    self.navigationController?.pushViewController(TagViewController(book: book), animated: true)
+                }))
+            }
+            
+            if let url = URL(string: SettingManager.shared.isLogin ? book.ExWebURLString : book.EWebURLString) {
+                vc.addAction(UIAlertAction(title: "打开原网页", style: .default, handler: { _ in
+                    self.navigationController?.pushViewController(WebViewController(url: url, shareItem: (book.showTitle, ImageCache.default.retrieveImageInMemoryCache(forKey: book.thumb))), animated: true)
+                }))
+            }
+            
+            vc.addAction(UIAlertAction(title: "没事", style: .cancel, handler: nil))
+            
+            self.present(vc, animated: true, completion: nil)
         }
-        
-        if type == .History {
-            vc.addAction(UIAlertAction(title: "删除历史", style: .default, handler: { _ in
-                if !DBManager.shared.contains(book: book, type: .download) {
-                    DownloadManager.shared.remove(book: book)
-                }
-                DBManager.shared.remove(book: book, at: .history)
-                self.refreshData(with: nil)
-            }))
-        }
-        
-        if !book.tags.isEmpty {
-            vc.addAction(UIAlertAction(title: "搜索相关Tag", style: .default, handler: { _ in
-                self.navigationController?.pushViewController(TagViewController(book: book), animated: true)
-            }))
-        }
-        
-        if let url = URL(string: SettingManager.shared.isLogin ? book.ExWebURLString : book.EWebURLString) {
-            vc.addAction(UIAlertAction(title: "打开原网页", style: .default, handler: { _ in
-                self.navigationController?.pushViewController(WebViewController(url: url, shareItem: (book.showTitle, ImageCache.default.retrieveImageInMemoryCache(forKey: book.thumb))), animated: true)
-            }))
-        }
-        
-        vc.addAction(UIAlertAction(title: "没事", style: .cancel, handler: nil))
-        return vc
     }
 }
 
@@ -256,7 +259,7 @@ extension BookListViewController {
             cell.updateWith(book: book)
             cell.longPressBlock = { [weak self] in
                 guard let self = self else { return }
-                self.present(self.makeAlertVC(with: book), animated: true, completion: nil)
+                self.showAlertVC(with: book)
             }
         }
         return cell
