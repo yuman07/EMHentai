@@ -194,10 +194,10 @@ extension BookListViewController {
                 vc.addAction(UIAlertAction(title: "下载", style: .default, handler: { _ in
                     DownloadManager.shared.download(book: book)
                     DBManager.shared.insertIfNotExist(book: book, at: .download)
-                    self.tableView.reloadData()
                 }))
             } else {
-                switch await DownloadManager.shared.downloadState(of: book) {
+                let state = await DownloadManager.shared.downloadState(of: book)
+                switch state {
                 case .before, .suspend:
                     vc.addAction(UIAlertAction(title: "下载", style: .default, handler: { _ in
                         DownloadManager.shared.download(book: book)
@@ -207,13 +207,15 @@ extension BookListViewController {
                         DownloadManager.shared.suspend(book: book)
                     }))
                 case .finish:
-                    if type != .History {
-                        vc.addAction(UIAlertAction(title: "删除下载", style: .default, handler: { _ in
-                            DownloadManager.shared.remove(book: book)
-                            DBManager.shared.remove(book: book, at: .download)
-                            if self.type == .Download { self.refreshData(with: nil) }
-                        }))
-                    }
+                    break
+                }
+                
+                if state != .before && type != .History {
+                    vc.addAction(UIAlertAction(title: "删除下载", style: .default, handler: { _ in
+                        DownloadManager.shared.remove(book: book)
+                        DBManager.shared.remove(book: book, at: .download)
+                        if self.type == .Download { self.refreshData(with: nil) }
+                    }))
                 }
             }
             
