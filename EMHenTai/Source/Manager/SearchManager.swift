@@ -57,17 +57,16 @@ class SearchManager {
     func searchWith(info: SearchInfo) {
         Task {
             guard await taskInfo.checkNewInfo(info) else { return }
-            guard let delegate = delegate else { return }
             
             if info.pageIndex == 0 { info.saveDB() }
-            await delegate.searchStartCallback(searchInfo: info)
+            await delegate?.searchStartCallback(searchInfo: info)
             
             let result = await p_searchWith(info: info)
             
             if let next = await taskInfo.getNextInfo() {
                 searchWith(info: next)
             } else {
-                await delegate.searchFinishCallback(searchInfo: info, result: result)
+                await delegate?.searchFinishCallback(searchInfo: info, result: result)
             }
         }
     }
