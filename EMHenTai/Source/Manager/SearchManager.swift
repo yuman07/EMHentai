@@ -17,35 +17,6 @@ enum SearchError: Error {
     case netError
 }
 
-private actor TaskInfo {
-    var runningInfo: SearchInfo?
-    var waitingInfo: SearchInfo?
-    
-    func checkNewInfo(_ info: SearchInfo) -> Bool {
-        guard let runningInfo = runningInfo else {
-            self.runningInfo = info
-            return true
-        }
-        guard runningInfo.requestString != info.requestString else { return false }
-        
-        if (info.pageIndex == 0) || (runningInfo.pageIndex > 0 && (waitingInfo == nil || waitingInfo!.pageIndex > 0)) {
-            self.waitingInfo = info
-            return false
-        }
-        
-        return false
-    }
-    
-    func getNextInfo() -> SearchInfo? {
-        runningInfo = nil
-        if let next = waitingInfo {
-            waitingInfo = nil
-            return next
-        }
-        return nil
-    }
-}
-
 class SearchManager {
     static let shared = SearchManager()
     private init() {}
@@ -98,6 +69,35 @@ class SearchManager {
         else { return .failure(.netError) }
         
         return .success(value.gmetadata)
+    }
+}
+
+private actor TaskInfo {
+    var runningInfo: SearchInfo?
+    var waitingInfo: SearchInfo?
+    
+    func checkNewInfo(_ info: SearchInfo) -> Bool {
+        guard let runningInfo = runningInfo else {
+            self.runningInfo = info
+            return true
+        }
+        guard runningInfo.requestString != info.requestString else { return false }
+        
+        if (info.pageIndex == 0) || (runningInfo.pageIndex > 0 && (waitingInfo == nil || waitingInfo!.pageIndex > 0)) {
+            self.waitingInfo = info
+            return false
+        }
+        
+        return false
+    }
+    
+    func getNextInfo() -> SearchInfo? {
+        runningInfo = nil
+        if let next = waitingInfo {
+            waitingInfo = nil
+            return next
+        }
+        return nil
     }
 }
 
