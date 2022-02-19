@@ -8,66 +8,72 @@
 import Foundation
 import Alamofire
 
-class SearchManager {
-    private actor TaskInfo {
-        var runningInfo: SearchInfo?
-        var waitingInfo: SearchInfo?
+protocol SearchManagerCallbackDelegate: AnyObject {
+    func searchStartCallback(searchInfo: SearchInfo) async
+    func searchFinishCallback(searchInfo: SearchInfo, result: Result<[Book], SearchError>) async
+}
+
+enum SearchError: Error {
+    case netError
+}
+
+private actor TaskInfo {
+    var runningInfo: SearchInfo?
+    var waitingInfo: SearchInfo?
+    
+    func checkNewInfo(_ info: SearchInfo) -> Bool {
+        guard let runningInfo = runningInfo else {
+            self.runningInfo = info
+            return true
+        }
+        guard runningInfo.requestString != info.requestString else { return false }
         
-        func checkNewInfo(_ info: SearchInfo) -> Bool {
-            guard let runningInfo = runningInfo else {
-                self.runningInfo = info
-                return true
-            }
-            guard runningInfo.requestString != info.requestString else { return false }
-            
-            if (info.pageIndex == 0) || (runningInfo.pageIndex > 0 && (waitingInfo == nil || waitingInfo!.pageIndex > 0)) {
-                self.waitingInfo = info
-                return false
-            }
-            
+        if (info.pageIndex == 0) || (runningInfo.pageIndex > 0 && (waitingInfo == nil || waitingInfo!.pageIndex > 0)) {
+            self.waitingInfo = info
             return false
         }
         
-        func getNextInfo() -> SearchInfo? {
-            runningInfo = nil
-            if let next = waitingInfo {
-                waitingInfo = nil
-                return next
-            }
-            return nil
-        }
+        return false
     }
     
+    func getNextInfo() -> SearchInfo? {
+        runningInfo = nil
+        if let next = waitingInfo {
+            waitingInfo = nil
+            return next
+        }
+        return nil
+    }
+}
+
+class SearchManager {
     static let shared = SearchManager()
     private init() {}
     
     private let taskInfo = TaskInfo()
-    var searchStartCallback: ((_ searchInfo: SearchInfo) -> Void)?
-    var searchFinishCallback: ((_ searchInfo: SearchInfo, _ books: [Book], _ isHappenedNetError: Bool) -> Void)?
+    
+    weak var delegate: SearchManagerCallbackDelegate?
     
     func searchWith(info: SearchInfo) {
         Task {
             guard await taskInfo.checkNewInfo(info) else { return }
+            guard let delegate = delegate else { return }
             
             if info.pageIndex == 0 { info.saveDB() }
-            DispatchQueue.main.async {
-                self.searchStartCallback?(info)
-            }
+            await delegate.searchStartCallback(searchInfo: info)
             
-            let value = await p_searchWith(info: info)
+            let result = await p_searchWith(info: info)
             
             if let next = await taskInfo.getNextInfo() {
                 searchWith(info: next)
             } else {
-                DispatchQueue.main.async {
-                    self.searchFinishCallback?(info, value.0, value.1)
-                }
+                await delegate.searchFinishCallback(searchInfo: info, result: result)
             }
         }
     }
     
-    private func p_searchWith(info: SearchInfo) async -> ([Book], Bool) {
-        guard let value = try? await AF.request(info.requestString).serializingString().value else { return ([], true) }
+    private func p_searchWith(info: SearchInfo) async -> Result<[Book], SearchError> {
+        guard let value = try? await AF.request(info.requestString).serializingString().value else { return .failure(.netError) }
         
         let target = info.source.rawValue + "g/"
         let ids = value.allIndicesOf(string: target).map { index -> [Substring] in
@@ -81,7 +87,7 @@ class SearchManager {
             return value[start..<end].split(separator: "/")
         }
         
-        guard !ids.isEmpty else { return ([], false) }
+        guard !ids.isEmpty else { return .success([]) }
         
         guard let value = try? await AF
                 .request(info.source.rawValue + "api.php",
@@ -90,9 +96,9 @@ class SearchManager {
                          encoding: JSONEncoding.default)
                 .serializingDecodable(Gmetadata.self)
                 .value
-        else { return ([], true) }
+        else { return .failure(.netError) }
         
-        return (value.gmetadata, false)
+        return .success(value.gmetadata)
     }
 }
 

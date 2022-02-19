@@ -37,7 +37,7 @@ class BookListViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        setupSearchCallBack()
+        setupConfig()
         setupData()
     }
     
@@ -77,34 +77,9 @@ class BookListViewController: UITableViewController {
         }
     }
     
-    private func setupSearchCallBack() {
-        guard type == .Home else { return }
-        SearchManager.shared.searchStartCallback = { [weak self] searchInfo in
-            guard let self = self, searchInfo.pageIndex == 0 else { return }
-            self.tableView.setContentOffset(CGPoint(x: 0, y: -self.refreshControl!.frame.size.height * 3), animated: false)
-            self.refreshControl?.beginRefreshing()
-        }
-        SearchManager.shared.searchFinishCallback = { [weak self] searchInfo, books, isHappenedNetError in
-            guard let self = self else { return }
-            self.hasMore = !books.isEmpty
-            if searchInfo.pageIndex == 0 {
-                self.books = books
-                if !self.tableView.visibleCells.isEmpty {
-                    self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
-                }
-            } else {
-                self.books += books
-            }
-            self.searchInfo = searchInfo
-            self.tableView.reloadData()
-            self.refreshControl?.endRefreshing()
-            if isHappenedNetError {
-                self.footerView.hint = .netError
-            } else if !self.hasMore {
-                self.footerView.hint = self.books.isEmpty ? .noData : .noMoreData
-            } else {
-                self.footerView.hint = .empty
-            }
+    private func setupConfig() {
+        if type == .Home {
+            SearchManager.shared.delegate = self
         }
     }
     
@@ -117,6 +92,42 @@ class BookListViewController: UITableViewController {
             refreshData(with: nil)
         case .Download:
             refreshData(with: nil)
+        }
+    }
+}
+
+// MARK: SearchManagerCallbackDelegate
+extension BookListViewController: SearchManagerCallbackDelegate {
+    @MainActor
+    func searchStartCallback(searchInfo: SearchInfo) async {
+        guard searchInfo.pageIndex == 0 else { return }
+        self.tableView.setContentOffset(CGPoint(x: 0, y: -self.refreshControl!.frame.size.height * 3), animated: false)
+        self.refreshControl?.beginRefreshing()
+    }
+    
+    @MainActor
+    func searchFinishCallback(searchInfo: SearchInfo, result: Result<[Book], SearchError>) async {
+        switch result {
+        case .success(let books):
+            self.hasMore = !books.isEmpty
+            if searchInfo.pageIndex == 0 {
+                self.books = books
+                if !self.tableView.visibleCells.isEmpty {
+                    self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
+                }
+            } else {
+                self.books += books
+            }
+            self.searchInfo = searchInfo
+            self.tableView.reloadData()
+            self.refreshControl?.endRefreshing()
+            if !self.hasMore {
+                self.footerView.hint = self.books.isEmpty ? .noData : .noMoreData
+            } else {
+                self.footerView.hint = .empty
+            }
+        case .failure:
+            self.footerView.hint = .netError
         }
     }
 }
