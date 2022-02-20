@@ -74,8 +74,10 @@ class DownloadManager {
                         let groupNum = book.fileCountNum / groupImgNum + (book.fileCountNum % groupImgNum == 0 ? 0 : 1)
                         for groupIndex in 0..<groupNum {
                             guard checkGroupNeedRequest(of: book, groupIndex: groupIndex) else { continue }
-                            let url = book.currentWebURLString + (groupIndex > 0 ? "?p=\(groupIndex)" : "")
+                            await group.waitForAll()
+                            guard await self.downloadState(of: book) == .ing else { return }
                             group.addTask {
+                                let url = book.currentWebURLString + (groupIndex > 0 ? "?p=\(groupIndex)" : "")
                                 guard let value = try? await AF.request(url).serializingString().value else { return }
                                 guard await self.downloadState(of: book) == .ing else { return }
                                 let urls = value.allIndicesOf(string: SearchInfo.currentSource.rawValue + "s/").map { index -> String in
@@ -90,6 +92,7 @@ class DownloadManager {
                             }
                         }
                     })
+                    continuation.finish()
                 }
             }
         }

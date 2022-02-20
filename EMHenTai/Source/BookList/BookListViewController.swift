@@ -194,6 +194,7 @@ extension BookListViewController {
                 vc.addAction(UIAlertAction(title: "下载", style: .default, handler: { _ in
                     DownloadManager.shared.download(book: book)
                     DBManager.shared.insertIfNotExist(book: book, at: .download)
+                    self.tableView.reloadData()
                 }))
             } else {
                 let state = await DownloadManager.shared.downloadState(of: book)
