@@ -21,42 +21,40 @@ class DownloadManager {
     static let DownloadPageSuccessNotification = NSNotification.Name(rawValue: "EMHenTai.DownloadManager.DownloadPageSuccessNotification")
     static let DownloadStateChangedNotification = NSNotification.Name(rawValue: "EMHenTai.DownloadManager.DownloadStateChangedNotification")
     
-    private let taskSet = TaskSet()
+    private let taskMap = TaskMap()
     private let groupImgNum = 40
     private let maxConcurrentDowloadCount = 10
     
     func download(book: Book) {
         Task {
-            switch await downloadState(of: book) {
-            case .before, .suspend:
-                await taskSet.insert(book.gid)
-            case .ing, .finish:
+            let state = await downloadState(of: book)
+            if state == .ing || state == .finish {
                 return
             }
             
-            NotificationCenter.default.post(name: DownloadManager.DownloadStateChangedNotification, object: book.gid, userInfo: nil)
             try? FileManager.default.createDirectory(at: URL(fileURLWithPath: book.folderPath), withIntermediateDirectories: true, attributes: nil)
-            await p_download(of: book)
+            await taskMap.set(Task { await p_download(of: book) }, for: book.gid)
+            NotificationCenter.default.post(name: DownloadManager.DownloadStateChangedNotification, object: book.gid, userInfo: nil)
         }
     }
     
     func suspend(book: Book) {
         Task {
-            await taskSet.remove(book.gid)
+            await taskMap.remove(book.gid)
             NotificationCenter.default.post(name: DownloadManager.DownloadStateChangedNotification, object: book.gid, userInfo: nil)
         }
     }
     
     func remove(book: Book) {
         Task {
-            await taskSet.remove(book.gid)
+            await taskMap.remove(book.gid)
             try? FileManager.default.removeItem(atPath: book.folderPath)
             NotificationCenter.default.post(name: DownloadManager.DownloadStateChangedNotification, object: book.gid, userInfo: nil)
         }
     }
     
     func downloadState(of book: Book) async -> DownloadState {
-        let isRunning = await taskSet.isContain(book.gid)
+        let isRunning = await taskMap.isContain(book.gid)
         if book.downloadedFileCount == book.fileCountNum {
             return .finish
         } else if isRunning {
@@ -75,11 +73,9 @@ class DownloadManager {
                         for groupIndex in 0..<groupNum {
                             guard checkGroupNeedRequest(of: book, groupIndex: groupIndex) else { continue }
                             await group.waitForAll()
-                            guard await self.downloadState(of: book) == .ing else { return }
                             group.addTask {
                                 let url = book.currentWebURLString + (groupIndex > 0 ? "?p=\(groupIndex)" : "")
-                                guard let value = try? await AF.request(url).serializingString().value else { return }
-                                guard await self.downloadState(of: book) == .ing else { return }
+                                guard let value = try? await AF.request(url).serializingString(automaticallyCancelling: true).value else { return }
                                 let urls = value.allIndicesOf(string: SearchInfo.currentSource.rawValue + "s/").map { index -> String in
                                     let start = value.index(value.startIndex, offsetBy: index)
                                     var end = value.index(after: start)
@@ -102,16 +98,14 @@ class DownloadManager {
             for await url in urlStream {
                 let imgIndex = (url.split(separator: "-").last.flatMap({ Int("\($0)") }) ?? 1) - 1
                 guard !FileManager.default.fileExists(atPath: book.imagePath(at: imgIndex)) else { continue }
-                guard await self.downloadState(of: book) == .ing else { return }
                 
                 count += 1
                 if count > maxConcurrentDowloadCount {
                     await group.next()
                 }
                 
-                guard await self.downloadState(of: book) == .ing else { return }
                 group.addTask {
-                    guard let value = try? await AF.request(url).serializingString().value else { return }
+                    guard let value = try? await AF.request(url).serializingString(automaticallyCancelling: true).value else { return }
                     guard let showKey = value.range(of: "showkey=\"").map({ range -> Substring in
                         let start = range.upperBound
                         var end = value.index(after: start)
@@ -120,7 +114,6 @@ class DownloadManager {
                         }
                         return value[start..<end]
                     }) else { return }
-                    guard await self.downloadState(of: book) == .ing else { return }
                     
                     guard let model = try? await AF.request(
                         SearchInfo.currentSource.rawValue + "api.php",
@@ -132,8 +125,7 @@ class DownloadManager {
                             "imgkey": url.split(separator: "/").reversed()[1],
                             "showkey": showKey],
                         encoding: JSONEncoding.default
-                    ).serializingDecodable(GroupModel.self).value else { return }
-                    guard await self.downloadState(of: book) == .ing else { return }
+                    ).serializingDecodable(GroupModel.self, automaticallyCancelling: true).value else { return }
                     
                     guard let imgURL = model.i3.range(of: "src=\"").map({ range -> String in
                         let start = range.upperBound
@@ -146,13 +138,13 @@ class DownloadManager {
                     
                     guard let u = try? await AF
                             .download(imgURL, to: { _, _ in (URL(fileURLWithPath: book.imagePath(at: imgIndex)), []) })
-                            .serializingDownloadedFileURL()
+                            .serializingDownload(using: URLResponseSerializer(), automaticallyCancelling: true)
                             .value else { return }
                     
                     guard FileManager.default.fileExists(atPath: u.path) else { return }
                     NotificationCenter.default.post(name: DownloadManager.DownloadPageSuccessNotification, object: (book.gid, imgIndex), userInfo: nil)
                     if book.downloadedFileCount == book.fileCountNum {
-                        await self.taskSet.remove(book.gid)
+                        await self.taskMap.remove(book.gid)
                         NotificationCenter.default.post(name: DownloadManager.DownloadStateChangedNotification, object: book.gid, userInfo: nil)
                     }
                 }
@@ -172,19 +164,20 @@ class DownloadManager {
     }
 }
 
-private actor TaskSet {
-    var runningDownload = Set<Int>()
+private actor TaskMap {
+    var map = [Int: Task<Void, Never>]()
     
-    func insert(_ gid: Int) {
-        runningDownload.insert(gid)
+    func set(_ task: Task<Void, Never>, for gid: Int) {
+        map[gid] = task
     }
     
     func remove(_ gid: Int) {
-        runningDownload.remove(gid)
+        let task = map.removeValue(forKey: gid)
+        task?.cancel()
     }
     
     func isContain(_ gid: Int) -> Bool {
-        runningDownload.contains(gid)
+        map[gid] != nil
     }
 }
 
