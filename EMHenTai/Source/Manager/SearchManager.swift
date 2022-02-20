@@ -64,9 +64,7 @@ class SearchManager {
                          method: .post,
                          parameters: ["method": "gdata", "gidlist": ids],
                          encoding: JSONEncoding.default)
-                .serializingDecodable(Gmetadata.self)
-                .value
-        else { return .failure(.netError) }
+                .serializingDecodable(Gmetadata.self).value else { return .failure(.netError) }
         
         return .success(value.gmetadata)
     }
