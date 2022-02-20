@@ -65,31 +65,29 @@ class DownloadManager {
     }
     
     private func p_download(of book: Book) async {
-        var urlStream: AsyncStream<String> {
-            AsyncStream<String> { continuation in
-                Task {
-                    await withTaskGroup(of: Void.self, body: { group in
-                        let groupNum = book.fileCountNum / groupImgNum + (book.fileCountNum % groupImgNum == 0 ? 0 : 1)
-                        for groupIndex in 0..<groupNum {
-                            guard checkGroupNeedRequest(of: book, groupIndex: groupIndex) else { continue }
-                            await group.waitForAll()
-                            group.addTask {
-                                let url = book.currentWebURLString + (groupIndex > 0 ? "?p=\(groupIndex)" : "")
-                                guard let value = try? await AF.request(url).serializingString(automaticallyCancelling: true).value else { return }
-                                let urls = value.allIndicesOf(string: SearchInfo.currentSource.rawValue + "s/").map { index -> String in
-                                    let start = value.index(value.startIndex, offsetBy: index)
-                                    var end = value.index(after: start)
-                                    while value[end] != "\"" && end < value.endIndex {
-                                        end = value.index(after: end)
-                                    }
-                                    return "\(value[start..<end])"
+        let urlStream = AsyncStream<String> { continuation in
+            Task {
+                await withTaskGroup(of: Void.self, body: { group in
+                    let groupNum = book.fileCountNum / groupImgNum + (book.fileCountNum % groupImgNum == 0 ? 0 : 1)
+                    for groupIndex in 0..<groupNum {
+                        guard checkGroupNeedRequest(of: book, groupIndex: groupIndex) else { continue }
+                        await group.waitForAll()
+                        group.addTask {
+                            let url = book.currentWebURLString + (groupIndex > 0 ? "?p=\(groupIndex)" : "")
+                            guard let value = try? await AF.request(url).serializingString(automaticallyCancelling: true).value else { return }
+                            let urls = value.allIndicesOf(string: SearchInfo.currentSource.rawValue + "s/").map { index -> String in
+                                let start = value.index(value.startIndex, offsetBy: index)
+                                var end = value.index(after: start)
+                                while end < value.endIndex && value[end] != "\"" {
+                                    end = value.index(after: end)
                                 }
-                                urls.forEach { continuation.yield($0) }
+                                return "\(value[start..<end])"
                             }
+                            urls.forEach { continuation.yield($0) }
                         }
-                    })
-                    continuation.finish()
-                }
+                    }
+                })
+                continuation.finish()
             }
         }
         
@@ -97,7 +95,9 @@ class DownloadManager {
             var count = 0
             for await url in urlStream {
                 let imgIndex = (url.split(separator: "-").last.flatMap({ Int("\($0)") }) ?? 1) - 1
+                let imgKey = url.split(separator: "/").count > 1 ? url.split(separator: "/").reversed()[1] : ""
                 guard !FileManager.default.fileExists(atPath: book.imagePath(at: imgIndex)) else { continue }
+                guard !imgKey.isEmpty else { continue }
                 
                 count += 1
                 if count > maxConcurrentDowloadCount {
@@ -109,39 +109,39 @@ class DownloadManager {
                     guard let showKey = value.range(of: "showkey=\"").map({ range -> Substring in
                         let start = range.upperBound
                         var end = value.index(after: start)
-                        while value[end] != "\"" && end < value.endIndex {
+                        while end < value.endIndex && value[end] != "\"" {
                             end = value.index(after: end)
                         }
                         return value[start..<end]
-                    }) else { return }
+                    }), !showKey.isEmpty else { return }
                     
-                    guard let model = try? await AF.request(
+                    guard let source = try? await AF.request(
                         SearchInfo.currentSource.rawValue + "api.php",
                         method: .post,
                         parameters: [
                             "method": "showpage",
                             "gid": book.gid,
                             "page": imgIndex + 1,
-                            "imgkey": url.split(separator: "/").reversed()[1],
+                            "imgkey": imgKey,
                             "showkey": showKey],
                         encoding: JSONEncoding.default
-                    ).serializingDecodable(GroupModel.self, automaticallyCancelling: true).value else { return }
+                    ).serializingDecodable(GroupModel.self, automaticallyCancelling: true).value.i3, !source.isEmpty else { return }
                     
-                    guard let imgURL = model.i3.range(of: "src=\"").map({ range -> String in
+                    guard let imgURL = source.range(of: "src=\"").map({ range -> String in
                         let start = range.upperBound
-                        var end = model.i3.index(after: start)
-                        while model.i3[end] != "\"" && end < model.i3.endIndex {
-                            end = model.i3.index(after: end)
+                        var end = source.index(after: start)
+                        while end < source.endIndex && source[end] != "\"" {
+                            end = source.index(after: end)
                         }
-                        return "\(model.i3[start..<end])"
-                    }) else { return }
+                        return "\(source[start..<end])"
+                    }), !imgURL.isEmpty else { return }
                     
-                    guard let u = try? await AF
+                    guard let p = try? await AF
                             .download(imgURL, to: { _, _ in (URL(fileURLWithPath: book.imagePath(at: imgIndex)), []) })
                             .serializingDownload(using: URLResponseSerializer(), automaticallyCancelling: true)
                             .value else { return }
                     
-                    guard FileManager.default.fileExists(atPath: u.path) else { return }
+                    guard FileManager.default.fileExists(atPath: p.path) else { return }
                     NotificationCenter.default.post(name: DownloadManager.DownloadPageSuccessNotification, object: (book.gid, imgIndex), userInfo: nil)
                     if book.downloadedFileCount == book.fileCountNum {
                         await self.taskMap.remove(book.gid)
@@ -172,8 +172,7 @@ private actor TaskMap {
     }
     
     func remove(_ gid: Int) {
-        let task = map.removeValue(forKey: gid)
-        task?.cancel()
+        map.removeValue(forKey: gid)?.cancel()
     }
     
     func isContain(_ gid: Int) -> Bool {
