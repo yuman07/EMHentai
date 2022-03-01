@@ -61,9 +61,7 @@ extension SearchInfo {
     var requestString: String {
         var url = source.rawValue
         url += "?page=\(pageIndex)"
-        for category in Category.allCases {
-            url += "&f_\(category.rawValue)=\(categories.contains(category) ? 1 : 0)"
-        }
+        Category.allCases.forEach { url += "&f_\($0.rawValue)=\(categories.contains($0) ? 1 : 0)" }
         url += "&f_search=\((keyWord + language.rawValue).split(separator: " ").map({ TranslateManager.shared.translateCn("\($0)") }).joined(separator: "+"))"
         url += "&f_apply=Apply+Filter&inline_set=dm_l"
         if rating.rawValue > 0 { url += "&advsearch=1&f_sname=on&f_stags=on&f_sr=on&f_srdd=\(rating.rawValue + 1)" }
