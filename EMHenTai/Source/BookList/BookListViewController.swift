@@ -17,12 +17,11 @@ final class BookListViewController: UITableViewController {
     }
     
     private let type: ListType
+    private let footerView = BookListFooterView()
     
     private var searchInfo: SearchInfo?
     private var books = [Book]()
     private var hasMore = true
-    
-    private let footerView = BookListFooterView()
     
     init(type: ListType) {
         self.type = type
@@ -43,9 +42,7 @@ final class BookListViewController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if type != .Home {
-            self.refreshData(with: nil)
-        }
+        if type != .Home { self.refreshData(with: nil) }
     }
     
     private func setupUI() {
@@ -78,9 +75,7 @@ final class BookListViewController: UITableViewController {
     }
     
     private func setupConfig() {
-        if type == .Home {
-            SearchManager.shared.delegate = self
-        }
+        if type == .Home { SearchManager.shared.delegate = self }
     }
     
     @objc

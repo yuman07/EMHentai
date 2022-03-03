@@ -10,9 +10,7 @@ import UIKit
 import Kingfisher
 
 final class BookListTableViewCell: UITableViewCell {
-    
     var book: Book?
-    
     var longPressBlock: (() -> Void)?
     
     private let thumbImageView: UIImageView = {

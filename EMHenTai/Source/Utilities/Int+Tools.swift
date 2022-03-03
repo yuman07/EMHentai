@@ -7,12 +7,13 @@
 
 import Foundation
 
+private let oneKB = 1024
+private let oneMB = oneKB * 1024
+private let oneGB = oneMB * 1024
+private let oneTB = oneGB * 1024
+
 extension Int {
     var diskSizeFormat: String {
-        let oneKB = 1024
-        let oneMB = oneKB * 1024
-        let oneGB = oneMB * 1024
-        let oneTB = oneGB * 1024
         switch self {
         case ..<oneKB:
             return "\(self) Byte"

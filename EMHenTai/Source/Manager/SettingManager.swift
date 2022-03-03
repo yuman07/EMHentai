@@ -11,8 +11,7 @@ import WebKit
 final class SettingManager {
     static let shared = SettingManager()
     static let LoginStateChangedNotification = NSNotification.Name(rawValue: "EMHenTai.SettingManager.LoginStateChangedNotification")
-    
-    let loginURL = URL(string: "https://forums.e-hentai.org/index.php?act=Login")!
+    static let loginURL = URL(string: "https://forums.e-hentai.org/index.php?act=Login")!
     
     lazy var isLogin = checkLogin() {
         didSet {
@@ -70,7 +69,7 @@ final class SettingManager {
         var passHashExist = false
         for cookie in cookies {
             guard let expiresDate = cookie.expiresDate, expiresDate > Date() && !cookie.value.isEmpty else { continue }
-            if cookie.name ==  "ipb_member_id" {
+            if cookie.name == "ipb_member_id" {
                 memberIDExist = true
             }
             if cookie.name == "ipb_pass_hash" {

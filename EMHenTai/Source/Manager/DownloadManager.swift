@@ -17,13 +17,13 @@ final class DownloadManager {
     }
     
     static let shared = DownloadManager()
-    private init() {}
     static let DownloadPageSuccessNotification = NSNotification.Name(rawValue: "EMHenTai.DownloadManager.DownloadPageSuccessNotification")
     static let DownloadStateChangedNotification = NSNotification.Name(rawValue: "EMHenTai.DownloadManager.DownloadStateChangedNotification")
     
+    private init() {}
     private let taskMap = TaskMap()
-    private let groupImgNum = 40
-    private let maxConcurrentDowloadCount = 10
+    private let groupTotalImgNum = 40
+    private let maxConcurrentDownloadCount = 8
     
     func download(book: Book) {
         Task {
@@ -54,10 +54,9 @@ final class DownloadManager {
     }
     
     func downloadState(of book: Book) async -> DownloadState {
-        let isRunning = await taskMap.isContain(book.gid)
         if book.downloadedFileCount == book.fileCountNum {
             return .finish
-        } else if isRunning {
+        } else if await taskMap.isContain(book.gid) {
             return .ing
         } else {
             return book.downloadedFileCount == 0 ? .before : .suspend
@@ -68,10 +67,9 @@ final class DownloadManager {
         let urlStream = AsyncStream<String> { continuation in
             Task {
                 await withTaskGroup(of: Void.self, body: { group in
-                    let groupNum = book.fileCountNum / groupImgNum + (book.fileCountNum % groupImgNum == 0 ? 0 : 1)
+                    let groupNum = book.fileCountNum / groupTotalImgNum + (book.fileCountNum % groupTotalImgNum == 0 ? 0 : 1)
                     for groupIndex in 0..<groupNum {
                         guard checkGroupNeedRequest(of: book, groupIndex: groupIndex) else { continue }
-                        await group.waitForAll()
                         group.addTask {
                             let url = book.currentWebURLString + (groupIndex > 0 ? "?p=\(groupIndex)" : "")
                             guard let value = try? await AF.request(url).serializingString(automaticallyCancelling: true).value else { return }
@@ -85,6 +83,7 @@ final class DownloadManager {
                             }
                             urls.forEach { continuation.yield($0) }
                         }
+                        await group.waitForAll()
                     }
                 })
                 continuation.finish()
@@ -100,7 +99,7 @@ final class DownloadManager {
                 guard !imgKey.isEmpty else { continue }
                 
                 count += 1
-                if count > maxConcurrentDowloadCount {
+                if count > maxConcurrentDownloadCount {
                     await group.next()
                 }
                 
@@ -125,7 +124,7 @@ final class DownloadManager {
                             "imgkey": imgKey,
                             "showkey": showKey],
                         encoding: JSONEncoding.default
-                    ).serializingDecodable(GroupModel.self, automaticallyCancelling: true).value.i3, !source.isEmpty else { return }
+                    ).serializingDecodable(GroupModel.self, automaticallyCancelling: true).value.i3 else { return }
                     
                     guard let imgURL = source.range(of: "src=\"").map({ range -> String in
                         let start = range.upperBound
@@ -153,9 +152,9 @@ final class DownloadManager {
     }
     
     private func checkGroupNeedRequest(of book: Book, groupIndex: Int) -> Bool {
-        for index in 0..<groupImgNum {
-            let realIndex = groupIndex * groupImgNum + index
-            if realIndex >= book.fileCountNum { break }
+        for index in 0..<groupTotalImgNum {
+            let realIndex = groupIndex * groupTotalImgNum + index
+            guard realIndex < book.fileCountNum else { break }
             if !FileManager.default.fileExists(atPath: book.imagePath(at: realIndex)) {
                 return true
             }
@@ -164,7 +163,7 @@ final class DownloadManager {
     }
 }
 
-private actor TaskMap {
+private final actor TaskMap {
     var map = [Int: Task<Void, Never>]()
     
     func set(_ task: Task<Void, Never>, for gid: Int) {

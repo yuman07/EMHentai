@@ -128,7 +128,7 @@ extension SettingViewController: UITableViewDelegate {
                 SettingManager.shared.logout()
             } else {
                 SettingManager.shared.logout()
-                navigationController?.pushViewController(WebViewController(url: SettingManager.shared.loginURL, needSyncCookieToApp: true), animated: true)
+                navigationController?.pushViewController(WebViewController(url: SettingManager.loginURL, needSyncCookieToApp: true), animated: true)
             }
         case 1:
             break

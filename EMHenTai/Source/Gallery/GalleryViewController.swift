@@ -9,7 +9,6 @@ import Foundation
 import UIKit
 
 final class GalleryViewController: UIViewController {
-    
     private let book: Book
     private var isRotating = false
     private var lastSeenPageIndex: Int {
