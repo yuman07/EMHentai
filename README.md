@@ -27,19 +27,14 @@
 
 ## 安装
 
-iOS版本要求：>= 13.0
-
-因为考虑到Ehentai的法律风险，这里就不提供直接的IPA安装包了。
+因为考虑到Ehentai的法律风险，这里就不直接提供IPA安装包了。
 
 有Mac的同学可以直接使用Xcode安装（无需开发者账号）：
 
-Download ZIP / git clone
-
-cd EMHentai
-
-pod install
-
-
+1. 确保你当前MacOS版本及Xcode版本均为最新，苹果设备的iOS版本>=13.0
+2. Download ZIP / git clone
+3. open EMHenTai.xcodeproj
+4. Run
 
 ## 其他
 
