@@ -33,13 +33,13 @@
 		7ACADDC027BF3E2700D8FC9B /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ACADDBF27BF3E2700D8FC9B /* WebViewController.swift */; };
 		7AD3B2E7279E79D8000702C6 /* TagViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD3B2E6279E79D8000702C6 /* TagViewController.swift */; };
 		7AD3B2E9279E810A000702C6 /* TranslateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD3B2E8279E810A000702C6 /* TranslateManager.swift */; };
+		7AE912C527D07BB500DD9E65 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 7AE912C427D07BB500DD9E65 /* Alamofire */; };
+		7AE912C827D07C2500DD9E65 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 7AE912C727D07C2500DD9E65 /* Kingfisher */; };
 		7AEDF3FC279138640064DB12 /* SearchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AEDF3FB279138640064DB12 /* SearchManager.swift */; };
 		7AEDF3FE279177720064DB12 /* SearchInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AEDF3FD279177720064DB12 /* SearchInfo.swift */; };
-		93E71501DFDB5FB91ED376A2 /* Pods_EMHenTai.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2104C61E89008033DC6B3C5C /* Pods_EMHenTai.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		1E7F3C881E1ABE71764FBE29 /* Pods-EMHenTai.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EMHenTai.release.xcconfig"; path = "Target Support Files/Pods-EMHenTai/Pods-EMHenTai.release.xcconfig"; sourceTree = "<group>"; };
 		2104C61E89008033DC6B3C5C /* Pods_EMHenTai.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EMHenTai.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A05E65C27948098001EE48F /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		7A11677927954C7A00C200CA /* BookListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookListTableViewCell.swift; sourceTree = "<group>"; };
@@ -71,7 +71,6 @@
 		7AD3B2E8279E810A000702C6 /* TranslateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslateManager.swift; sourceTree = "<group>"; };
 		7AEDF3FB279138640064DB12 /* SearchManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchManager.swift; sourceTree = "<group>"; };
 		7AEDF3FD279177720064DB12 /* SearchInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchInfo.swift; sourceTree = "<group>"; };
-		B0B243D0240E92FA129A0D9A /* Pods-EMHenTai.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EMHenTai.debug.xcconfig"; path = "Target Support Files/Pods-EMHenTai/Pods-EMHenTai.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,7 +78,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				93E71501DFDB5FB91ED376A2 /* Pods_EMHenTai.framework in Frameworks */,
+				7AE912C827D07C2500DD9E65 /* Kingfisher in Frameworks */,
+				7AE912C527D07BB500DD9E65 /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -168,7 +168,6 @@
 			children = (
 				7AB967F3279117CC0006466A /* EMHenTai */,
 				7AB967F2279117CC0006466A /* Products */,
-				E2E8379CB55C407BE26EF8C6 /* Pods */,
 				0AB70A369CCA38912AE1D6CE /* Frameworks */,
 			);
 			sourceTree = "<group>";
@@ -236,15 +235,6 @@
 			path = Tag;
 			sourceTree = "<group>";
 		};
-		E2E8379CB55C407BE26EF8C6 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				B0B243D0240E92FA129A0D9A /* Pods-EMHenTai.debug.xcconfig */,
-				1E7F3C881E1ABE71764FBE29 /* Pods-EMHenTai.release.xcconfig */,
-			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -252,7 +242,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7AB96805279117CD0006466A /* Build configuration list for PBXNativeTarget "EMHenTai" */;
 			buildPhases = (
-				97F76C76E1A7810026899304 /* [CP] Check Pods Manifest.lock */,
 				7AB967ED279117CC0006466A /* Sources */,
 				7AB967EE279117CC0006466A /* Frameworks */,
 				7AB967EF279117CC0006466A /* Resources */,
@@ -262,6 +251,10 @@
 			dependencies = (
 			);
 			name = EMHenTai;
+			packageProductDependencies = (
+				7AE912C427D07BB500DD9E65 /* Alamofire */,
+				7AE912C727D07C2500DD9E65 /* Kingfisher */,
+			);
 			productName = EMHenTai;
 			productReference = 7AB967F1279117CC0006466A /* EMHenTai.app */;
 			productType = "com.apple.product-type.application";
@@ -290,6 +283,10 @@
 				Base,
 			);
 			mainGroup = 7AB967E8279117CC0006466A;
+			packageReferences = (
+				7AE912C327D07BB500DD9E65 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				7AE912C627D07C2500DD9E65 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+			);
 			productRefGroup = 7AB967F2279117CC0006466A /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -311,31 +308,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		97F76C76E1A7810026899304 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-EMHenTai-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		7AB967ED279117CC0006466A /* Sources */ = {
@@ -502,7 +474,6 @@
 		};
 		7AB96806279117CD0006466A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B0B243D0240E92FA129A0D9A /* Pods-EMHenTai.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -532,7 +503,6 @@
 		};
 		7AB96807279117CD0006466A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1E7F3C881E1ABE71764FBE29 /* Pods-EMHenTai.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -582,6 +552,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		7AE912C327D07BB500DD9E65 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = exactVersion;
+				version = 5.5.0;
+			};
+		};
+		7AE912C627D07C2500DD9E65 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				kind = exactVersion;
+				version = 7.2.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		7AE912C427D07BB500DD9E65 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7AE912C327D07BB500DD9E65 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+		7AE912C727D07C2500DD9E65 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7AE912C627D07C2500DD9E65 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		7A1C12B127995C5E00ADD54E /* EMDB.xcdatamodeld */ = {
