@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 import WebKit
 
-class WebViewController: UIViewController {
+final class WebViewController: UIViewController {
     private let webView = WKWebView()
     private let url: URL
     private let needSyncCookieToApp: Bool

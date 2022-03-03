@@ -12,7 +12,7 @@ protocol searchVCItemProtocol {
     var searchItemTitle: String { get }
 }
 
-class SearchViewController: UIViewController {
+final class SearchViewController: UIViewController {
     private static let sections = [
         "关键词",
         "数据源",

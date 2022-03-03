@@ -8,7 +8,7 @@
 import Foundation
 import WebKit
 
-class SettingManager {
+final class SettingManager {
     static let shared = SettingManager()
     static let LoginStateChangedNotification = NSNotification.Name(rawValue: "EMHenTai.SettingManager.LoginStateChangedNotification")
     

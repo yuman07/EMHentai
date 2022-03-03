@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class RootViewController: UITabBarController {
+final class RootViewController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemGroupedBackground

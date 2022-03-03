@@ -9,7 +9,7 @@ import Foundation
 import CoreData
 import UIKit
 
-class DBManager {
+final class DBManager {
     enum DBType: String, CaseIterable {
         case history = "HistoryBook"
         case download = "DownloadBook"

@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class TextFieldTableViewCell: UITableViewCell {
+final class TextFieldTableViewCell: UITableViewCell {
     lazy var searchTextField: UITextField = {
         let view = UITextField()
         view.delegate = self

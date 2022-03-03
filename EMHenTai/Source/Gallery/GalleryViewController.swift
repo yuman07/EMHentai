@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class GalleryViewController: UIViewController {
+final class GalleryViewController: UIViewController {
     
     private let book: Book
     private var isRotating = false

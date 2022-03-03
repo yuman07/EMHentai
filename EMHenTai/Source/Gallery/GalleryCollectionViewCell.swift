@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class GalleryCollectionViewCell: UICollectionViewCell {
+final class GalleryCollectionViewCell: UICollectionViewCell {
     
     var tapBlock: (() -> Void)?
     

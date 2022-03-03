@@ -10,14 +10,14 @@ import Alamofire
 
 protocol SearchManagerCallbackDelegate: AnyObject {
     func searchStartCallback(searchInfo: SearchInfo) async
-    func searchFinishCallback(searchInfo: SearchInfo, result: Result<[Book], SearchError>) async
+    func searchFinishCallback(searchInfo: SearchInfo, result: Result<[Book], SearchManager.SearchError>) async
 }
 
-enum SearchError: Error {
-    case netError
-}
-
-class SearchManager {
+final class SearchManager {
+    enum SearchError: Error {
+        case netError
+    }
+    
     static let shared = SearchManager()
     private init() {}
     
@@ -70,7 +70,7 @@ class SearchManager {
     }
 }
 
-private actor TaskInfo {
+private final actor TaskInfo {
     var runningInfo: SearchInfo?
     var waitingInfo: SearchInfo?
     

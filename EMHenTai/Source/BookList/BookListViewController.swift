@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 import Kingfisher
 
-class BookListViewController: UITableViewController {
+final class BookListViewController: UITableViewController {
     enum ListType {
         case Home
         case History
@@ -106,7 +106,7 @@ extension BookListViewController: SearchManagerCallbackDelegate {
     }
     
     @MainActor
-    func searchFinishCallback(searchInfo: SearchInfo, result: Result<[Book], SearchError>) async {
+    func searchFinishCallback(searchInfo: SearchInfo, result: Result<[Book], SearchManager.SearchError>) async {
         var books = [Book]()
         var isHappenedError = false
         switch result {
@@ -236,7 +236,7 @@ extension BookListViewController {
                 }))
             }
             
-            if let url = URL(string: SettingManager.shared.isLogin ? book.ExWebURLString : book.EWebURLString) {
+            if let url = URL(string: SettingManager.shared.isLogin ? book.webURLString(with: .ExHentai) : book.webURLString(with: .EHentai)) {
                 vc.addAction(UIAlertAction(title: "打开原网页", style: .default, handler: { _ in
                     self.navigationController?.pushViewController(WebViewController(url: url, shareItem: (book.showTitle, ImageCache.default.retrieveImageInMemoryCache(forKey: book.thumb))), animated: true)
                 }))

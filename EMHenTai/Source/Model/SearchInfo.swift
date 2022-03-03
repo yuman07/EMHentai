@@ -38,9 +38,9 @@ struct SearchInfo: Codable {
         case misc
     }
     
-    static var currentSource = {
-        SearchInfo().source
-    }()
+    private static let dbKey = "EMHenTai.SearchInfo.dbKey"
+    
+    static var currentSource = SearchInfo().source
     
     var pageIndex = 0
     var keyWord = ""
@@ -50,7 +50,7 @@ struct SearchInfo: Codable {
     var categories = Category.allCases
     
     init() {
-        if let data = UserDefaults.standard.object(forKey: "EMHenTai.SearchInfo.shared") as? Data,
+        if let data = UserDefaults.standard.object(forKey: SearchInfo.dbKey) as? Data,
            let info = try? JSONDecoder().decode(SearchInfo.self, from: data) {
             self = info
         }
@@ -59,11 +59,9 @@ struct SearchInfo: Codable {
 
 extension SearchInfo {
     var requestString: String {
-        var url = source.rawValue
-        url += "?page=\(pageIndex)"
+        var url = source.rawValue + "?page=\(pageIndex)"
         Category.allCases.forEach { url += "&f_\($0.rawValue)=\(categories.contains($0) ? 1 : 0)" }
         url += "&f_search=\((keyWord + language.rawValue).split(separator: " ").map({ TranslateManager.shared.translateCn("\($0)") }).joined(separator: "+"))"
-        url += "&f_apply=Apply+Filter&inline_set=dm_l"
         if rating.rawValue > 0 { url += "&advsearch=1&f_sname=on&f_stags=on&f_sr=on&f_srdd=\(rating.rawValue + 1)" }
         return url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? url
     }
@@ -71,7 +69,7 @@ extension SearchInfo {
     func saveDB() {
         if let data = try? JSONEncoder().encode(self) {
             SearchInfo.currentSource = self.source
-            UserDefaults.standard.set(data, forKey: "EMHenTai.SearchInfo.shared")
+            UserDefaults.standard.set(data, forKey: SearchInfo.dbKey)
         }
     }
 }

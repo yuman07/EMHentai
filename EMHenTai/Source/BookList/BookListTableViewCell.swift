@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 import Kingfisher
 
-class BookListTableViewCell: UITableViewCell {
+final class BookListTableViewCell: UITableViewCell {
     
     var book: Book?
     

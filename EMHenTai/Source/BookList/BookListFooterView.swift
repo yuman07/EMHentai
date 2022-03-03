@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class BookListFooterView: UIView {
+final class BookListFooterView: UIView {
     enum HintType: String {
         case empty = " "
         case noData = "无数据"

@@ -7,7 +7,7 @@
 
 import Foundation
 
-class TranslateManager {
+final class TranslateManager {
     static let shared = TranslateManager()
     private static let jsonName = "tag-v6.4007.1-220211.json"    // https://github.com/EhTagTranslation/Database/releases    db.text.json
     private init () {

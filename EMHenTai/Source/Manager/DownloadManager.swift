@@ -8,7 +8,7 @@
 import Foundation
 import Alamofire
 
-class DownloadManager {
+final class DownloadManager {
     enum DownloadState {
         case before
         case ing

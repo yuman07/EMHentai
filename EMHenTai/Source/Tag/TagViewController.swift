@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class TagViewController: UITableViewController {
+final class TagViewController: UITableViewController {
     
     private let book: Book
     private var selectedTags = [String]()

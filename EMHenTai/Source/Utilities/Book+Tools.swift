@@ -28,12 +28,8 @@ extension Book {
         "\(SearchInfo.currentSource.rawValue)g/\(gid)/\(token)/"
     }
     
-    var EWebURLString: String {
-        "\(SearchInfo.Source.EHentai.rawValue)g/\(gid)/\(token)/"
-    }
-    
-    var ExWebURLString: String {
-        "\(SearchInfo.Source.ExHentai.rawValue)g/\(gid)/\(token)/"
+    func webURLString(with source: SearchInfo.Source) -> String {
+        "\(source.rawValue)g/\(gid)/\(token)/"
     }
     
     var fileCountNum: Int {

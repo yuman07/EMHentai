@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class SettingViewController: UIViewController {
+final class SettingViewController: UIViewController {
     private var fileSize: (download: Int, history: Int)?
     
     private lazy var tableView: UITableView = {
