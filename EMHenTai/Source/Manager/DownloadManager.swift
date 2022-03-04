@@ -73,15 +73,8 @@ final class DownloadManager {
                         group.addTask {
                             let url = book.currentWebURLString + (groupIndex > 0 ? "?p=\(groupIndex)" : "")
                             guard let value = try? await AF.request(url).serializingString(automaticallyCancelling: true).value else { return }
-                            let urls = value.allIndicesOf(string: SearchInfo.currentSource.rawValue + "s/").map { index -> String in
-                                let start = value.index(value.startIndex, offsetBy: index)
-                                var end = value.index(after: start)
-                                while end < value.endIndex && value[end] != "\"" {
-                                    end = value.index(after: end)
-                                }
-                                return "\(value[start..<end])"
-                            }
-                            urls.forEach { continuation.yield($0) }
+                            let baseURL = SearchInfo.currentSource.rawValue + "s/"
+                            value.allSubStringOf(target: baseURL, endCharater: "\"").forEach { continuation.yield(baseURL + $0) }
                         }
                         await group.waitForAll()
                     }
@@ -105,14 +98,7 @@ final class DownloadManager {
                 
                 group.addTask {
                     guard let value = try? await AF.request(url).serializingString(automaticallyCancelling: true).value else { return }
-                    guard let showKey = value.range(of: "showkey=\"").map({ range -> Substring in
-                        let start = range.upperBound
-                        var end = value.index(after: start)
-                        while end < value.endIndex && value[end] != "\"" {
-                            end = value.index(after: end)
-                        }
-                        return value[start..<end]
-                    }), !showKey.isEmpty else { return }
+                    guard let showKey = value.allSubStringOf(target: "showkey=\"", endCharater: "\"").first else { return }
                     
                     guard let source = try? await AF.request(
                         SearchInfo.currentSource.rawValue + "api.php",
@@ -126,14 +112,7 @@ final class DownloadManager {
                         encoding: JSONEncoding.default
                     ).serializingDecodable(GroupModel.self, automaticallyCancelling: true).value.i3 else { return }
                     
-                    guard let imgURL = source.range(of: "src=\"").map({ range -> String in
-                        let start = range.upperBound
-                        var end = source.index(after: start)
-                        while end < source.endIndex && source[end] != "\"" {
-                            end = source.index(after: end)
-                        }
-                        return "\(source[start..<end])"
-                    }), !imgURL.isEmpty else { return }
+                    guard let imgURL = source.allSubStringOf(target: "src=\"", endCharater: "\"").first else { return }
                     
                     guard let p = try? await AF
                             .download(imgURL, to: { _, _ in (URL(fileURLWithPath: book.imagePath(at: imgIndex)), []) })

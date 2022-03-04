@@ -47,18 +47,7 @@ final class SearchManager {
         guard let value = try? await AF.request(info.requestString).serializingString().value else { return .failure(.netError) }
         guard !value.contains(SearchError.ipError.rawValue) else { return .failure(.ipError) }
         
-        let target = info.source.rawValue + "g/"
-        let ids = value.allIndicesOf(string: target).map { index -> [Substring] in
-            var count = 0
-            let start = value.index(value.startIndex, offsetBy: index + target.count)
-            var end = value.index(after: start)
-            while count < 2 && end < value.endIndex {
-                if value[end] == "/" { count += 1 }
-                end = value.index(after: end)
-            }
-            return value[start..<end].split(separator: "/")
-        }
-        
+        let ids = value.allSubStringOf(target: info.source.rawValue + "g/", endCharater: "/", count: 2).map { $0.split(separator: "/") }
         guard !ids.isEmpty else { return .success([]) }
         
         guard let value = try? await AF
