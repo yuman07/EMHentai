@@ -35,7 +35,7 @@ final class SearchManager {
             
             let result = await p_searchWith(info: info)
             
-            if let next = await taskInfo.getNextInfo() {
+            if let next = await taskInfo.nextInfo() {
                 searchWith(info: next)
             } else {
                 await delegate?.searchFinishCallback(searchInfo: info, result: result)
@@ -91,7 +91,7 @@ private final actor TaskInfo {
         return false
     }
     
-    func getNextInfo() -> SearchInfo? {
+    func nextInfo() -> SearchInfo? {
         runningInfo = nil
         if let next = waitingInfo {
             waitingInfo = nil
