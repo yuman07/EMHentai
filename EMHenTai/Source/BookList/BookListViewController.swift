@@ -103,12 +103,12 @@ extension BookListViewController: SearchManagerCallbackDelegate {
     @MainActor
     func searchFinishCallback(searchInfo: SearchInfo, result: Result<[Book], SearchManager.SearchError>) async {
         var books = [Book]()
-        var isHappenedError = false
+        var error: SearchManager.SearchError?
         switch result {
         case .success(let value):
             books = value
-        case .failure:
-            isHappenedError = true
+        case .failure(let sError):
+           error = sError
         }
         
         self.hasMore = !books.isEmpty
@@ -120,8 +120,13 @@ extension BookListViewController: SearchManagerCallbackDelegate {
             self.books += books
         }
         self.tableView.reloadData()
-        if isHappenedError {
-            self.footerView.hint = .netError
+        if let error = error {
+            switch error {
+            case .netError:
+                self.footerView.hint = .netError
+            case .ipError:
+                self.footerView.hint = .ipError
+            }
         } else if !self.hasMore {
             self.footerView.hint = self.books.isEmpty ? .noData : .noMoreData
         } else {

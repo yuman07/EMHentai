@@ -14,8 +14,9 @@ protocol SearchManagerCallbackDelegate: AnyObject {
 }
 
 final class SearchManager {
-    enum SearchError: Error {
+    enum SearchError: String, Error {
         case netError
+        case ipError = "Your IP address has been temporarily banned for excessive pageloads"
     }
     
     static let shared = SearchManager()
@@ -44,6 +45,7 @@ final class SearchManager {
     
     private func p_searchWith(info: SearchInfo) async -> Result<[Book], SearchError> {
         guard let value = try? await AF.request(info.requestString).serializingString().value else { return .failure(.netError) }
+        guard !value.contains(SearchError.ipError.rawValue) else { return .failure(.ipError) }
         
         let target = info.source.rawValue + "g/"
         let ids = value.allIndicesOf(string: target).map { index -> [Substring] in
