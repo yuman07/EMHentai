@@ -27,7 +27,7 @@ final class GalleryViewController: UIViewController {
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = 0
         layout.minimumInteritemSpacing = 0
-        let view = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
+        let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
         view.delegate = self
         view.dataSource = self
         view.isPagingEnabled = true
@@ -124,6 +124,7 @@ final class GalleryViewController: UIViewController {
             self.lastSeenPageIndex = 0
         } else {
             let index = self.lastSeenPageIndex
+            guard index > 0 else { return }
             DispatchQueue.main.async {
                 self.collectionView.scrollToItem(at: IndexPath(row: index, section: 0), at: .left, animated: false)
             }
@@ -144,7 +145,7 @@ extension GalleryViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        isRotating ? CGSize.zero : collectionView.bounds.size
+        isRotating ? .zero : collectionView.bounds.size
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

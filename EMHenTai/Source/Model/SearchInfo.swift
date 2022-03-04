@@ -74,7 +74,7 @@ extension SearchInfo {
     }
 }
 
-extension SearchInfo.Source: searchVCItemProtocol {
+extension SearchInfo.Source: searchVCItemDataSource {
     var searchItemTitle: String {
         switch self {
         case .EHentai:
@@ -85,7 +85,7 @@ extension SearchInfo.Source: searchVCItemProtocol {
     }
 }
 
-extension SearchInfo.Language: searchVCItemProtocol {
+extension SearchInfo.Language: searchVCItemDataSource {
     var searchItemTitle: String {
         switch self {
         case .all:
@@ -96,7 +96,7 @@ extension SearchInfo.Language: searchVCItemProtocol {
     }
 }
 
-extension SearchInfo.Rating: searchVCItemProtocol {
+extension SearchInfo.Rating: searchVCItemDataSource {
     var searchItemTitle: String {
         switch self {
         case .all:
@@ -111,7 +111,7 @@ extension SearchInfo.Rating: searchVCItemProtocol {
     }
 }
 
-extension SearchInfo.Category: searchVCItemProtocol {
+extension SearchInfo.Category: searchVCItemDataSource {
     var searchItemTitle: String {
         switch self {
         case .doujinshi:

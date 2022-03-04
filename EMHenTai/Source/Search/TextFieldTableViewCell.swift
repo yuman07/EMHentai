@@ -9,6 +9,9 @@ import Foundation
 import UIKit
 
 final class TextFieldTableViewCell: UITableViewCell {
+    
+    var textChangeAction: ((String) -> Void)?
+    
     lazy var searchTextField: UITextField = {
         let view = UITextField()
         view.delegate = self
@@ -24,6 +27,7 @@ final class TextFieldTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
+        setupAction()
     }
     
     required init?(coder: NSCoder) {
@@ -37,6 +41,15 @@ final class TextFieldTableViewCell: UITableViewCell {
         searchTextField.rightAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.rightAnchor, constant: -15).isActive = true
         searchTextField.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
         searchTextField.heightAnchor.constraint(equalToConstant: 30).isActive = true
+    }
+    
+    private func setupAction() {
+        searchTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+    }
+    
+    @objc
+    private func textFieldDidChange() {
+        textChangeAction?(searchTextField.text ?? "")
     }
 }
 

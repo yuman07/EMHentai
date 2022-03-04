@@ -8,11 +8,11 @@
 import Foundation
 import UIKit
 
-protocol searchVCItemProtocol {
+protocol searchVCItemDataSource {
     var searchItemTitle: String { get }
 }
 
-final class SearchViewController: UIViewController {
+final class SearchViewController: UITableViewController {
     private static let sections = [
         "关键词",
         "数据源",
@@ -23,24 +23,8 @@ final class SearchViewController: UIViewController {
     
     private var searchInfo = SearchInfo()
     
-    weak var textField: UITextField?
-    
-    private lazy var tableView: UITableView = {
-        let table = UITableView(frame: CGRect.zero, style: .grouped)
-        table.rowHeight = 44
-        table.estimatedRowHeight = 0
-        table.estimatedSectionHeaderHeight = 0
-        table.estimatedSectionFooterHeight = 0
-        table.delegate = self
-        table.dataSource = self
-        table.bounces = false
-        table.register(TextFieldTableViewCell.self, forCellReuseIdentifier: NSStringFromClass(TextFieldTableViewCell.self))
-        table.register(UITableViewCell.self, forCellReuseIdentifier: NSStringFromClass(UITableViewCell.self))
-        return table
-    }()
-    
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+    init() {
+        super.init(style: .grouped)
         hidesBottomBarWhenPushed = true
     }
     
@@ -57,30 +41,32 @@ final class SearchViewController: UIViewController {
         navigationItem.title = "搜索"
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "GO", style: .done, target: self, action: #selector(searchAction))
         
-        view.backgroundColor = .systemGroupedBackground
-        view.addSubview(tableView)
-        
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
-        tableView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor).isActive = true
-        tableView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+        tableView.backgroundColor = .systemGroupedBackground
+        tableView.rowHeight = 44
+        tableView.estimatedRowHeight = 0
+        tableView.estimatedSectionHeaderHeight = 0
+        tableView.estimatedSectionFooterHeight = 0
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.bounces = false
+        tableView.register(TextFieldTableViewCell.self, forCellReuseIdentifier: NSStringFromClass(TextFieldTableViewCell.self))
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: NSStringFromClass(UITableViewCell.self))
     }
     
     @objc
     private func searchAction() {
-        searchInfo.keyWord = textField?.text ?? ""
         SearchManager.shared.searchWith(info: searchInfo)
         navigationController?.popViewController(animated: true)
     }
 }
 
-extension SearchViewController: UITableViewDataSource {
-    func numberOfSections(in tableView: UITableView) -> Int {
+// MARK: UITableViewDataSource
+extension SearchViewController {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         SearchViewController.sections.count
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
             return 1
@@ -97,19 +83,19 @@ extension SearchViewController: UITableViewDataSource {
         }
     }
     
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         SearchViewController.sections[section]
     }
     
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         30
     }
 
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         CGFloat.leastNormalMagnitude
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cls = indexPath.section == 0 ? TextFieldTableViewCell.self : UITableViewCell.self
         let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(cls), for: indexPath)
         cell.selectionStyle = .none
@@ -117,8 +103,10 @@ extension SearchViewController: UITableViewDataSource {
         switch indexPath.section {
         case 0:
             if let cell = cell as? TextFieldTableViewCell {
-                textField = cell.searchTextField
-                textField?.text = searchInfo.keyWord
+                cell.searchTextField.text = searchInfo.keyWord
+                cell.textChangeAction = { [weak self] text in
+                    self?.searchInfo.keyWord = text
+                }
             }
         case 1:
             let source = SearchInfo.Source.allCases[indexPath.row]
@@ -143,8 +131,9 @@ extension SearchViewController: UITableViewDataSource {
     }
 }
 
-extension SearchViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+// MARK: UITableViewDelegate
+extension SearchViewController {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.section {
         case 0:
             break
@@ -164,7 +153,6 @@ extension SearchViewController: UITableViewDelegate {
         default:
             break
         }
-        searchInfo.keyWord = textField?.text ?? ""
         tableView.reloadSections([indexPath.section], with: .none)
     }
 }
