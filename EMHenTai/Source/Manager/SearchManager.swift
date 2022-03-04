@@ -62,8 +62,8 @@ final class SearchManager {
 }
 
 final private actor TaskInfo {
-    var runningInfo: SearchInfo?
-    var waitingInfo: SearchInfo?
+    private var runningInfo: SearchInfo?
+    private var waitingInfo: SearchInfo?
     
     func checkNewInfo(_ info: SearchInfo) -> Bool {
         guard let runningInfo = runningInfo else {
