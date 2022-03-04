@@ -31,7 +31,7 @@
 
 有Mac的同学可以直接使用Xcode安装（无需开发者账号）：
 
-1. 确保你当前MacOS版本及Xcode版本均为最新，苹果设备的iOS版本>=13.0
+1. 确保你当前的Xcode版本为最新，苹果设备的iOS版本>=13.0
 2. Download ZIP / git clone
 3. open EMHenTai.xcodeproj
 4. Run
