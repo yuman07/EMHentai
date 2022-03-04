@@ -53,9 +53,9 @@ final class SettingManager {
         DispatchQueue.global().async {
             let size = folders.reduce(into: (0, 0)) {
                 let gid = Int($1) ?? 0
-                if DBManager.shared.booksMap[.download]!.contains(where: { $0.gid == gid }) {
+                if DBManager.shared.contains(gid: gid, of: .download) {
                     $0.0 += FileManager.default.folderSizeAt(path: Book.downloadFolderPath + "/\($1)")
-                } else if DBManager.shared.booksMap[.history]!.contains(where: { $0.gid == gid }) {
+                } else if DBManager.shared.contains(gid: gid, of: .history) {
                     $0.1 += FileManager.default.folderSizeAt(path: Book.downloadFolderPath + "/\($1)")
                 }
             }

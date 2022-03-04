@@ -143,7 +143,7 @@ extension BookListViewController {
             guard let searchInfo = searchInfo else { return }
             SearchManager.shared.searchWith(info: searchInfo)
         case .History, .Download:
-            books = (type == .History) ? DBManager.shared.booksMap[.history]! : DBManager.shared.booksMap[.download]!
+            books = (type == .History) ? DBManager.shared.books(of: .history) : DBManager.shared.books(of: .download)
             if (type == .History) { navigationItem.rightBarButtonItem?.isEnabled = !books.isEmpty }
             hasMore = false
             footerView.hint = books.isEmpty ? .noData : .noMoreData
@@ -170,8 +170,8 @@ extension BookListViewController {
             guard !books.isEmpty else { return }
             let vc = UIAlertController(title: "提示", message: "确定要清除所有历史记录吗？\n(不会影响已下载内容)", preferredStyle: .alert)
             vc.addAction(UIAlertAction(title: "清除", style: .default, handler: { _ in
-                DBManager.shared.booksMap[.history]!
-                    .filter { !DBManager.shared.contains(book: $0, type: .download) }
+                DBManager.shared.books(of: .history)
+                    .filter { !DBManager.shared.contains(gid: $0.gid, of: .download) }
                     .forEach { DownloadManager.shared.remove(book: $0) }
                 DBManager.shared.removeAll(type: .history)
                 self.refreshData(with: nil)
@@ -190,10 +190,10 @@ extension BookListViewController {
         Task {
             let vc = UIAlertController(title: "", message: book.showTitle, preferredStyle: .alert)
             
-            if !DBManager.shared.contains(book: book, type: .download) {
+            if !DBManager.shared.contains(gid: book.gid, of: .download) {
                 vc.addAction(UIAlertAction(title: "下载", style: .default, handler: { _ in
                     DownloadManager.shared.download(book: book)
-                    DBManager.shared.insertIfNotExist(book: book, at: .download)
+                    DBManager.shared.insertIfNotExist(book: book, of: .download)
                     self.tableView.reloadData()
                 }))
             } else {
@@ -214,7 +214,7 @@ extension BookListViewController {
                 if state != .before && type != .History {
                     vc.addAction(UIAlertAction(title: "删除下载", style: .default, handler: { _ in
                         DownloadManager.shared.remove(book: book)
-                        DBManager.shared.remove(book: book, at: .download)
+                        DBManager.shared.remove(book: book, of: .download)
                         if self.type == .Download { self.refreshData(with: nil) }
                     }))
                 }
@@ -222,10 +222,10 @@ extension BookListViewController {
             
             if type == .History {
                 vc.addAction(UIAlertAction(title: "删除历史", style: .default, handler: { _ in
-                    if !DBManager.shared.contains(book: book, type: .download) {
+                    if !DBManager.shared.contains(gid: book.gid, of: .download) {
                         DownloadManager.shared.remove(book: book)
                     }
-                    DBManager.shared.remove(book: book, at: .history)
+                    DBManager.shared.remove(book: book, of: .history)
                     self.refreshData(with: nil)
                 }))
             }

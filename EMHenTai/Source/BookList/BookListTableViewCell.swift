@@ -112,7 +112,7 @@ final class BookListTableViewCell: UITableViewCell {
     private func updateProgress() {
         Task {
             progressLabel.text = ""
-            guard let book = self.book, DBManager.shared.contains(book: book, type: .download) else { return }
+            guard let book = self.book, DBManager.shared.contains(gid: book.gid, of: .download) else { return }
             
             switch await DownloadManager.shared.downloadState(of: book) {
             case .before:

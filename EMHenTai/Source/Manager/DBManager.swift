@@ -20,9 +20,9 @@ final class DBManager {
     
     var context: NSManagedObjectContext!
     
+    private let lock = NSLock()
     private var queue = DispatchQueue(label: "EMHenTai.DBManager.Queue")
-    
-    private(set) lazy var booksMap: [DBType: [Book]] = {
+    private lazy var booksMap: [DBType: [Book]] = {
         DBType.allCases.reduce(into: [DBType: [Book]]()) { map, type in
             map[type] = {
                 let request = NSFetchRequest<NSFetchRequestResult>(entityName: type.rawValue)
@@ -35,8 +35,14 @@ final class DBManager {
         context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     }
     
-    func insertIfNotExist(book: Book, at type: DBType) {
-        if !contains(book: book, type: type) { self.booksMap[type]!.insert(book, at: 0) }
+    func books(of type: DBType) -> [Book] {
+        booksMap[type]!
+    }
+    
+    func insertIfNotExist(book: Book, of type: DBType) {
+        lock.lock()
+        defer { lock.unlock() }
+        if !booksMap[type]!.contains(where: { $0.gid == book.gid }) { booksMap[type]!.insert(book, at: 0) }
         
         queue.async { [weak self] in
             guard let self = self else { return }
@@ -51,8 +57,10 @@ final class DBManager {
         }
     }
     
-    func remove(book: Book, at type: DBType) {
-        self.booksMap[type]?.removeAll { $0.gid == book.gid }
+    func remove(book: Book, of type: DBType) {
+        lock.lock()
+        defer { lock.unlock() }
+        booksMap[type]?.removeAll { $0.gid == book.gid }
         
         queue.async { [weak self] in
             guard let self = self else { return }
@@ -66,7 +74,9 @@ final class DBManager {
     }
     
     func removeAll(type: DBType) {
-        self.booksMap[type]?.removeAll()
+        lock.lock()
+        defer { lock.unlock() }
+        booksMap[type]?.removeAll()
         
         queue.async { [weak self] in
             guard let self = self else { return }
@@ -78,8 +88,10 @@ final class DBManager {
         }
     }
     
-    func contains(book: Book, type: DBType) -> Bool {
-        self.booksMap[type]!.contains(where: { $0.gid == book.gid })
+    func contains(gid: Int, of type: DBType) -> Bool {
+        lock.lock()
+        defer { lock.unlock() }
+        return booksMap[type]!.contains(where: { $0.gid == gid })
     }
     
     private func saveDB() {

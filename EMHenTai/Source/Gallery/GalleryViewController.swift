@@ -53,13 +53,13 @@ final class GalleryViewController: UIViewController {
         setupNotification()
         backToLastSeenPage()
         DownloadManager.shared.download(book: book)
-        DBManager.shared.remove(book: book, at: .history)
-        DBManager.shared.insertIfNotExist(book: book, at: .history)
+        DBManager.shared.remove(book: book, of: .history)
+        DBManager.shared.insertIfNotExist(book: book, of: .history)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        if !DBManager.shared.contains(book: book, type: .download) {
+        if !DBManager.shared.contains(gid: book.gid, of: .download) {
             DownloadManager.shared.suspend(book: book)
         }
     }
