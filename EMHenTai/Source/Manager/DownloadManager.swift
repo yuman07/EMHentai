@@ -143,7 +143,7 @@ final class DownloadManager {
 }
 
 final private actor TaskMap {
-    var map = [Int: Task<Void, Never>]()
+    private var map = [Int: Task<Void, Never>]()
     
     func set(_ task: Task<Void, Never>, for gid: Int) {
         map[gid] = task
