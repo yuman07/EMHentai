@@ -72,7 +72,7 @@ final class SearchManager {
     }
 }
 
-private final actor TaskInfo {
+final private actor TaskInfo {
     var runningInfo: SearchInfo?
     var waitingInfo: SearchInfo?
     
