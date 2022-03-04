@@ -129,7 +129,7 @@ extension BookListViewController: SearchManagerCallbackDelegate {
         } else if !self.hasMore {
             self.footerView.hint = self.books.isEmpty ? .noData : .noMoreData
         } else {
-            self.footerView.hint = .empty
+            self.footerView.hint = .loading
         }
     }
 }

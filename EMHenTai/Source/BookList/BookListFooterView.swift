@@ -10,14 +10,14 @@ import UIKit
 
 final class BookListFooterView: UIView {
     enum HintType: String {
-        case empty = " "
+        case loading = "加载中..."
         case noData = "无数据"
         case noMoreData = "没有更多数据了"
         case netError = "网络错误：请检查网络连接或VPN设置"
         case ipError = "IP错误：IP地址被禁，请尝试更换节点"
     }
     
-    var hint = HintType.empty {
+    var hint = HintType.loading {
         didSet {
             self.label.text = hint.rawValue
         }
@@ -34,7 +34,7 @@ final class BookListFooterView: UIView {
     
     private let label: UILabel = {
         let label = UILabel()
-        label.text = HintType.empty.rawValue
+        label.text = HintType.loading.rawValue
         label.font = UIFont.systemFont(ofSize: 14)
         label.sizeToFit()
         return label
