@@ -193,7 +193,7 @@ extension BookListViewController {
             if !DBManager.shared.contains(gid: book.gid, of: .download) {
                 vc.addAction(UIAlertAction(title: "下载", style: .default, handler: { _ in
                     DownloadManager.shared.download(book: book)
-                    DBManager.shared.insertIfNotExist(book: book, of: .download)
+                    DBManager.shared.insert(book: book, of: .download)
                     self.tableView.reloadData()
                 }))
             } else {

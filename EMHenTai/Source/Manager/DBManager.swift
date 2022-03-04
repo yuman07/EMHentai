@@ -39,10 +39,10 @@ final class DBManager {
         booksMap[type]!
     }
     
-    func insertIfNotExist(book: Book, of type: DBType) {
+    func insert(book: Book, of type: DBType) {
         lock.lock()
         defer { lock.unlock() }
-        if !booksMap[type]!.contains(where: { $0.gid == book.gid }) { booksMap[type]!.insert(book, at: 0) }
+        booksMap[type]!.insert(book, at: 0)
         
         queue.async { [weak self] in
             guard let self = self else { return }
