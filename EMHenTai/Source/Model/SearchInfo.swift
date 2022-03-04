@@ -54,6 +54,7 @@ struct SearchInfo: Codable {
            let info = try? JSONDecoder().decode(SearchInfo.self, from: data) {
             self = info
         }
+        pageIndex = 0
     }
 }
 
