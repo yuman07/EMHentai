@@ -48,12 +48,9 @@ final class DBManager {
             guard let self = self else { return }
             let request = NSFetchRequest<NSFetchRequestResult>(entityName: type.rawValue)
             request.predicate = NSPredicate(format: "gid = %d", book.gid)
-            let isExist = ((try? self.context.fetch(request) as? [NSManagedObject]).flatMap { $0.count > 0 }) ?? false
-            if !isExist {
-                let obj = NSEntityDescription.insertNewObject(forEntityName: type.rawValue, into: self.context)
-                self.update(obj: obj, with: book)
-                self.saveDB()
-            }
+            let obj = NSEntityDescription.insertNewObject(forEntityName: type.rawValue, into: self.context)
+            self.update(obj: obj, with: book)
+            self.saveDB()
         }
     }
     
