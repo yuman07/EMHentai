@@ -64,16 +64,16 @@ final class SettingManager {
     
     private func checkLogin() -> Bool {
         guard let cookies = HTTPCookieStorage.shared.cookies else { return false }
-        func isVaildID(_ id: String) -> Bool { !id.isEmpty && id.lowercased() != "mystery" && id.lowercased() != "null" }
-        var memberIDVaild = false
-        var passHashVaild = false
-        var igneousVaild = false
+        func isValidID(_ id: String) -> Bool { !id.isEmpty && id.lowercased() != "mystery" && id.lowercased() != "null" }
+        var memberIDValid = false
+        var passHashValid = false
+        var igneousValid = false
         for cookie in cookies {
             guard let expiresDate = cookie.expiresDate, expiresDate > Date() else { continue }
-            if cookie.name == "ipb_member_id" { memberIDVaild = isVaildID(cookie.value) }
-            if cookie.name == "ipb_pass_hash" { passHashVaild = isVaildID(cookie.value) }
-            if cookie.name == "igneous" { igneousVaild = isVaildID(cookie.value) }
+            if cookie.name == "ipb_member_id" { memberIDValid = isValidID(cookie.value) }
+            if cookie.name == "ipb_pass_hash" { passHashValid = isValidID(cookie.value) }
+            if cookie.name == "igneous" { igneousValid = isValidID(cookie.value) }
         }
-        return memberIDVaild && passHashVaild && igneousVaild
+        return memberIDValid && passHashValid && igneousValid
     }
 }
