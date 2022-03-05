@@ -33,8 +33,6 @@ final class TagViewController: UITableViewController {
         tableView.estimatedRowHeight = 0
         tableView.estimatedSectionHeaderHeight = 0
         tableView.estimatedSectionFooterHeight = 0
-        tableView.delegate = self
-        tableView.dataSource = self
         tableView.bounces = false
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: NSStringFromClass(UITableViewCell.self))
         

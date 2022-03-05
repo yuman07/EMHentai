@@ -47,8 +47,6 @@ final class BookListViewController: UITableViewController {
     
     private func setupUI() {
         tableView.backgroundColor = .systemGroupedBackground
-        tableView.delegate = self
-        tableView.dataSource = self
         tableView.estimatedRowHeight = 150
         tableView.estimatedSectionHeaderHeight = 0
         tableView.estimatedSectionFooterHeight = 0

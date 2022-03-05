@@ -42,8 +42,6 @@ final class SettingViewController: UITableViewController {
         tableView.estimatedSectionFooterHeight = 0
         tableView.bounces = false
         tableView.rowHeight = 44
-        tableView.delegate = self
-        tableView.dataSource = self
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: NSStringFromClass(UITableViewCell.self))
         
         navigationItem.title = "设置"
