@@ -28,7 +28,7 @@ final class SearchManager {
     
     func searchWith(info: SearchInfo) {
         Task {
-            guard await taskInfo.checkNeedRequestInfo(info) else { return }
+            guard await taskInfo.checkNeedRequest(info: info) else { return }
             
             if info.pageIndex == 0 { info.saveDB() }
             await delegate?.searchStartCallback(searchInfo: info)
@@ -68,7 +68,7 @@ final private actor TaskInfo {
     private var runningInfo: SearchInfo?
     private var waitingInfo: SearchInfo?
     
-    func checkNeedRequestInfo(_ info: SearchInfo) -> Bool {
+    func checkNeedRequest(info: SearchInfo) -> Bool {
         guard let runningInfo = runningInfo else {
             self.runningInfo = info
             return true

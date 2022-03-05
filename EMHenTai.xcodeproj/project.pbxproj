@@ -12,7 +12,7 @@
 		7A11677D2795690500C200CA /* String+Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A11677C2795690500C200CA /* String+Tools.swift */; };
 		7A1167812796887500C200CA /* GalleryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1167802796887500C200CA /* GalleryCollectionViewCell.swift */; };
 		7A1167852796970F00C200CA /* SettingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1167842796970F00C200CA /* SettingManager.swift */; };
-		7A1167892796D41F00C200CA /* TextFieldTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1167882796D41F00C200CA /* TextFieldTableViewCell.swift */; };
+		7A1167892796D41F00C200CA /* SearchTextFieldCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1167882796D41F00C200CA /* SearchTextFieldCell.swift */; };
 		7A1167932797D80B00C200CA /* BookListFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1167922797D80B00C200CA /* BookListFooterView.swift */; };
 		7A1167952797DEA600C200CA /* Book+Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1167942797DEA600C200CA /* Book+Tools.swift */; };
 		7A1C12B027994BDD00ADD54E /* DBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1C12AF27994BDD00ADD54E /* DBManager.swift */; };
@@ -47,7 +47,7 @@
 		7A11677C2795690500C200CA /* String+Tools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Tools.swift"; sourceTree = "<group>"; };
 		7A1167802796887500C200CA /* GalleryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryCollectionViewCell.swift; sourceTree = "<group>"; };
 		7A1167842796970F00C200CA /* SettingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingManager.swift; sourceTree = "<group>"; };
-		7A1167882796D41F00C200CA /* TextFieldTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldTableViewCell.swift; sourceTree = "<group>"; };
+		7A1167882796D41F00C200CA /* SearchTextFieldCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTextFieldCell.swift; sourceTree = "<group>"; };
 		7A1167922797D80B00C200CA /* BookListFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookListFooterView.swift; sourceTree = "<group>"; };
 		7A1167942797DEA600C200CA /* Book+Tools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Book+Tools.swift"; sourceTree = "<group>"; };
 		7A1C12AF27994BDD00ADD54E /* DBManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBManager.swift; sourceTree = "<group>"; };
@@ -93,7 +93,7 @@
 			isa = PBXGroup;
 			children = (
 				7A05E65C27948098001EE48F /* SearchViewController.swift */,
-				7A1167882796D41F00C200CA /* TextFieldTableViewCell.swift */,
+				7A1167882796D41F00C200CA /* SearchTextFieldCell.swift */,
 			);
 			path = Search;
 			sourceTree = "<group>";
@@ -101,12 +101,12 @@
 		7A11677B279568D200C200CA /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				7A11677C2795690500C200CA /* String+Tools.swift */,
-				7A1167942797DEA600C200CA /* Book+Tools.swift */,
-				7A1C12B4279A8CC000ADD54E /* FileManager+Tools.swift */,
 				7A1C12B6279A8EE400ADD54E /* Int+Tools.swift */,
-				7A5CA04B27A9770C00E9FDF9 /* UIApplication+Tools.swift */,
+				7A1167942797DEA600C200CA /* Book+Tools.swift */,
+				7A11677C2795690500C200CA /* String+Tools.swift */,
 				7A5FE79427D384ED0042B712 /* UIImage+Tools.swift */,
+				7A1C12B4279A8CC000ADD54E /* FileManager+Tools.swift */,
+				7A5CA04B27A9770C00E9FDF9 /* UIApplication+Tools.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -339,7 +339,7 @@
 				7AEDF3FC279138640064DB12 /* SearchManager.swift in Sources */,
 				7AEDF3FE279177720064DB12 /* SearchInfo.swift in Sources */,
 				7AB9680B279118F90006466A /* RootViewController.swift in Sources */,
-				7A1167892796D41F00C200CA /* TextFieldTableViewCell.swift in Sources */,
+				7A1167892796D41F00C200CA /* SearchTextFieldCell.swift in Sources */,
 				7A1167952797DEA600C200CA /* Book+Tools.swift in Sources */,
 				7AD3B2E7279E79D8000702C6 /* TagViewController.swift in Sources */,
 				7A5CA04C27A9770C00E9FDF9 /* UIApplication+Tools.swift in Sources */,

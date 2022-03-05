@@ -1,5 +1,5 @@
 //
-//  TextFieldTableViewCell.swift
+//  SearchTextFieldCell.swift
 //  EMHenTai
 //
 //  Created by yuman on 2022/1/18.
@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-final class TextFieldTableViewCell: UITableViewCell {
+final class SearchTextFieldCell: UITableViewCell {
     
     var textChangeAction: ((String) -> Void)?
     
@@ -53,7 +53,7 @@ final class TextFieldTableViewCell: UITableViewCell {
     }
 }
 
-extension TextFieldTableViewCell: UITextFieldDelegate {
+extension SearchTextFieldCell: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         searchTextField.resignFirstResponder()
         return true

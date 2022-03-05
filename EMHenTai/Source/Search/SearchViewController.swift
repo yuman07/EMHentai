@@ -47,7 +47,7 @@ final class SearchViewController: UITableViewController {
         tableView.estimatedSectionHeaderHeight = 0
         tableView.estimatedSectionFooterHeight = 0
         tableView.bounces = false
-        tableView.register(TextFieldTableViewCell.self, forCellReuseIdentifier: NSStringFromClass(TextFieldTableViewCell.self))
+        tableView.register(SearchTextFieldCell.self, forCellReuseIdentifier: NSStringFromClass(SearchTextFieldCell.self))
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: NSStringFromClass(UITableViewCell.self))
     }
     
@@ -94,13 +94,13 @@ extension SearchViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cls = indexPath.section == 0 ? TextFieldTableViewCell.self : UITableViewCell.self
+        let cls = indexPath.section == 0 ? SearchTextFieldCell.self : UITableViewCell.self
         let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(cls), for: indexPath)
         cell.selectionStyle = .none
         
         switch indexPath.section {
         case 0:
-            if let cell = cell as? TextFieldTableViewCell {
+            if let cell = cell as? SearchTextFieldCell {
                 cell.searchTextField.text = searchInfo.keyWord
                 cell.textChangeAction = { [weak self] text in
                     self?.searchInfo.keyWord = text
