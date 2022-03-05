@@ -21,7 +21,7 @@ final class BookListViewController: UITableViewController {
     
     private var searchInfo: SearchInfo?
     private var books = [Book]()
-    private var hasMore = true
+    private var hasMore = false
     
     init(type: ListType) {
         self.type = type
@@ -93,6 +93,7 @@ extension BookListViewController: SearchManagerCallbackDelegate {
     @MainActor
     func searchStartCallback(searchInfo: SearchInfo) async {
         guard searchInfo.pageIndex == 0 else { return }
+        searchInfo.saveDB()
         self.tableView.setContentOffset(CGPoint(x: 0, y: -self.refreshControl!.frame.size.height * 3), animated: false)
         self.refreshControl?.beginRefreshing()
     }
@@ -105,7 +106,7 @@ extension BookListViewController: SearchManagerCallbackDelegate {
         case .success(let value):
             books = value
         case .failure(let sError):
-           error = sError
+            error = sError
         }
         
         self.hasMore = !books.isEmpty
@@ -142,15 +143,13 @@ extension BookListViewController {
         case .History, .Download:
             books = (type == .History) ? DBManager.shared.books(of: .history) : DBManager.shared.books(of: .download)
             if (type == .History) { navigationItem.rightBarButtonItem?.isEnabled = !books.isEmpty }
-            hasMore = false
             footerView.hint = books.isEmpty ? .noData : .noMoreData
             self.tableView.reloadData()
         }
     }
     
     private func loadMoreData() {
-        guard type == .Home, let searchInfo = searchInfo, hasMore else { return }
-        var nextInfo = searchInfo
+        guard type == .Home, var nextInfo = searchInfo, hasMore else { return }
         nextInfo.pageIndex += 1
         SearchManager.shared.searchWith(info: nextInfo)
     }
@@ -235,7 +234,8 @@ extension BookListViewController {
             
             if let url = URL(string: book.webURLString(with: SettingManager.shared.isLogin ? .ExHentai : .EHentai)) {
                 vc.addAction(UIAlertAction(title: "打开原网页", style: .default, handler: { _ in
-                    self.navigationController?.pushViewController(WebViewController(url: url, shareItem: (book.showTitle, ImageCache.default.retrieveImageInMemoryCache(forKey: book.thumb))), animated: true)
+                    let image = ImageCache.default.retrieveImageInMemoryCache(forKey: book.thumb)
+                    self.navigationController?.pushViewController(WebViewController(url: url, shareItem: (book.showTitle, image)), animated: true)
                 }))
             }
             
@@ -285,9 +285,7 @@ extension BookListViewController {
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         let prefetchPoint = Int(Double(books.count) * 0.7)
-        if indexPath.row >= prefetchPoint {
-            loadMoreData()
-        }
+        if indexPath.row >= prefetchPoint { loadMoreData() }
     }
 }
 

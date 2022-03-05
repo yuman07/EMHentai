@@ -30,7 +30,6 @@ final class SearchManager {
         Task {
             guard await taskInfo.checkNeedRequest(info: info) else { return }
             
-            if info.pageIndex == 0 { info.saveDB() }
             await delegate?.searchStartCallback(searchInfo: info)
             
             let result = await p_searchWith(info: info)
