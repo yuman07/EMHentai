@@ -63,8 +63,8 @@ final class DBManager {
             guard let self = self else { return }
             let request = NSFetchRequest<NSFetchRequestResult>(entityName: type.rawValue)
             request.predicate = NSPredicate(format: "gid = %d", book.gid)
-            if let objs = try? self.context.fetch(request) as? [NSManagedObject] {
-                for obj in objs { self.context.delete(obj) }
+            let delRequest = NSBatchDeleteRequest(fetchRequest: request)
+            if (try? self.context.execute(delRequest)) != nil {
                 self.saveDB()
             }
         }
@@ -78,8 +78,8 @@ final class DBManager {
         queue.async { [weak self] in
             guard let self = self else { return }
             let request = NSFetchRequest<NSFetchRequestResult>(entityName: type.rawValue)
-            if let objs = try? self.context.fetch(request) as? [NSManagedObject] {
-                for obj in objs { self.context.delete(obj) }
+            let delRequest = NSBatchDeleteRequest(fetchRequest: request)
+            if (try? self.context.execute(delRequest)) != nil {
                 self.saveDB()
             }
         }
