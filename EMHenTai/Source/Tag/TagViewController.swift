@@ -28,8 +28,6 @@ final class TagViewController: UITableViewController {
     }
     
     private func setupUI() {
-        view.backgroundColor = .systemGroupedBackground
-        
         tableView.backgroundColor = .systemGroupedBackground
         tableView.rowHeight = 44
         tableView.estimatedRowHeight = 0

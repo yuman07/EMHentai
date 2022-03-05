@@ -28,7 +28,7 @@ final class SearchManager {
     
     func searchWith(info: SearchInfo) {
         Task {
-            guard await taskInfo.checkNewInfo(info) else { return }
+            guard await taskInfo.checkNeedRequestInfo(info) else { return }
             
             if info.pageIndex == 0 { info.saveDB() }
             await delegate?.searchStartCallback(searchInfo: info)
@@ -47,7 +47,10 @@ final class SearchManager {
         guard let value = try? await AF.request(info.requestString).serializingString().value else { return .failure(.netError) }
         guard !value.contains(SearchError.ipError.rawValue) else { return .failure(.ipError) }
         
-        let ids = value.allSubStringOf(target: info.source.rawValue + "g/", endCharater: "/", count: 2).map { $0.split(separator: "/") }
+        let ids = value
+            .allSubStringOf(target: info.source.rawValue + "g/", endCharater: "/", count: 2)
+            .map { $0.split(separator: "/") }
+            .filter { $0.count == 2 }
         guard !ids.isEmpty else { return .success([]) }
         
         guard let value = try? await AF
@@ -65,7 +68,7 @@ final private actor TaskInfo {
     private var runningInfo: SearchInfo?
     private var waitingInfo: SearchInfo?
     
-    func checkNewInfo(_ info: SearchInfo) -> Bool {
+    func checkNeedRequestInfo(_ info: SearchInfo) -> Bool {
         guard let runningInfo = runningInfo else {
             self.runningInfo = info
             return true

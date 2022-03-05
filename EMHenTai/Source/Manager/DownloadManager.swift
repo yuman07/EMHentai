@@ -33,7 +33,15 @@ final class DownloadManager {
             }
             
             try? FileManager.default.createDirectory(at: URL(fileURLWithPath: book.folderPath), withIntermediateDirectories: true, attributes: nil)
-            await taskMap.set(Task { await p_download(of: book) }, for: book.gid)
+            
+            await taskMap.set(Task {
+                await p_download(of: book)
+                await taskMap.remove(book.gid)
+                if book.downloadedFileCount == book.fileCountNum {
+                    NotificationCenter.default.post(name: DownloadManager.DownloadStateChangedNotification, object: book.gid, userInfo: nil)
+                }
+            }, for: book.gid)
+            
             NotificationCenter.default.post(name: DownloadManager.DownloadStateChangedNotification, object: book.gid, userInfo: nil)
         }
     }
@@ -117,14 +125,9 @@ final class DownloadManager {
                     guard let p = try? await AF
                             .download(imgURL, to: { _, _ in (URL(fileURLWithPath: book.imagePath(at: imgIndex)), []) })
                             .serializingDownload(using: URLResponseSerializer(), automaticallyCancelling: true)
-                            .value else { return }
+                            .value, FileManager.default.fileExists(atPath: p.path) else { return }
                     
-                    guard FileManager.default.fileExists(atPath: p.path) else { return }
                     NotificationCenter.default.post(name: DownloadManager.DownloadPageSuccessNotification, object: (book.gid, imgIndex), userInfo: nil)
-                    if book.downloadedFileCount == book.fileCountNum {
-                        await self.taskMap.remove(book.gid)
-                        NotificationCenter.default.post(name: DownloadManager.DownloadStateChangedNotification, object: book.gid, userInfo: nil)
-                    }
                 }
             }
         })

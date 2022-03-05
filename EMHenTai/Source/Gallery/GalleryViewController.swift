@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-final class GalleryViewController: UIViewController {
+final class GalleryViewController: UICollectionViewController {
     private let book: Book
     private var isRotating = false
     private var lastSeenPageIndex: Int {
@@ -22,24 +22,13 @@ final class GalleryViewController: UIViewController {
         return view
     }()
     
-    private lazy var collectionView: UICollectionView = {
+    init(book: Book) {
+        self.book = book
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = 0
         layout.minimumInteritemSpacing = 0
-        let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        view.delegate = self
-        view.dataSource = self
-        view.isPagingEnabled = true
-        view.backgroundColor = .black
-        view.contentInsetAdjustmentBehavior = .never
-        view.register(GalleryCollectionViewCell.self, forCellWithReuseIdentifier: NSStringFromClass(GalleryCollectionViewCell.self))
-        return view
-    }()
-    
-    init(book: Book) {
-        self.book = book
-        super.init(nibName: nil, bundle: nil)
+        super.init(collectionViewLayout: layout)
         hidesBottomBarWhenPushed = true
     }
     
@@ -65,15 +54,11 @@ final class GalleryViewController: UIViewController {
     }
     
     private func setupUI() {
-        view.backgroundColor = .black
-        view.addSubview(collectionView)
-        view.addSubview(navBarBackgroundView)
-        
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        collectionView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor).isActive = true
-        collectionView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor).isActive = true
-        collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        collectionView.addSubview(navBarBackgroundView)
+        collectionView.backgroundColor = .black
+        collectionView.isPagingEnabled = true
+        collectionView.contentInsetAdjustmentBehavior = .never
+        collectionView.register(GalleryCollectionViewCell.self, forCellWithReuseIdentifier: NSStringFromClass(GalleryCollectionViewCell.self))
         
         navBarBackgroundView.translatesAutoresizingMaskIntoConstraints = false
         navBarBackgroundView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
@@ -139,16 +124,20 @@ final class GalleryViewController: UIViewController {
     }
 }
 
-extension GalleryViewController: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        book.fileCountNum
-    }
-    
+// MARK: UICollectionViewDelegateFlowLayout
+extension GalleryViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         isRotating ? .zero : collectionView.bounds.size
     }
+}
+
+// MARK: UICollectionViewDataSource
+extension GalleryViewController {
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        book.fileCountNum
+    }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NSStringFromClass(GalleryCollectionViewCell.self), for: indexPath)
         if let cell = cell as? GalleryCollectionViewCell {
             cell.updateImageWith(filePath: book.imagePath(at: indexPath.row))
@@ -160,8 +149,9 @@ extension GalleryViewController: UICollectionViewDataSource {
     }
 }
 
-extension GalleryViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+// MARK: UICollectionViewDelegate
+extension GalleryViewController {
+    override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         navigationItem.title = "\(indexPath.row + 1)/\(book.fileCountNum)"
         lastSeenPageIndex = indexPath.row
     }

@@ -36,7 +36,7 @@ final class BookListViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        setupConfig()
+        setupDelegate()
         setupData()
     }
     
@@ -73,7 +73,7 @@ final class BookListViewController: UITableViewController {
         }
     }
     
-    private func setupConfig() {
+    private func setupDelegate() {
         if type == .Home { SearchManager.shared.delegate = self }
     }
     
@@ -243,7 +243,7 @@ extension BookListViewController {
             
             vc.addAction(UIAlertAction(title: "没事", style: .cancel, handler: nil))
             
-            self.present(vc, animated: true, completion: nil)
+            present(vc, animated: true, completion: nil)
         }
     }
 }
@@ -260,8 +260,7 @@ extension BookListViewController {
             let book = books[indexPath.row]
             cell.updateWith(book: book)
             cell.longPressBlock = { [weak self] in
-                guard let self = self else { return }
-                self.showAlertVC(with: book)
+                self?.showAlertVC(with: book)
             }
         }
         return cell
