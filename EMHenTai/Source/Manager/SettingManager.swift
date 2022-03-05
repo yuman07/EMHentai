@@ -69,7 +69,7 @@ final class SettingManager {
         var passHashVaild = false
         var igneousVaild = false
         for cookie in cookies {
-            guard let expiresDate = cookie.expiresDate, expiresDate > Date() && !cookie.value.isEmpty else { continue }
+            guard let expiresDate = cookie.expiresDate, expiresDate > Date() else { continue }
             if cookie.name == "ipb_member_id" { memberIDVaild = isVaildID(cookie.value) }
             if cookie.name == "ipb_pass_hash" { passHashVaild = isVaildID(cookie.value) }
             if cookie.name == "igneous" { igneousVaild = isVaildID(cookie.value) }
