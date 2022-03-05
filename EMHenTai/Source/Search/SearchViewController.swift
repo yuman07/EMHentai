@@ -35,6 +35,7 @@ final class SearchViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        updateSearchEnable()
     }
     
     private func setupUI() {
@@ -49,6 +50,12 @@ final class SearchViewController: UITableViewController {
         tableView.bounces = false
         tableView.register(SearchTextFieldCell.self, forCellReuseIdentifier: NSStringFromClass(SearchTextFieldCell.self))
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: NSStringFromClass(UITableViewCell.self))
+    }
+    
+    private func updateSearchEnable() {
+        let f1 = searchInfo.source == .EHentai || SettingManager.shared.isLogin
+        let f2 = !searchInfo.categories.isEmpty
+        navigationItem.rightBarButtonItem?.isEnabled = f1 && f2
     }
     
     @objc
@@ -151,6 +158,7 @@ extension SearchViewController {
         default:
             break
         }
+        updateSearchEnable()
         tableView.reloadSections([indexPath.section], with: .none)
     }
 }
