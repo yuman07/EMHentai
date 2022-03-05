@@ -44,7 +44,7 @@ final class SearchManager {
     }
     
     private func p_searchWith(info: SearchInfo) async -> Result<[Book], SearchError> {
-        guard let value = try? await AF.request(info.requestString).serializingString().value else { return .failure(.netError) }
+        guard let value = try? await AF.request(info.requestString, interceptor: RetryPolicy()).serializingString().value else { return .failure(.netError) }
         guard !value.contains(SearchError.ipError.rawValue) else { return .failure(.ipError) }
         
         let ids = value
