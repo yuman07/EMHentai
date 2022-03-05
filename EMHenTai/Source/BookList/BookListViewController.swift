@@ -80,9 +80,7 @@ final class BookListViewController: UITableViewController {
         switch type {
         case .Home:
             refreshData(with: SearchInfo())
-        case .History:
-            refreshData(with: nil)
-        case .Download:
+        case .History, .Download:
             refreshData(with: nil)
         }
     }
