@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 import WebKit
 
 final class LoginViewController: WebViewController {
@@ -40,7 +41,7 @@ final class LoginViewController: WebViewController {
 extension LoginViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         webView.configuration.websiteDataStore.httpCookieStore.getAllCookies { cookies in
-            cookies.forEach { print($0); HTTPCookieStorage.shared.setCookie($0) }
+            cookies.forEach { HTTPCookieStorage.shared.setCookie($0) }
         }
         if (webView.url?.absoluteString ?? "") == "https://forums.e-hentai.org/index.php?" {
             self.webView.load(URLRequest(url: URL(string: SearchInfo.Source.ExHentai.rawValue)!))
