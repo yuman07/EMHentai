@@ -23,6 +23,7 @@ struct SearchInfo: Codable {
         case atLeast2
         case atLeast3
         case atLeast4
+        case atLeast5
     }
     
     enum Category: String, CaseIterable, Codable {
@@ -108,6 +109,8 @@ extension SearchInfo.Rating: searchVCItemDataSource {
             return "至少3星"
         case .atLeast4:
             return "至少4星"
+        case .atLeast5:
+            return "满星"
         }
     }
 }
