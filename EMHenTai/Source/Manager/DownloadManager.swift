@@ -79,7 +79,7 @@ final class DownloadManager {
                     for groupIndex in 0..<groupNum {
                         guard checkGroupNeedRequest(of: book, groupIndex: groupIndex) else { continue }
                         group.addTask {
-                            let url = book.currentWebURLString + (groupIndex > 0 ? "?p=\(groupIndex)" : "")
+                            let url = book.currentWebURLString + (groupIndex > 0 ? "?p=\(groupIndex)" : "") + "/?nw=session"
                             guard let value = try? await AF.request(url).serializingString(automaticallyCancelling: true).value else { return }
                             let baseURL = SearchInfo.currentSource.rawValue + "s/"
                             value.allSubStringOf(target: baseURL, endCharater: "\"").forEach { continuation.yield(baseURL + $0) }

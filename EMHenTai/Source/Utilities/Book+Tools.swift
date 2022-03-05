@@ -7,6 +7,9 @@
 
 import Foundation
 
+// https://ehwiki.org/wiki/Technical_Issues
+private let offensiveTags = ["guro", "snuff", "scat"]
+
 extension Book {
     static var downloadFolderPath: String {
         NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first.flatMap { $0 + "/EMDownload" } ?? NSHomeDirectory() + "/Documents/EMDownload"
@@ -38,5 +41,12 @@ extension Book {
     
     var downloadedFileCount: Int {
         (try? FileManager.default.contentsOfDirectory(atPath: folderPath))?.count ?? 0
+    }
+    
+    var isOffensive: Bool {
+        for tag in tags {
+            if offensiveTags.contains(tag.lowercased()) { return true }
+        }
+        return false
     }
 }

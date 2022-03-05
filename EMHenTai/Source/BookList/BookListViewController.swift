@@ -271,8 +271,17 @@ extension BookListViewController {
 extension BookListViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        if indexPath.row < books.count {
-            navigationController?.pushViewController(GalleryViewController(book: books[indexPath.row]), animated: true)
+        guard indexPath.row < books.count else { return }
+        let book = books[indexPath.row]
+        if !book.isOffensive {
+            navigationController?.pushViewController(GalleryViewController(book: book), animated: true)
+        } else {
+            let vc = UIAlertController(title: "警告", message: "此本含有令人不适内容(恶心猎奇)\n请确认是否一定要观看？", preferredStyle: .alert)
+            vc.addAction(UIAlertAction(title: "确认", style: .default, handler: { _ in
+                self.navigationController?.pushViewController(GalleryViewController(book: book), animated: true)
+            }))
+            vc.addAction(UIAlertAction(title: "算了", style: .cancel, handler: nil))
+            present(vc, animated: true, completion: nil)
         }
     }
     
