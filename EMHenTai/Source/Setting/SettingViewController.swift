@@ -125,7 +125,7 @@ extension SettingViewController {
                 SettingManager.shared.logout()
             } else {
                 SettingManager.shared.logout()
-                navigationController?.pushViewController(WebViewController(url: SettingManager.loginURL, needSyncCookieToApp: true), animated: true)
+                navigationController?.pushViewController(LoginViewController(), animated: true)
             }
         case 1:
             break

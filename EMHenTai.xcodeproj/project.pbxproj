@@ -21,6 +21,7 @@
 		7A1C12B7279A8EE400ADD54E /* Int+Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1C12B6279A8EE400ADD54E /* Int+Tools.swift */; };
 		7A5CA04C27A9770C00E9FDF9 /* UIApplication+Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A5CA04B27A9770C00E9FDF9 /* UIApplication+Tools.swift */; };
 		7A5FE79527D384ED0042B712 /* UIImage+Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A5FE79427D384ED0042B712 /* UIImage+Tools.swift */; };
+		7A5FE79927D389310042B712 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A5FE79827D389310042B712 /* LoginViewController.swift */; };
 		7A6C95C727911DC200077093 /* BookListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A6C95C627911DC200077093 /* BookListViewController.swift */; };
 		7A6C95CC27911E4600077093 /* GalleryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A6C95CB27911E4600077093 /* GalleryViewController.swift */; };
 		7A6C95D127911E9A00077093 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A6C95D027911E9A00077093 /* SettingViewController.swift */; };
@@ -55,6 +56,7 @@
 		7A1C12B6279A8EE400ADD54E /* Int+Tools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Tools.swift"; sourceTree = "<group>"; };
 		7A5CA04B27A9770C00E9FDF9 /* UIApplication+Tools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+Tools.swift"; sourceTree = "<group>"; };
 		7A5FE79427D384ED0042B712 /* UIImage+Tools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Tools.swift"; sourceTree = "<group>"; };
+		7A5FE79827D389310042B712 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		7A6C95C627911DC200077093 /* BookListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookListViewController.swift; sourceTree = "<group>"; };
 		7A6C95CB27911E4600077093 /* GalleryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryViewController.swift; sourceTree = "<group>"; };
 		7A6C95D027911E9A00077093 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
@@ -107,6 +109,14 @@
 				7A5FE79427D384ED0042B712 /* UIImage+Tools.swift */,
 			);
 			path = Utilities;
+			sourceTree = "<group>";
+		};
+		7A5FE79727D389170042B712 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				7A5FE79827D389310042B712 /* LoginViewController.swift */,
+			);
+			path = Login;
 			sourceTree = "<group>";
 		};
 		7A6C95C827911DD700077093 /* Model */ = {
@@ -194,6 +204,7 @@
 				7A6C95CE27911E5F00077093 /* Gallery */,
 				7AD3B2E5279E79BD000702C6 /* Tag */,
 				7ACADDBE27BF3DFE00D8FC9B /* WebView */,
+				7A5FE79727D389170042B712 /* Login */,
 				7AB967F4279117CC0006466A /* AppDelegate.swift */,
 				7AB9680A279118F90006466A /* RootViewController.swift */,
 			);
@@ -307,6 +318,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7A5FE79927D389310042B712 /* LoginViewController.swift in Sources */,
 				7A6C95D127911E9A00077093 /* SettingViewController.swift in Sources */,
 				7AB967F5279117CC0006466A /* AppDelegate.swift in Sources */,
 				7A1167812796887500C200CA /* GalleryCollectionViewCell.swift in Sources */,

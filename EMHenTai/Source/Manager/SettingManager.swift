@@ -11,7 +11,6 @@ import WebKit
 final class SettingManager {
     static let shared = SettingManager()
     static let LoginStateChangedNotification = NSNotification.Name(rawValue: "EMHenTai.SettingManager.LoginStateChangedNotification")
-    static let loginURL = URL(string: "https://forums.e-hentai.org/index.php?act=Login")!
     
     lazy var isLogin = checkLogin() {
         didSet {
@@ -65,17 +64,16 @@ final class SettingManager {
     
     private func checkLogin() -> Bool {
         guard let cookies = HTTPCookieStorage.shared.cookies else { return false }
-        var memberIDExist = false
-        var passHashExist = false
+        func isVaildID(_ id: String) -> Bool { !id.isEmpty && id.lowercased() != "mystery" && id.lowercased() != "null" }
+        var memberIDVaild = false
+        var passHashVaild = false
+        var igneousVaild = false
         for cookie in cookies {
             guard let expiresDate = cookie.expiresDate, expiresDate > Date() && !cookie.value.isEmpty else { continue }
-            if cookie.name == "ipb_member_id" {
-                memberIDExist = true
-            }
-            if cookie.name == "ipb_pass_hash" {
-                passHashExist = true
-            }
+            if cookie.name == "ipb_member_id" { memberIDVaild = isVaildID(cookie.value) }
+            if cookie.name == "ipb_pass_hash" { passHashVaild = isVaildID(cookie.value) }
+            if cookie.name == "igneous" { igneousVaild = isVaildID(cookie.value) }
         }
-        return memberIDExist && passHashExist
+        return memberIDVaild && passHashVaild && igneousVaild
     }
 }

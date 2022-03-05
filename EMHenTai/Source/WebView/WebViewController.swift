@@ -9,15 +9,13 @@ import Foundation
 import UIKit
 import WebKit
 
-final class WebViewController: UIViewController {
-    private let webView = WKWebView()
+class WebViewController: UIViewController {
+    let webView = WKWebView()
     private let url: URL
-    private let needSyncCookieToApp: Bool
     private let shareItem: (shareTitle: String?, shareImage: UIImage?)?
     
-    init(url: URL, needSyncCookieToApp: Bool = false, shareItem: (shareTitle: String?, shareImage: UIImage?)? = nil) {
+    init(url: URL, shareItem: (shareTitle: String?, shareImage: UIImage?)? = nil) {
         self.url = url
-        self.needSyncCookieToApp = needSyncCookieToApp
         self.shareItem = shareItem
         super.init(nibName: nil, bundle: nil)
         hidesBottomBarWhenPushed = true
@@ -37,7 +35,6 @@ final class WebViewController: UIViewController {
         view.backgroundColor = .systemGroupedBackground
         view.addSubview(webView)
         
-        webView.navigationDelegate = self
         webView.translatesAutoresizingMaskIntoConstraints = false
         webView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
         webView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
@@ -63,14 +60,5 @@ final class WebViewController: UIViewController {
             vc.dismiss(animated: true, completion: nil)
         }
         present(vc, animated: true, completion: nil)
-    }
-}
-
-extension WebViewController: WKNavigationDelegate {
-    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        guard needSyncCookieToApp else { return }
-        webView.configuration.websiteDataStore.httpCookieStore.getAllCookies { cookies in
-            cookies.forEach { HTTPCookieStorage.shared.setCookie($0) }
-        }
     }
 }
