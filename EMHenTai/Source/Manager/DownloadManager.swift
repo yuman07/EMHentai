@@ -123,7 +123,7 @@ final class DownloadManager {
                     guard let imgURL = source.allSubStringOf(target: "src=\"", endCharater: "\"").first else { return }
                     
                     guard let p = try? await AF
-                            .download(imgURL, to: { _, _ in (URL(fileURLWithPath: book.imagePath(at: imgIndex)), []) })
+                            .download(imgURL, interceptor: RetryPolicy(), to: { _, _ in (URL(fileURLWithPath: book.imagePath(at: imgIndex)), []) })
                             .serializingDownload(using: URLResponseSerializer(), automaticallyCancelling: true)
                             .value, FileManager.default.fileExists(atPath: p.path) else { return }
                     
