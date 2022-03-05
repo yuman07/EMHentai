@@ -4,7 +4,7 @@
 
 ## 简介
 
-一个简单，纯Swift，容易使用的Ehentai的iOS APP
+一个简易，小巧，快速，纯Swift的Ehentai的iOS APP
 
 
 
@@ -15,7 +15,7 @@
 - [x] 相关Tag搜索
 - [x] 高级搜索
 - [x] 历史记录
-- [x] 下载
+- [x] 下载管理
 - [x] Tag翻译
 - [x] E-hentai/ExHentai切换
 - [x] 分享功能
@@ -36,11 +36,13 @@
 3. open EMHenTai.xcodeproj
 4. Run
 
+
+
 ## 其他
 
-欢迎提PR或者建议
+长期维护，欢迎提PR或者建议
 
-有任何代码上的问题可以随时联系我
+有任何BUG或者功能/代码上的问题等，都可以直接提issue
 
 
 
