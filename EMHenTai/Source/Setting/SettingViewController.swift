@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 final class SettingViewController: UITableViewController {
-    private var fileSize: (download: Int, history: Int)?
+    private var fileSize: (history: Int, download: Int)?
     
     init() {
         super.init(style: .grouped)
@@ -28,9 +28,9 @@ final class SettingViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        SettingManager.shared.calculateFilesSize { [weak self] (downloadSize, historySize) in
+        SettingManager.shared.calculateFilesSize { [weak self] (historySize, downloadSize) in
             guard let self = self else { return }
-            self.fileSize = (downloadSize, historySize)
+            self.fileSize = (historySize, downloadSize)
             self.tableView.reloadSections([1], with: .none)
         }
     }
@@ -98,8 +98,8 @@ extension SettingViewController {
             cell.textLabel?.text = SettingManager.shared.isLogin ? "已登录：点击可登出" : "未登录：点击去登录"
             cell.selectionStyle = .default
         case 1:
-            var text = indexPath.row == 0 ? "下载数据" : "历史数据"
-            if let size = (indexPath.row == 0 ? self.fileSize?.download : self.fileSize?.history) {
+            var text = indexPath.row == 0 ? "历史数据" : "下载数据"
+            if let size = (indexPath.row == 0 ? self.fileSize?.history : self.fileSize?.download) {
                 text += "：\(size.diskSizeFormat)"
             }
             cell.textLabel?.text = text

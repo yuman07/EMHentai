@@ -43,7 +43,7 @@ final class SettingManager {
         }
     }
     
-    func calculateFilesSize(completion: @escaping ((downloadSize: Int, historySize: Int)) -> Void) {
+    func calculateFilesSize(completion: @escaping ((historySize: Int, downloadSize: Int)) -> Void) {
         guard let folders = try? FileManager.default.contentsOfDirectory(atPath: Book.downloadFolderPath), !folders.isEmpty else {
             DispatchQueue.main.async { completion((0, 0)) }
             return
@@ -53,9 +53,9 @@ final class SettingManager {
             let size = folders.reduce(into: (0, 0)) {
                 let gid = Int($1) ?? 0
                 if DBManager.shared.contains(gid: gid, of: .download) {
-                    $0.0 += FileManager.default.folderSizeAt(path: Book.downloadFolderPath + "/\($1)")
-                } else if DBManager.shared.contains(gid: gid, of: .history) {
                     $0.1 += FileManager.default.folderSizeAt(path: Book.downloadFolderPath + "/\($1)")
+                } else if DBManager.shared.contains(gid: gid, of: .history) {
+                    $0.0 += FileManager.default.folderSizeAt(path: Book.downloadFolderPath + "/\($1)")
                 }
             }
             DispatchQueue.main.async { completion(size) }
