@@ -58,6 +58,8 @@ final class GalleryViewController: UICollectionViewController {
         collectionView.backgroundColor = .black
         collectionView.isPagingEnabled = true
         collectionView.contentInsetAdjustmentBehavior = .never
+        collectionView.showsVerticalScrollIndicator = false
+        collectionView.showsHorizontalScrollIndicator = false
         collectionView.register(GalleryCollectionViewCell.self, forCellWithReuseIdentifier: NSStringFromClass(GalleryCollectionViewCell.self))
         
         navBarBackgroundView.translatesAutoresizingMaskIntoConstraints = false
