@@ -64,7 +64,8 @@ extension SearchInfo {
         var url = source.rawValue + "?page=\(pageIndex)"
         Category.allCases.forEach { url += "&f_\($0.rawValue)=\(categories.contains($0) ? 1 : 0)" }
         url += "&f_search=\((keyWord + language.rawValue).split(separator: " ").map({ TranslateManager.shared.translateCn("\($0)") }).joined(separator: "+"))"
-        if rating.rawValue > 0 { url += "&advsearch=1&f_sname=on&f_stags=on&f_sr=on&f_srdd=\(rating.rawValue + 1)" }
+        url += "&advsearch=1&f_sname=on&f_stags=on&f_sdesc=on&f_sh=on"
+        if rating.rawValue > 0 { url += "&f_sr=on&f_srdd=\(rating.rawValue + 1)" }
         return url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? url
     }
     
