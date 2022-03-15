@@ -9,7 +9,7 @@ import Foundation
 
 final class TranslateManager {
     static let shared = TranslateManager()
-    private static let jsonName = "tag-v6.4007.1-220211.json"    // https://github.com/EhTagTranslation/Database/releases    db.text.json
+    private static let jsonName = "tag-v6.4068.1-220315.json"    // https://github.com/EhTagTranslation/Database/releases    db.text.json
     private init () {
         guard let url = Bundle.main.url(forResource: TranslateManager.jsonName, withExtension: nil),
               let data = try? Data(contentsOf: url),
