@@ -51,7 +51,7 @@ class WebViewController: UIViewController {
     }
     
     @objc
-    func shareAction() {
+    private func shareAction() {
         guard let shareItem = shareItem else { return }
         let title = shareItem.shareTitle ?? self.title ?? self.url.absoluteString
         let image = shareItem.shareImage ?? UIApplication.shared.APPIcon ?? UIImage()

@@ -41,13 +41,10 @@ final class GalleryViewController: UICollectionViewController {
         setupUI()
         setupNotification()
         backToLastSeenPage()
-        DownloadManager.shared.download(book: book)
-        DBManager.shared.remove(book: book, of: .history)
-        DBManager.shared.insert(book: book, of: .history)
+        startDownload()
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
+    deinit {
         if !DBManager.shared.contains(gid: book.gid, of: .download) {
             DownloadManager.shared.suspend(book: book)
         }
@@ -116,6 +113,12 @@ final class GalleryViewController: UICollectionViewController {
                 self.collectionView.scrollToItem(at: IndexPath(row: index, section: 0), at: .left, animated: false)
             }
         }
+    }
+    
+    private func startDownload() {
+        DownloadManager.shared.download(book: book)
+        DBManager.shared.remove(book: book, of: .history)
+        DBManager.shared.insert(book: book, of: .history)
     }
     
     @objc
