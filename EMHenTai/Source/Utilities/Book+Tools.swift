@@ -7,7 +7,7 @@
 
 import Foundation
 
-// https://ehwiki.org/wiki/Technical_Issues
+// https://ehwiki.org/wiki/Technical_Issues  "Content Warning - This gallery has been flagged as Offensive For Everyone
 private let offensiveTags = ["guro", "snuff", "scat"]
 
 extension Book {
