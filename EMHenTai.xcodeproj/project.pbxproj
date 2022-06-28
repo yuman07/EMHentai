@@ -27,7 +27,6 @@
 		7A6C95D127911E9A00077093 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A6C95D027911E9A00077093 /* SettingViewController.swift */; };
 		7A6C95D327911EB200077093 /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A6C95D227911EB200077093 /* Book.swift */; };
 		7A6C95D727911EF300077093 /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A6C95D627911EF300077093 /* DownloadManager.swift */; };
-		7AA966DE284209F000F92A3E /* tag-v6.4485.1-220528.json in Resources */ = {isa = PBXBuildFile; fileRef = 7AA966DD284209F000F92A3E /* tag-v6.4485.1-220528.json */; };
 		7AB967F5279117CC0006466A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB967F4279117CC0006466A /* AppDelegate.swift */; };
 		7AB967FE279117CD0006466A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7AB967FD279117CD0006466A /* Assets.xcassets */; };
 		7AB96801279117CD0006466A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7AB967FF279117CD0006466A /* LaunchScreen.storyboard */; };
@@ -39,6 +38,7 @@
 		7AE912C827D07C2500DD9E65 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 7AE912C727D07C2500DD9E65 /* Kingfisher */; };
 		7AEDF3FC279138640064DB12 /* SearchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AEDF3FB279138640064DB12 /* SearchManager.swift */; };
 		7AEDF3FE279177720064DB12 /* SearchInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AEDF3FD279177720064DB12 /* SearchInfo.swift */; };
+		7AEE4D68286AD348000F2AF2 /* tag-v6.4891.1-220628.json in Resources */ = {isa = PBXBuildFile; fileRef = 7AEE4D67286AD348000F2AF2 /* tag-v6.4891.1-220628.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -62,7 +62,6 @@
 		7A6C95D027911E9A00077093 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		7A6C95D227911EB200077093 /* Book.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Book.swift; sourceTree = "<group>"; };
 		7A6C95D627911EF300077093 /* DownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
-		7AA966DD284209F000F92A3E /* tag-v6.4485.1-220528.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "tag-v6.4485.1-220528.json"; sourceTree = "<group>"; };
 		7AB967F1279117CC0006466A /* EMHenTai.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EMHenTai.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7AB967F4279117CC0006466A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7AB967FD279117CD0006466A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -74,6 +73,7 @@
 		7AD3B2E8279E810A000702C6 /* TranslateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslateManager.swift; sourceTree = "<group>"; };
 		7AEDF3FB279138640064DB12 /* SearchManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchManager.swift; sourceTree = "<group>"; };
 		7AEDF3FD279177720064DB12 /* SearchInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchInfo.swift; sourceTree = "<group>"; };
+		7AEE4D67286AD348000F2AF2 /* tag-v6.4891.1-220628.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "tag-v6.4891.1-220628.json"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -218,7 +218,7 @@
 				7AB967FF279117CD0006466A /* LaunchScreen.storyboard */,
 				7AB96802279117CD0006466A /* Info.plist */,
 				7A1C12B127995C5E00ADD54E /* EMDB.xcdatamodeld */,
-				7AA966DD284209F000F92A3E /* tag-v6.4485.1-220528.json */,
+				7AEE4D67286AD348000F2AF2 /* tag-v6.4891.1-220628.json */,
 			);
 			path = Support;
 			sourceTree = "<group>";
@@ -307,7 +307,7 @@
 			files = (
 				7AB96801279117CD0006466A /* LaunchScreen.storyboard in Resources */,
 				7AB967FE279117CD0006466A /* Assets.xcassets in Resources */,
-				7AA966DE284209F000F92A3E /* tag-v6.4485.1-220528.json in Resources */,
+				7AEE4D68286AD348000F2AF2 /* tag-v6.4891.1-220628.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
