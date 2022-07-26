@@ -14,19 +14,19 @@ final class RootViewController: UITabBarController {
         view.backgroundColor = .systemGroupedBackground
         viewControllers = [
             {
-                let vc = UINavigationController(rootViewController: BookcaseViewController(type: .Home))
+                let vc = UINavigationController(rootViewController: BookcaseViewController(type: .home))
                 vc.tabBarItem.title = "主页"
                 vc.tabBarItem.image = UIImage(symbol: .home)
                 return vc
             }(),
             {
-                let vc = UINavigationController(rootViewController: BookcaseViewController(type: .History))
+                let vc = UINavigationController(rootViewController: BookcaseViewController(type: .history))
                 vc.tabBarItem.title = "历史"
                 vc.tabBarItem.image = UIImage(symbol: .history)
                 return vc
             }(),
             {
-                let vc = UINavigationController(rootViewController: BookcaseViewController(type: .Download))
+                let vc = UINavigationController(rootViewController: BookcaseViewController(type: .download))
                 vc.tabBarItem.title = "下载"
                 vc.tabBarItem.image = UIImage(symbol: .download)
                 return vc

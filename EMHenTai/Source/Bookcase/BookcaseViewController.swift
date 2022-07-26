@@ -11,9 +11,14 @@ import Kingfisher
 
 final class BookcaseViewController: UITableViewController {
     enum BookcaseType {
-        case Home
-        case History
-        case Download
+        case home
+        case history
+        case download
+    }
+    
+    enum CellLayout: Int {
+        case normal
+        case thumbnail
     }
     
     private let type: BookcaseType
@@ -22,6 +27,7 @@ final class BookcaseViewController: UITableViewController {
     private var searchInfo: SearchInfo?
     private var books = [Book]()
     private var hasMore = false
+    private var cellLayout = CellLayout.normal
     
     init(type: BookcaseType) {
         self.type = type
@@ -42,7 +48,7 @@ final class BookcaseViewController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if type != .Home { self.refreshData(with: nil) }
+        if type != .home { self.refreshData(with: nil) }
     }
     
     private func setupUI() {
@@ -53,34 +59,34 @@ final class BookcaseViewController: UITableViewController {
         tableView.tableFooterView = footerView
         tableView.register(BookcaseTableViewCell.self, forCellReuseIdentifier: NSStringFromClass(BookcaseTableViewCell.self))
         
-        if type == .Home {
+        if type == .home {
             refreshControl = UIRefreshControl()
             refreshControl?.attributedTitle = NSAttributedString(string: "刷新中...")
             refreshControl?.addTarget(self, action: #selector(setupData), for: .valueChanged)
         }
         
         switch type {
-        case .Home:
+        case .home:
             navigationItem.title = "主页"
             navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(tapNavBarRightItem))
-        case .History:
+        case .history:
             navigationItem.title = "历史"
             navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(symbol: .trash), style: .plain, target: self, action: #selector(tapNavBarRightItem))
-        case .Download:
+        case .download:
             navigationItem.title = "下载"
         }
     }
     
     private func setupDelegate() {
-        if type == .Home { SearchManager.shared.delegate = self }
+        if type == .home { SearchManager.shared.delegate = self }
     }
     
     @objc
     private func setupData() {
         switch type {
-        case .Home:
+        case .home:
             refreshData(with: SearchInfo())
-        case .History, .Download:
+        case .history, .download:
             refreshData(with: nil)
         }
     }
@@ -127,19 +133,19 @@ extension BookcaseViewController: SearchManagerCallbackDelegate {
 extension BookcaseViewController {
     private func refreshData(with searchInfo: SearchInfo?) {
         switch type {
-        case .Home:
+        case .home:
             guard let searchInfo = searchInfo else { return }
             SearchManager.shared.searchWith(info: searchInfo)
-        case .History, .Download:
-            books = (type == .History) ? DBManager.shared.books(of: .history) : DBManager.shared.books(of: .download)
-            if (type == .History) { navigationItem.rightBarButtonItem?.isEnabled = !books.isEmpty }
+        case .history, .download:
+            books = (type == .history) ? DBManager.shared.books(of: .history) : DBManager.shared.books(of: .download)
+            if (type == .history) { navigationItem.rightBarButtonItem?.isEnabled = !books.isEmpty }
             footerView.hint = books.isEmpty ? .noData : .noMoreData
             self.tableView.reloadData()
         }
     }
     
     private func loadMoreData() {
-        guard type == .Home, var nextInfo = searchInfo, hasMore else { return }
+        guard type == .home, var nextInfo = searchInfo, hasMore else { return }
         nextInfo.pageIndex += 1
         SearchManager.shared.searchWith(info: nextInfo)
     }
@@ -150,9 +156,9 @@ extension BookcaseViewController {
     @objc
     private func tapNavBarRightItem() {
         switch type {
-        case .Home:
+        case .home:
             navigationController?.pushViewController(SearchViewController(), animated: true)
-        case .History:
+        case .history:
             guard !books.isEmpty else { return }
             let vc = UIAlertController(title: "提示", message: "确定要清除所有历史记录吗？\n(不会影响已下载内容)", preferredStyle: .alert)
             vc.addAction(UIAlertAction(title: "清除", style: .default, handler: { _ in
@@ -164,7 +170,7 @@ extension BookcaseViewController {
             }))
             vc.addAction(UIAlertAction(title: "取消", style: .cancel, handler: nil))
             present(vc, animated: true, completion: nil)
-        case .Download:
+        case .download:
             break
         }
     }
@@ -197,16 +203,16 @@ extension BookcaseViewController {
                     break
                 }
                 
-                if state != .before && type != .History {
+                if state != .before && type != .history {
                     vc.addAction(UIAlertAction(title: "删除下载", style: .default, handler: { _ in
                         DownloadManager.shared.remove(book: book)
                         DBManager.shared.remove(book: book, of: .download)
-                        if self.type == .Download { self.refreshData(with: nil) }
+                        if self.type == .download { self.refreshData(with: nil) }
                     }))
                 }
             }
             
-            if type == .History {
+            if type == .history {
                 vc.addAction(UIAlertAction(title: "删除历史", style: .default, handler: { _ in
                     if !DBManager.shared.contains(gid: book.gid, of: .download) {
                         DownloadManager.shared.remove(book: book)
