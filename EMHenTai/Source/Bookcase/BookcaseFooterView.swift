@@ -1,5 +1,5 @@
 //
-//  BookListFooterView.swift
+//  BookcaseFooterView.swift
 //  EMHenTai
 //
 //  Created by yuman on 2022/1/19.
@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-final class BookListFooterView: UIView {
+final class BookcaseFooterView: UIView {
     enum HintType: String {
         case empty = " "
         case loading = "加载中..."

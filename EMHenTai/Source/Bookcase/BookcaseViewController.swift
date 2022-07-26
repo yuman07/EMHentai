@@ -1,5 +1,5 @@
 //
-//  BookListViewController.swift
+//  BookcaseViewController.swift
 //  EMHenTai
 //
 //  Created by yuman on 2022/1/14.
@@ -9,21 +9,21 @@ import Foundation
 import UIKit
 import Kingfisher
 
-final class BookListViewController: UITableViewController {
-    enum ListType {
+final class BookcaseViewController: UITableViewController {
+    enum BookcaseType {
         case Home
         case History
         case Download
     }
     
-    private let type: ListType
-    private let footerView = BookListFooterView()
+    private let type: BookcaseType
+    private let footerView = BookcaseFooterView()
     
     private var searchInfo: SearchInfo?
     private var books = [Book]()
     private var hasMore = false
     
-    init(type: ListType) {
+    init(type: BookcaseType) {
         self.type = type
         super.init(nibName: nil, bundle: nil)
         hidesBottomBarWhenPushed = false
@@ -51,7 +51,7 @@ final class BookListViewController: UITableViewController {
         tableView.estimatedSectionHeaderHeight = 0
         tableView.estimatedSectionFooterHeight = 0
         tableView.tableFooterView = footerView
-        tableView.register(BookListTableViewCell.self, forCellReuseIdentifier: NSStringFromClass(BookListTableViewCell.self))
+        tableView.register(BookcaseTableViewCell.self, forCellReuseIdentifier: NSStringFromClass(BookcaseTableViewCell.self))
         
         if type == .Home {
             refreshControl = UIRefreshControl()
@@ -87,7 +87,7 @@ final class BookListViewController: UITableViewController {
 }
 
 // MARK: SearchManagerCallbackDelegate
-extension BookListViewController: SearchManagerCallbackDelegate {
+extension BookcaseViewController: SearchManagerCallbackDelegate {
     @MainActor
     func searchStartCallback(searchInfo: SearchInfo) async {
         guard searchInfo.pageIndex == 0 else { return }
@@ -124,7 +124,7 @@ extension BookListViewController: SearchManagerCallbackDelegate {
 }
 
 // MARK: load Data
-extension BookListViewController {
+extension BookcaseViewController {
     private func refreshData(with searchInfo: SearchInfo?) {
         switch type {
         case .Home:
@@ -146,7 +146,7 @@ extension BookListViewController {
 }
 
 // MARK: TapNavBarRightItem
-extension BookListViewController {
+extension BookcaseViewController {
     @objc
     private func tapNavBarRightItem() {
         switch type {
@@ -171,7 +171,7 @@ extension BookListViewController {
 }
 
 // MARK: AlertVC
-extension BookListViewController {
+extension BookcaseViewController {
     private func showAlertVC(with book: Book) {
         Task {
             let vc = UIAlertController(title: "", message: book.showTitle, preferredStyle: .alert)
@@ -237,14 +237,14 @@ extension BookListViewController {
 }
 
 // MARK: UITableViewDataSource
-extension BookListViewController {
+extension BookcaseViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         books.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(BookListTableViewCell.self), for: indexPath)
-        if let cell = cell as? BookListTableViewCell, indexPath.row < books.count {
+        let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(BookcaseTableViewCell.self), for: indexPath)
+        if let cell = cell as? BookcaseTableViewCell, indexPath.row < books.count {
             let book = books[indexPath.row]
             cell.updateWith(book: book)
             cell.longPressBlock = { [weak self] in
@@ -256,7 +256,7 @@ extension BookListViewController {
 }
 
 // MARK: UITableViewDelegate
-extension BookListViewController {
+extension BookcaseViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         guard indexPath.row < books.count else { return }
