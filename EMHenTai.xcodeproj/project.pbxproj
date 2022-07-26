@@ -499,7 +499,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = EMHenTai.EMHenTai.001;
+				PRODUCT_BUNDLE_IDENTIFIER = EMHenTai.EMHenTai.20220726;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -528,7 +528,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = EMHenTai.EMHenTai.001;
+				PRODUCT_BUNDLE_IDENTIFIER = EMHenTai.EMHenTai.20220726;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -565,7 +565,7 @@
 			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
 			requirement = {
 				kind = exactVersion;
-				version = 5.6.1;
+				version = 5.6.2;
 			};
 		};
 		7AE912C627D07C2500DD9E65 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
@@ -573,7 +573,7 @@
 			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
 			requirement = {
 				kind = exactVersion;
-				version = 7.2.4;
+				version = 7.3.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
