@@ -18,8 +18,7 @@ final class DBManager {
     static let shared = DBManager()
     private init() {}
     
-    var context: NSManagedObjectContext!
-    
+    private var context: NSManagedObjectContext!
     private let lock = NSLock()
     private let queue = DispatchQueue(label: "EMHenTai.DBManager.SerialQueue")
     private lazy var booksMap: [DBType: [Book]] = {
