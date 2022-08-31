@@ -99,10 +99,8 @@ final class DownloadManager {
                 guard !FileManager.default.fileExists(atPath: book.imagePath(at: imgIndex)) else { continue }
                 guard !imgKey.isEmpty else { continue }
                 
+                if count >= maxConcurrentDownloadCount { await group.next() }
                 count += 1
-                if count > maxConcurrentDownloadCount {
-                    await group.next()
-                }
                 
                 group.addTask {
                     guard let value = try? await AF.request(url, interceptor: RetryPolicy()).serializingString(automaticallyCancelling: true).value else { return }

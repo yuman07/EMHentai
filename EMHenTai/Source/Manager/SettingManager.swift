@@ -66,13 +66,13 @@ final class SettingManager {
         guard let cookies = HTTPCookieStorage.shared.cookies, !cookies.isEmpty else { return false }
         func isValidID(_ id: String) -> Bool { !id.isEmpty && id.lowercased() != "mystery" && id.lowercased() != "null" }
         let currentDate = Date()
-        var validFlag: (memberIDValid: Bool, passHashValid: Bool, igneousValid: Bool) = (false, false, false)
+        var validFlags = (false, false, false)
         for cookie in cookies {
             guard let expiresDate = cookie.expiresDate, expiresDate > currentDate else { continue }
-            if cookie.name == "ipb_member_id" { validFlag.memberIDValid = isValidID(cookie.value) }
-            if cookie.name == "ipb_pass_hash" { validFlag.passHashValid = isValidID(cookie.value) }
-            if cookie.name == "igneous" { validFlag.igneousValid = isValidID(cookie.value) }
-            if validFlag == (true, true, true) { return true }
+            if cookie.name == "ipb_member_id" { validFlags.0 = isValidID(cookie.value) }
+            if cookie.name == "ipb_pass_hash" { validFlags.1 = isValidID(cookie.value) }
+            if cookie.name == "igneous" { validFlags.2 = isValidID(cookie.value) }
+            if validFlags == (true, true, true) { return true }
         }
         return false
     }
