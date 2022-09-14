@@ -46,7 +46,7 @@ final class GalleryViewController: UICollectionViewController {
     }
     
     deinit {
-        if let token { NotificationCenter.default.removeObserver(token) }
+        token.flatMap { NotificationCenter.default.removeObserver($0) }
         if !DBManager.shared.contains(gid: book.gid, of: .download) {
             DownloadManager.shared.suspend(book: book)
         }

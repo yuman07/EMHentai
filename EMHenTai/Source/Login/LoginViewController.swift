@@ -25,7 +25,7 @@ final class LoginViewController: WebViewController {
     }
     
     deinit {
-        if let token { NotificationCenter.default.removeObserver(token) }
+        token.flatMap { NotificationCenter.default.removeObserver($0) }
     }
     
     private func setupNotification() {

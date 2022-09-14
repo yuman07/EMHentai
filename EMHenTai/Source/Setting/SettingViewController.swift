@@ -21,7 +21,7 @@ final class SettingViewController: UITableViewController {
     }
     
     deinit {
-        if let token { NotificationCenter.default.removeObserver(token) }
+        token.flatMap { NotificationCenter.default.removeObserver($0) }
     }
     
     override func viewDidLoad() {
