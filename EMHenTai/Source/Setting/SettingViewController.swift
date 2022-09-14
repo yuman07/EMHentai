@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 final class SettingViewController: UITableViewController {
-    private var fileSize: (history: Int, download: Int)?
+    private var fileSize: (historySize: Int, downloadSize: Int)?
     private var token: NSObjectProtocol?
     
     init() {
@@ -33,10 +33,9 @@ final class SettingViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        SettingManager.shared.calculateFilesSize { [weak self] (historySize, downloadSize) in
-            guard let self else { return }
-            self.fileSize = (historySize, downloadSize)
-            self.tableView.reloadSections([1], with: .none)
+        Task {
+            fileSize = await SettingManager.shared.calculateFileSize()
+            tableView.reloadSections([1], with: .none)
         }
     }
     
@@ -103,7 +102,7 @@ extension SettingViewController {
             cell.selectionStyle = .default
         case 1:
             var text = indexPath.row == 0 ? "历史数据" : "下载数据"
-            if let size = (indexPath.row == 0 ? fileSize?.history : fileSize?.download) {
+            if let size = (indexPath.row == 0 ? fileSize?.historySize : fileSize?.downloadSize) {
                 text += "：\(size.diskSizeFormat)"
             }
             cell.textLabel?.text = text
