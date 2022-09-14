@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 final class SettingViewController: UITableViewController {
-    private var fileSize: (historySize: Int, downloadSize: Int) = (0, 0)
+    private var fileSize = (historySize: 0, downloadSize: 0)
     private var token: NSObjectProtocol?
     
     init() {
