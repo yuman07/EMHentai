@@ -10,6 +10,7 @@ import UIKit
 
 final class SettingViewController: UITableViewController {
     private var fileSize: (history: Int, download: Int)?
+    private var token: NSObjectProtocol?
     
     init() {
         super.init(style: .grouped)
@@ -17,6 +18,10 @@ final class SettingViewController: UITableViewController {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        if let token { NotificationCenter.default.removeObserver(token) }
     }
     
     override func viewDidLoad() {
@@ -48,11 +53,10 @@ final class SettingViewController: UITableViewController {
     }
     
     private func setupNotification() {
-        var token: NSObjectProtocol?
         token = NotificationCenter.default.addObserver(forName: SettingManager.LoginStateChangedNotification,
                                                        object: nil,
                                                        queue: .main) { [weak self] _ in
-            guard let self = self else { NotificationCenter.default.removeObserver(token!); return }
+            guard let self = self else { return }
             self.tableView.reloadSections([0], with: .none)
         }
     }

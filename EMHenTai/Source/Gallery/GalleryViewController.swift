@@ -11,6 +11,7 @@ import UIKit
 final class GalleryViewController: UICollectionViewController {
     private let book: Book
     private var isRotating = false
+    private var token: NSObjectProtocol?
     private var lastSeenPageIndex: Int {
         get { UserDefaults.standard.integer(forKey: "GalleryViewController_lastSeenPageIndex_\(book.gid)") }
         set { UserDefaults.standard.set(newValue, forKey: "GalleryViewController_lastSeenPageIndex_\(book.gid)") }
@@ -45,6 +46,7 @@ final class GalleryViewController: UICollectionViewController {
     }
     
     deinit {
+        if let token { NotificationCenter.default.removeObserver(token) }
         if !DBManager.shared.contains(gid: book.gid, of: .download) {
             DownloadManager.shared.suspend(book: book)
         }
@@ -81,11 +83,10 @@ final class GalleryViewController: UICollectionViewController {
     }
     
     private func setupNotification() {
-        var token: NSObjectProtocol?
         token = NotificationCenter.default.addObserver(forName: DownloadManager.DownloadPageSuccessNotification,
                                                        object: nil,
                                                        queue: .main) { [weak self] notification in
-            guard let self = self else { NotificationCenter.default.removeObserver(token!); return }
+            guard let self = self else { return }
             guard let (gid, index) = notification.object as? (Int, Int), gid == self.book.gid else { return }
             self.collectionView.reloadItems(at: [IndexPath(row: index, section: 0)])
         }

@@ -11,6 +11,8 @@ import WebKit
 
 final class LoginViewController: WebViewController {
     private static let loginURL = URL(string: "https://forums.e-hentai.org/index.php?act=Login")!
+    
+    private var token: NSObjectProtocol?
 
     init() {
         super.init(url: LoginViewController.loginURL)
@@ -22,12 +24,15 @@ final class LoginViewController: WebViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    deinit {
+        if let token { NotificationCenter.default.removeObserver(token) }
+    }
+    
     private func setupNotification() {
-        var token: NSObjectProtocol?
         token = NotificationCenter.default.addObserver(forName: SettingManager.LoginStateChangedNotification,
                                                        object: nil,
                                                        queue: .main) { [weak self] _ in
-            guard let self = self else { NotificationCenter.default.removeObserver(token!); return }
+            guard let self = self else { return }
             guard SettingManager.shared.isLogin else { return }
             let vc = UIAlertController(title: "提示", message: "登录成功", preferredStyle: .alert)
             vc.addAction(UIAlertAction(title: "好的", style: .default, handler: { _ in

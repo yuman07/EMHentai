@@ -22,7 +22,7 @@
 - [x] 适配iPhone/iPad
 - [x] 适配暗黑模式
 - [x] 适配横竖屏
-- [x] 适配至iOS15
+- [x] 适配至iOS16
 
 
 
@@ -32,7 +32,7 @@
 
 有Mac的同学可以直接使用Xcode安装（无需开发者账号）：
 
-1. 确保你当前的Xcode版本为最新，苹果设备的iOS版本>=13.0
+1. 确保你当前的Xcode版本为最新，苹果设备的iOS版本>=14.0
 2. Download ZIP / git clone
 3. open EMHenTai.xcodeproj
 4. Run
