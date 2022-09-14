@@ -20,7 +20,7 @@ final class BookcaseFooterView: UIView {
     
     var hint = HintType.empty {
         didSet {
-            self.label.text = hint.rawValue
+            label.text = hint.rawValue
         }
     }
     

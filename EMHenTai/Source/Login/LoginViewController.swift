@@ -32,8 +32,7 @@ final class LoginViewController: WebViewController {
         token = NotificationCenter.default.addObserver(forName: SettingManager.LoginStateChangedNotification,
                                                        object: nil,
                                                        queue: .main) { [weak self] _ in
-            guard let self else { return }
-            guard SettingManager.shared.isLogin else { return }
+            guard let self, SettingManager.shared.isLogin else { return }
             let vc = UIAlertController(title: "提示", message: "登录成功", preferredStyle: .alert)
             vc.addAction(UIAlertAction(title: "好的", style: .default, handler: { _ in
                 self.navigationController?.popViewController(animated: true)
@@ -49,7 +48,7 @@ extension LoginViewController: WKNavigationDelegate {
             cookies.forEach { HTTPCookieStorage.shared.setCookie($0) }
         }
         if (webView.url?.absoluteString ?? "") == "https://forums.e-hentai.org/index.php?" {
-            self.webView.load(URLRequest(url: URL(string: SearchInfo.Source.ExHentai.rawValue)!))
+            webView.load(URLRequest(url: URL(string: SearchInfo.Source.ExHentai.rawValue)!))
         }
     }
 }

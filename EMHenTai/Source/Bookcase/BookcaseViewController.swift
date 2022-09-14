@@ -48,7 +48,7 @@ final class BookcaseViewController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if type != .home { self.refreshData(with: nil) }
+        if type != .home { refreshData(with: nil) }
     }
     
     private func setupUI() {
@@ -98,34 +98,31 @@ extension BookcaseViewController: SearchManagerCallbackDelegate {
     func searchStartCallback(searchInfo: SearchInfo) async {
         guard searchInfo.pageIndex == 0 else { return }
         searchInfo.saveDB()
-        self.tableView.setContentOffset(CGPoint(x: 0, y: -self.refreshControl!.frame.size.height * 3), animated: false)
-        self.refreshControl?.beginRefreshing()
+        tableView.setContentOffset(CGPoint(x: 0, y: -refreshControl!.frame.size.height * 3), animated: false)
+        refreshControl?.beginRefreshing()
     }
     
     @MainActor
     func searchFinishCallback(searchInfo: SearchInfo, result: Result<[Book], SearchManager.SearchError>) async {
         switch result {
         case .success(let books):
-            self.hasMore = !books.isEmpty
+            hasMore = !books.isEmpty
             if searchInfo.pageIndex == 0 { self.books = books }
             else { self.books += books }
-            if !self.hasMore {
-                self.footerView.hint = self.books.isEmpty ? .noData : .noMoreData
-            } else {
-                self.footerView.hint = .loading
-            }
+            if !hasMore { footerView.hint = books.isEmpty ? .noData : .noMoreData }
+            else { footerView.hint = .loading }
         case .failure(let error):
             switch error {
             case .netError:
-                self.footerView.hint = .netError
+                footerView.hint = .netError
             case .ipError:
-                self.footerView.hint = .ipError
+                footerView.hint = .ipError
             }
         }
         
         self.searchInfo = searchInfo
-        self.refreshControl?.endRefreshing()
-        self.tableView.reloadData()
+        refreshControl?.endRefreshing()
+        tableView.reloadData()
     }
 }
 
@@ -139,7 +136,7 @@ extension BookcaseViewController {
             books = (type == .history) ? DBManager.shared.books(of: .history) : DBManager.shared.books(of: .download)
             if (type == .history) { navigationItem.rightBarButtonItem?.isEnabled = !books.isEmpty }
             footerView.hint = books.isEmpty ? .noData : .noMoreData
-            self.tableView.reloadData()
+            tableView.reloadData()
         }
     }
     

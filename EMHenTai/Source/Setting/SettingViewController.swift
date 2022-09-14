@@ -103,7 +103,7 @@ extension SettingViewController {
             cell.selectionStyle = .default
         case 1:
             var text = indexPath.row == 0 ? "历史数据" : "下载数据"
-            if let size = (indexPath.row == 0 ? self.fileSize?.history : self.fileSize?.download) {
+            if let size = (indexPath.row == 0 ? fileSize?.history : fileSize?.download) {
                 text += "：\(size.diskSizeFormat)"
             }
             cell.textLabel?.text = text
