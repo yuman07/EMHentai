@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 final class SettingViewController: UITableViewController {
-    private var fileSize: (historySize: Int, downloadSize: Int)?
+    private var fileSize: (historySize: Int, downloadSize: Int) = (0, 0)
     private var token: NSObjectProtocol?
     
     init() {
@@ -101,10 +101,8 @@ extension SettingViewController {
             cell.textLabel?.text = SettingManager.shared.isLogin ? "已登录：点击可登出" : "未登录：点击去登录"
             cell.selectionStyle = .default
         case 1:
-            var text = indexPath.row == 0 ? "历史数据" : "下载数据"
-            if let size = (indexPath.row == 0 ? fileSize?.historySize : fileSize?.downloadSize) {
-                text += "：\(size.diskSizeFormat)"
-            }
+            let size = indexPath.row == 0 ? fileSize.historySize : fileSize.downloadSize
+            let text = (indexPath.row == 0 ? "历史数据：" : "下载数据：") + "\(size.diskSizeFormat)"
             cell.textLabel?.text = text
             cell.selectionStyle = .none
         default:
