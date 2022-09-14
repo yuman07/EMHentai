@@ -19,7 +19,7 @@ final class SearchTextFieldCell: UITableViewCell {
         view.layer.sublayerTransform = CATransform3DMakeTranslation(5, 0, 0)
         view.layer.borderColor = UIColor.gray.cgColor
         view.layer.cornerRadius = 5
-        view.font = UIFont.systemFont(ofSize: 14)
+        view.font = .systemFont(ofSize: 14)
         view.returnKeyType = .done
         return view
     }()

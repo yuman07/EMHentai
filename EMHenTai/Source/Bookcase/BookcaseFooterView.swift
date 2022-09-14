@@ -36,7 +36,7 @@ final class BookcaseFooterView: UIView {
     private let label: UILabel = {
         let label = UILabel()
         label.text = HintType.empty.rawValue
-        label.font = UIFont.systemFont(ofSize: 14)
+        label.font = .systemFont(ofSize: 14)
         label.sizeToFit()
         return label
     }()

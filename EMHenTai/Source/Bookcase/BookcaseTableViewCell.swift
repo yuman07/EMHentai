@@ -22,31 +22,31 @@ final class BookcaseTableViewCell: UITableViewCell {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
-        label.font = UIFont.systemFont(ofSize: 13)
+        label.font = .systemFont(ofSize: 13)
         return label
     }()
     
     private let categoryLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 12)
+        label.font = .systemFont(ofSize: 12)
         return label
     }()
     
     private let progressLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 12)
+        label.font = .systemFont(ofSize: 12)
         return label
     }()
     
     private let scoreLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 12)
+        label.font = .systemFont(ofSize: 12)
         return label
     }()
     
     private let fileCountLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 12)
+        label.font = .systemFont(ofSize: 12)
         return label
     }()
     
