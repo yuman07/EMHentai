@@ -134,8 +134,7 @@ extension BookcaseViewController {
     private func refreshData(with searchInfo: SearchInfo?) {
         switch type {
         case .home:
-            guard let searchInfo = searchInfo else { return }
-            SearchManager.shared.searchWith(info: searchInfo)
+            if let searchInfo { SearchManager.shared.searchWith(info: searchInfo) }
         case .history, .download:
             books = (type == .history) ? DBManager.shared.books(of: .history) : DBManager.shared.books(of: .download)
             if (type == .history) { navigationItem.rightBarButtonItem?.isEnabled = !books.isEmpty }

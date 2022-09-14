@@ -34,7 +34,7 @@ final class SettingViewController: UITableViewController {
         super.viewWillAppear(animated)
         
         SettingManager.shared.calculateFilesSize { [weak self] (historySize, downloadSize) in
-            guard let self = self else { return }
+            guard let self else { return }
             self.fileSize = (historySize, downloadSize)
             self.tableView.reloadSections([1], with: .none)
         }
@@ -56,7 +56,7 @@ final class SettingViewController: UITableViewController {
         token = NotificationCenter.default.addObserver(forName: SettingManager.LoginStateChangedNotification,
                                                        object: nil,
                                                        queue: .main) { [weak self] _ in
-            guard let self = self else { return }
+            guard let self else { return }
             self.tableView.reloadSections([0], with: .none)
         }
     }

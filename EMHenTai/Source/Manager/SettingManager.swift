@@ -34,7 +34,7 @@ final class SettingManager {
         token = NotificationCenter.default.addObserver(forName: NSNotification.Name.NSHTTPCookieManagerCookiesChanged,
                                                        object: nil,
                                                        queue: .main) { [weak self] _ in
-            guard let self = self else { return }
+            guard let self else { return }
             self.isLogin = self.checkLogin()
         }
     }

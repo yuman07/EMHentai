@@ -86,7 +86,7 @@ final class GalleryViewController: UICollectionViewController {
         token = NotificationCenter.default.addObserver(forName: DownloadManager.DownloadPageSuccessNotification,
                                                        object: nil,
                                                        queue: .main) { [weak self] notification in
-            guard let self = self else { return }
+            guard let self else { return }
             guard let (gid, index) = notification.object as? (Int, Int), gid == self.book.gid else { return }
             self.collectionView.reloadItems(at: [IndexPath(row: index, section: 0)])
         }

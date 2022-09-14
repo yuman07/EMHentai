@@ -44,7 +44,7 @@ final class DBManager {
         booksMap[type]!.insert(book, at: 0)
         
         queue.async { [weak self] in
-            guard let self = self else { return }
+            guard let self else { return }
             let request = NSFetchRequest<NSFetchRequestResult>(entityName: type.rawValue)
             request.predicate = NSPredicate(format: "gid = %d", book.gid)
             let obj = NSEntityDescription.insertNewObject(forEntityName: type.rawValue, into: self.context)
@@ -59,7 +59,7 @@ final class DBManager {
         booksMap[type]?.removeAll { $0.gid == book.gid }
         
         queue.async { [weak self] in
-            guard let self = self else { return }
+            guard let self else { return }
             let request = NSFetchRequest<NSFetchRequestResult>(entityName: type.rawValue)
             request.predicate = NSPredicate(format: "gid = %d", book.gid)
             let delRequest = NSBatchDeleteRequest(fetchRequest: request)
@@ -75,7 +75,7 @@ final class DBManager {
         booksMap[type]?.removeAll()
         
         queue.async { [weak self] in
-            guard let self = self else { return }
+            guard let self else { return }
             let request = NSFetchRequest<NSFetchRequestResult>(entityName: type.rawValue)
             let delRequest = NSBatchDeleteRequest(fetchRequest: request)
             if (try? self.context.execute(delRequest)) != nil {

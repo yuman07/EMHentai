@@ -112,7 +112,7 @@ final class BookcaseTableViewCell: UITableViewCell {
     private func updateProgress() {
         Task {
             progressLabel.text = ""
-            guard let book = self.book, DBManager.shared.contains(gid: book.gid, of: .download) else { return }
+            guard let book, DBManager.shared.contains(gid: book.gid, of: .download) else { return }
             
             switch await DownloadManager.shared.downloadState(of: book) {
             case .before:
@@ -140,14 +140,14 @@ final class BookcaseTableViewCell: UITableViewCell {
     @objc
     private func downloadStatusChanged(notification: Notification) {
         DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
+            guard let self else { return }
             var gid: Int?
             if notification.name == DownloadManager.DownloadPageSuccessNotification {
                 gid = (notification.object as? (Int, Int))?.0
             } else if notification.name == DownloadManager.DownloadStateChangedNotification {
                 gid = notification.object as? Int
             }
-            if let gid = gid, let book = self.book, book.gid == gid {
+            if let gid, let book = self.book, book.gid == gid {
                 self.updateProgress()
             }
         }

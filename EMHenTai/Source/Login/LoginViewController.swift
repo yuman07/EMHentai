@@ -32,7 +32,7 @@ final class LoginViewController: WebViewController {
         token = NotificationCenter.default.addObserver(forName: SettingManager.LoginStateChangedNotification,
                                                        object: nil,
                                                        queue: .main) { [weak self] _ in
-            guard let self = self else { return }
+            guard let self else { return }
             guard SettingManager.shared.isLogin else { return }
             let vc = UIAlertController(title: "提示", message: "登录成功", preferredStyle: .alert)
             vc.addAction(UIAlertAction(title: "好的", style: .default, handler: { _ in
