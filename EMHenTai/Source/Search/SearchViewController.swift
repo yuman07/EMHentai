@@ -26,7 +26,9 @@ final class SearchViewController: UITableViewController {
             navigationItem.rightBarButtonItem?.isEnabled = {
                 !searchInfo.categories.isEmpty && (searchInfo.source == .EHentai || SettingManager.shared.isLogin)
             }()
-            tableView.reloadData()
+            if oldValue.keyWord == searchInfo.keyWord {
+                tableView.reloadData()
+            }
         }
     }
     
@@ -129,9 +131,12 @@ extension SearchViewController {
         switch indexPath.section {
         case 0:
             if let cell = cell as? SearchTextFieldCell {
-                cell.searchTextField.text = searchInfo.keyWord
-                cell.textChangeAction = { [weak self] text in
-                    self?.searchInfo.keyWord = text
+                if cell.searchTextField.text?.isEmpty ?? true {
+                    cell.searchTextField.text = searchInfo.keyWord
+                }
+                cell.textChangedAction = { [weak self] text in
+                    guard let self, self.searchInfo.keyWord != text else { return }
+                    self.searchInfo.keyWord = text
                 }
             }
         case 1:

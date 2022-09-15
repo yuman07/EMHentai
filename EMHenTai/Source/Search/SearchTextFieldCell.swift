@@ -10,7 +10,7 @@ import UIKit
 
 final class SearchTextFieldCell: UITableViewCell {
     
-    var textChangeAction: ((String) -> Void)?
+    var textChangedAction: ((String) -> Void)?
     
     lazy var searchTextField = {
         let view = UITextField()
@@ -44,12 +44,12 @@ final class SearchTextFieldCell: UITableViewCell {
     }
     
     private func setupAction() {
-        searchTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+        searchTextField.addTarget(self, action: #selector(textFieldDidChanged), for: .editingChanged)
     }
     
     @objc
-    private func textFieldDidChange() {
-        textChangeAction?(searchTextField.text ?? "")
+    private func textFieldDidChanged() {
+        textChangedAction?(searchTextField.text ?? "")
     }
 }
 
