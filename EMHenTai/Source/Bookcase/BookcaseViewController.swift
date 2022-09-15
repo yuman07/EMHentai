@@ -84,7 +84,6 @@ final class BookcaseViewController: UITableViewController {
 
 // MARK: SearchManagerCallbackDelegate
 extension BookcaseViewController: SearchManagerCallbackDelegate {
-    @MainActor
     func searchStartCallback(searchInfo: SearchInfo) async {
         guard searchInfo.pageIndex == 0 else { return }
         searchInfo.saveDB()
@@ -92,7 +91,6 @@ extension BookcaseViewController: SearchManagerCallbackDelegate {
         refreshControl?.beginRefreshing()
     }
     
-    @MainActor
     func searchFinishCallback(searchInfo: SearchInfo, result: Result<[Book], SearchManager.SearchError>) async {
         switch result {
         case .success(let books):

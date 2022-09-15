@@ -109,7 +109,6 @@ final class BookcaseTableViewCell: UITableViewCell {
         NotificationCenter.default.addObserver(self, selector: #selector(downloadStatusChanged(notification:)), name: DownloadManager.DownloadStateChangedNotification, object: nil)
     }
     
-    @MainActor
     private func updateProgress() {
         Task {
             guard let book, DBManager.shared.contains(gid: book.gid, of: .download) else {
