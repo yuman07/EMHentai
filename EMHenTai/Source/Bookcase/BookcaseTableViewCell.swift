@@ -13,38 +13,38 @@ final class BookcaseTableViewCell: UITableViewCell {
     var book: Book?
     var longPressBlock: (() -> Void)?
     
-    private let thumbImageView: UIImageView = {
+    private let thumbImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFit
         return view
     }()
     
-    private let titleLabel: UILabel = {
+    private let titleLabel = {
         let label = UILabel()
         label.numberOfLines = 0
         label.font = .systemFont(ofSize: 13)
         return label
     }()
     
-    private let categoryLabel: UILabel = {
+    private let categoryLabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 12)
         return label
     }()
     
-    private let progressLabel: UILabel = {
+    private let progressLabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 12)
         return label
     }()
     
-    private let scoreLabel: UILabel = {
+    private let scoreLabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 12)
         return label
     }()
     
-    private let fileCountLabel: UILabel = {
+    private let fileCountLabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 12)
         return label

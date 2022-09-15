@@ -17,7 +17,7 @@ final class GalleryViewController: UICollectionViewController {
         set { UserDefaults.standard.set(newValue, forKey: "GalleryViewController_lastSeenPageIndex_\(book.gid)") }
     }
     
-    private let navBarBackgroundView: UIView = {
+    private let navBarBackgroundView = {
         let view = UIView()
         view.backgroundColor = .systemGroupedBackground
         return view

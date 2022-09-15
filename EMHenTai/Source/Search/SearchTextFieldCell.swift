@@ -12,7 +12,7 @@ final class SearchTextFieldCell: UITableViewCell {
     
     var textChangeAction: ((String) -> Void)?
     
-    lazy var searchTextField: UITextField = {
+    lazy var searchTextField = {
         let view = UITextField()
         view.delegate = self
         view.layer.borderWidth = 0.5

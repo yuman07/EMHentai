@@ -21,7 +21,7 @@ final class DBManager {
     private var context: NSManagedObjectContext!
     private let lock = NSLock()
     private let queue = DispatchQueue(label: "EMHenTai.DBManager.SerialQueue")
-    private lazy var booksMap: [DBType: [Book]] = {
+    private lazy var booksMap = {
         DBType.allCases.reduce(into: [DBType: [Book]]()) { map, type in
             map[type] = {
                 let request = NSFetchRequest<NSFetchRequestResult>(entityName: type.rawValue)

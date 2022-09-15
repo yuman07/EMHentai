@@ -33,7 +33,7 @@ final class BookcaseFooterView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private let label: UILabel = {
+    private let label = {
         let label = UILabel()
         label.text = HintType.empty.rawValue
         label.font = .systemFont(ofSize: 14)

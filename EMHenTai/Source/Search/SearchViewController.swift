@@ -30,7 +30,7 @@ final class SearchViewController: UITableViewController {
         }
     }
     
-    lazy var doubleTapCategoryGR: UITapGestureRecognizer = {
+    lazy var doubleTapCategoryGestureRecognizer = {
         let gr = UITapGestureRecognizer(target: self, action: #selector(doubleTapCategoryHeaderAction))
         gr.numberOfTapsRequired = 2
         return gr
@@ -116,8 +116,8 @@ extension SearchViewController {
         let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: NSStringFromClass(UITableViewHeaderFooterView.self))
         header?.textLabel?.text = SearchViewController.sections[section]
         header?.isUserInteractionEnabled = true
-        header?.removeGestureRecognizer(doubleTapCategoryGR)
-        if section == 4 { header?.addGestureRecognizer(doubleTapCategoryGR) }
+        header?.removeGestureRecognizer(doubleTapCategoryGestureRecognizer)
+        if section == 4 { header?.addGestureRecognizer(doubleTapCategoryGestureRecognizer) }
         return header
     }
     

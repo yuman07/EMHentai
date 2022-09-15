@@ -12,7 +12,7 @@ final class GalleryCollectionViewCell: UICollectionViewCell {
     
     var tapBlock: (() -> Void)?
     
-    private lazy var scrollView: UIScrollView = {
+    private lazy var scrollView = {
         let view = UIScrollView()
         view.bounces = false
         view.bouncesZoom = false
@@ -22,7 +22,7 @@ final class GalleryCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
-    private let imageView: UIImageView = {
+    private let imageView = {
         let img = UIImageView()
         img.contentMode = .scaleAspectFit
         return img
