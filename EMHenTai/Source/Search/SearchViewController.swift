@@ -21,7 +21,20 @@ final class SearchViewController: UITableViewController {
         "分类",
     ]
     
-    private var searchInfo = SearchInfo()
+    private var searchInfo = SearchInfo() {
+        didSet {
+            navigationItem.rightBarButtonItem?.isEnabled = {
+                !searchInfo.categories.isEmpty && (searchInfo.source == .EHentai || SettingManager.shared.isLogin)
+            }()
+            tableView.reloadData()
+        }
+    }
+    
+    lazy var doubleTapCategoryGR: UITapGestureRecognizer = {
+        let gr = UITapGestureRecognizer(target: self, action: #selector(doubleTapCategoryHeaderAction))
+        gr.numberOfTapsRequired = 2
+        return gr
+    }()
     
     init() {
         super.init(style: .grouped)
@@ -35,7 +48,6 @@ final class SearchViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        updateSearchEnable()
     }
     
     private func setupUI() {
@@ -50,12 +62,16 @@ final class SearchViewController: UITableViewController {
         tableView.bounces = false
         tableView.register(SearchTextFieldCell.self, forCellReuseIdentifier: NSStringFromClass(SearchTextFieldCell.self))
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: NSStringFromClass(UITableViewCell.self))
+        tableView.register(UITableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: NSStringFromClass(UITableViewHeaderFooterView.self))
     }
     
-    private func updateSearchEnable() {
-        let f1 = searchInfo.source == .EHentai || SettingManager.shared.isLogin
-        let f2 = !searchInfo.categories.isEmpty
-        navigationItem.rightBarButtonItem?.isEnabled = f1 && f2
+    @objc
+    private func doubleTapCategoryHeaderAction() {
+        if searchInfo.categories.isEmpty {
+            searchInfo.categories = SearchInfo.Category.allCases
+        } else {
+            searchInfo.categories = []
+        }
     }
     
     @objc
@@ -88,16 +104,21 @@ extension SearchViewController {
         }
     }
     
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        SearchViewController.sections[section]
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        40
     }
     
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        30
-    }
-
     override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         .leastNormalMagnitude
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: NSStringFromClass(UITableViewHeaderFooterView.self))
+        header?.textLabel?.text = SearchViewController.sections[section]
+        header?.isUserInteractionEnabled = true
+        header?.removeGestureRecognizer(doubleTapCategoryGR)
+        if section == 4 { header?.addGestureRecognizer(doubleTapCategoryGR) }
+        return header
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -158,7 +179,5 @@ extension SearchViewController {
         default:
             break
         }
-        updateSearchEnable()
-        tableView.reloadSections([indexPath.section], with: .none)
     }
 }
