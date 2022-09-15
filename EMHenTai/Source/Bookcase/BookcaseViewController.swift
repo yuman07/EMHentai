@@ -43,7 +43,7 @@ final class BookcaseViewController: UITableViewController {
         super.viewDidLoad()
         setupUI()
         setupDelegate()
-        setupData()
+        refreshData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -62,7 +62,7 @@ final class BookcaseViewController: UITableViewController {
         if type == .home {
             refreshControl = UIRefreshControl()
             refreshControl?.attributedTitle = NSAttributedString(string: "刷新中...")
-            refreshControl?.addTarget(self, action: #selector(setupData), for: .valueChanged)
+            refreshControl?.addTarget(self, action: #selector(refreshData), for: .valueChanged)
         }
         
         switch type {
@@ -79,16 +79,6 @@ final class BookcaseViewController: UITableViewController {
     
     private func setupDelegate() {
         if type == .home { SearchManager.shared.delegate = self }
-    }
-    
-    @objc
-    private func setupData() {
-        switch type {
-        case .home:
-            refreshData(with: SearchInfo())
-        case .history, .download:
-            refreshData()
-        }
     }
 }
 
@@ -128,10 +118,11 @@ extension BookcaseViewController: SearchManagerCallbackDelegate {
 
 // MARK: load Data
 extension BookcaseViewController {
-    private func refreshData(with searchInfo: SearchInfo? = nil) {
+    @objc
+    private func refreshData() {
         switch type {
         case .home:
-            searchInfo.flatMap { SearchManager.shared.searchWith(info: $0) }
+            SearchManager.shared.searchWith(info: SearchInfo())
         case .history, .download:
             books = (type == .history) ? DBManager.shared.books(of: .history) : DBManager.shared.books(of: .download)
             if (type == .history) { navigationItem.rightBarButtonItem?.isEnabled = !books.isEmpty }
