@@ -107,9 +107,8 @@ final class GalleryViewController: UICollectionViewController {
     private func backToLastSeenPage() {
         if book.downloadedFileCount == 0 {
             lastSeenPageIndex = 0
-        } else {
+        } else if lastSeenPageIndex > 0 {
             let index = lastSeenPageIndex
-            guard index > 0 else { return }
             DispatchQueue.main.async { [weak self] in
                 self?.collectionView.scrollToItem(at: IndexPath(row: index, section: 0), at: .left, animated: false)
             }

@@ -48,7 +48,7 @@ final class BookcaseViewController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if type != .home { refreshData(with: nil) }
+        if type != .home { refreshData() }
     }
     
     private func setupUI() {
@@ -87,7 +87,7 @@ final class BookcaseViewController: UITableViewController {
         case .home:
             refreshData(with: SearchInfo())
         case .history, .download:
-            refreshData(with: nil)
+            refreshData()
         }
     }
 }
@@ -109,7 +109,7 @@ extension BookcaseViewController: SearchManagerCallbackDelegate {
             hasMore = !books.isEmpty
             if searchInfo.pageIndex == 0 { self.books = books }
             else { self.books += books }
-            if !hasMore { footerView.hint = books.isEmpty ? .noData : .noMoreData }
+            if !hasMore { footerView.hint = self.books.isEmpty ? .noData : .noMoreData }
             else { footerView.hint = .loading }
         case .failure(let error):
             switch error {
@@ -128,10 +128,10 @@ extension BookcaseViewController: SearchManagerCallbackDelegate {
 
 // MARK: load Data
 extension BookcaseViewController {
-    private func refreshData(with searchInfo: SearchInfo?) {
+    private func refreshData(with searchInfo: SearchInfo? = nil) {
         switch type {
         case .home:
-            if let searchInfo { SearchManager.shared.searchWith(info: searchInfo) }
+            searchInfo.flatMap { SearchManager.shared.searchWith(info: $0) }
         case .history, .download:
             books = (type == .history) ? DBManager.shared.books(of: .history) : DBManager.shared.books(of: .download)
             if (type == .history) { navigationItem.rightBarButtonItem?.isEnabled = !books.isEmpty }
@@ -162,7 +162,7 @@ extension BookcaseViewController {
                     .filter { !DBManager.shared.contains(gid: $0.gid, of: .download) }
                     .forEach { DownloadManager.shared.remove(book: $0) }
                 DBManager.shared.removeAll(type: .history)
-                self.refreshData(with: nil)
+                self.refreshData()
             }))
             vc.addAction(UIAlertAction(title: "取消", style: .cancel, handler: nil))
             present(vc, animated: true, completion: nil)
@@ -203,7 +203,7 @@ extension BookcaseViewController {
                     vc.addAction(UIAlertAction(title: "删除下载", style: .default, handler: { _ in
                         DownloadManager.shared.remove(book: book)
                         DBManager.shared.remove(book: book, of: .download)
-                        if self.type == .download { self.refreshData(with: nil) }
+                        if self.type == .download { self.refreshData() }
                     }))
                 }
             }
@@ -214,7 +214,7 @@ extension BookcaseViewController {
                         DownloadManager.shared.remove(book: book)
                     }
                     DBManager.shared.remove(book: book, of: .history)
-                    self.refreshData(with: nil)
+                    self.refreshData()
                 }))
             }
             

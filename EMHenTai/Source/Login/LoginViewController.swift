@@ -10,7 +10,8 @@ import UIKit
 import WebKit
 
 final class LoginViewController: WebViewController {
-    private static let loginURL = URL(string: "https://forums.e-hentai.org/index.php?act=Login")!
+    private static let forums = "https://forums.e-hentai.org/index.php?"
+    private static let loginURL = URL(string: "\(forums)act=Login")!
     
     private var token: NSObjectProtocol?
 
@@ -47,7 +48,7 @@ extension LoginViewController: WKNavigationDelegate {
         webView.configuration.websiteDataStore.httpCookieStore.getAllCookies { cookies in
             cookies.forEach { HTTPCookieStorage.shared.setCookie($0) }
         }
-        if (webView.url?.absoluteString ?? "") == "https://forums.e-hentai.org/index.php?" {
+        if (webView.url?.absoluteString ?? "") == Self.forums {
             webView.load(URLRequest(url: URL(string: SearchInfo.Source.ExHentai.rawValue)!))
         }
     }
