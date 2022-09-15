@@ -109,14 +109,17 @@ final class BookcaseTableViewCell: UITableViewCell {
         NotificationCenter.default.addObserver(self, selector: #selector(downloadStatusChanged(notification:)), name: DownloadManager.DownloadStateChangedNotification, object: nil)
     }
     
+    @MainActor
     private func updateProgress() {
         Task {
-            progressLabel.text = ""
-            guard let book, DBManager.shared.contains(gid: book.gid, of: .download) else { return }
+            guard let book, DBManager.shared.contains(gid: book.gid, of: .download) else {
+                progressLabel.text = ""
+                return
+            }
             
             switch await DownloadManager.shared.downloadState(of: book) {
             case .before:
-                break
+                progressLabel.text = ""
             case .ing:
                 progressLabel.text = "下载中：" + "\(book.downloadedFileCount)/\(book.fileCountNum)"
             case .suspend:
@@ -139,18 +142,13 @@ final class BookcaseTableViewCell: UITableViewCell {
     
     @objc
     private func downloadStatusChanged(notification: Notification) {
-        DispatchQueue.main.async { [weak self] in
-            guard let self else { return }
-            var gid: Int?
-            if notification.name == DownloadManager.DownloadPageSuccessNotification {
-                gid = (notification.object as? (Int, Int))?.0
-            } else if notification.name == DownloadManager.DownloadStateChangedNotification {
-                gid = notification.object as? Int
-            }
-            if let gid, let book = self.book, book.gid == gid {
-                self.updateProgress()
-            }
+        var gid: Int?
+        if notification.name == DownloadManager.DownloadPageSuccessNotification {
+            gid = (notification.object as? (Int, Int))?.0
+        } else if notification.name == DownloadManager.DownloadStateChangedNotification {
+            gid = notification.object as? Int
         }
+        if let gid, let book, book.gid == gid { updateProgress() }
     }
     
     @objc
