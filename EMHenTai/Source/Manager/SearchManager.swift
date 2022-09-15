@@ -76,7 +76,6 @@ final private actor TaskInfo {
         
         if (info.pageIndex == 0) || (runningInfo.pageIndex > 0 && (waitingInfo == nil || waitingInfo!.pageIndex > 0)) {
             waitingInfo = info
-            return false
         }
         
         return false
