@@ -70,18 +70,6 @@ final class GalleryViewController: UICollectionViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "回到首页", style: .plain, target: self, action: #selector(backToFirstPage))
     }
     
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransition(to: size, with: coordinator)
-        
-        isRotating = true
-        let currentIndex = Int(collectionView.contentOffset.x / collectionView.bounds.size.width)
-        coordinator.animate(alongsideTransition: nil) { _ in
-            self.isRotating = false
-            self.collectionView.collectionViewLayout.invalidateLayout()
-            self.collectionView.scrollToItem(at: IndexPath(row: currentIndex, section: 0), at: .left, animated: false)
-        }
-    }
-    
     private func setupNotification() {
         token = NotificationCenter.default.addObserver(forName: DownloadManager.DownloadPageSuccessNotification,
                                                        object: nil,
@@ -89,6 +77,17 @@ final class GalleryViewController: UICollectionViewController {
             guard let self else { return }
             guard let (gid, index) = notification.object as? (Int, Int), gid == self.book.gid else { return }
             self.collectionView.reloadItems(at: [IndexPath(row: index, section: 0)])
+        }
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        
+        isRotating = true
+        let currentIndex = lastSeenPageIndex
+        coordinator.animate(alongsideTransition: nil) { _ in
+            self.isRotating = false
+            self.collectionView.scrollToItem(at: IndexPath(row: currentIndex, section: 0), at: .left, animated: false)
         }
     }
     
@@ -132,7 +131,7 @@ final class GalleryViewController: UICollectionViewController {
 // MARK: UICollectionViewDelegateFlowLayout
 extension GalleryViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        isRotating ? .zero : collectionView.bounds.size
+        collectionView.bounds.size
     }
 }
 
@@ -157,6 +156,7 @@ extension GalleryViewController {
 // MARK: UICollectionViewDelegate
 extension GalleryViewController {
     override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        guard !isRotating else { return }
         navigationItem.title = "\(indexPath.row + 1)/\(book.fileCountNum)"
         lastSeenPageIndex = indexPath.row
     }
