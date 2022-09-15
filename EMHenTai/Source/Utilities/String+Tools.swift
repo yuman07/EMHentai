@@ -23,7 +23,7 @@ extension String {
             guard case let start = index(startIndex, offsetBy: $0 + target.count), start < endIndex else { return "" }
             var end = index(after: start)
             var meet = 0
-            while end < endIndex && meet < count  {
+            while end < endIndex && meet < count {
                 end = index(after: end)
                 if self[end] == endCharater { meet += 1 }
             }

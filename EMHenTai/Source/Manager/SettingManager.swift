@@ -55,11 +55,10 @@ final class SettingManager {
                 return
             }
             
-            let size = folders.reduce(into: (0, 0)) {
-                let gid = Int($1) ?? 0
-                if DBManager.shared.contains(gid: gid, of: .download) {
+            let size = folders.compactMap({ Int($0) }).reduce(into: (0, 0)) {
+                if DBManager.shared.contains(gid: $1, of: .download) {
                     $0.1 += FileManager.default.folderSizeAt(path: Book.downloadFolderPath + "/\($1)")
-                } else if DBManager.shared.contains(gid: gid, of: .history) {
+                } else if DBManager.shared.contains(gid: $1, of: .history) {
                     $0.0 += FileManager.default.folderSizeAt(path: Book.downloadFolderPath + "/\($1)")
                 }
             }
