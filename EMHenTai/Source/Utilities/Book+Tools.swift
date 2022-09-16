@@ -8,7 +8,7 @@
 import Foundation
 
 // https://ehwiki.org/wiki/Technical_Issues  "Content Warning - This gallery has been flagged as Offensive For Everyone
-private let offensiveTags = Set<String>(["guro", "snuff", "scat"])
+private let offensiveTags = Set(["guro", "snuff", "scat"])
 
 extension Book {
     static var downloadFolderPath: String {
@@ -44,6 +44,6 @@ extension Book {
     }
     
     var isOffensive: Bool {
-        !offensiveTags.intersection(Set<String>(tags)).isEmpty
+        !offensiveTags.intersection(Set(tags)).isEmpty
     }
 }
