@@ -33,13 +33,9 @@ final class SettingViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        Task.detached {
-            let size = await SettingManager.shared.calculateFileSize()
-            await MainActor.run(body: { [weak self] in
-                guard let self else { return }
-                self.fileSize = size
-                self.tableView.reloadSections([1], with: .none)
-            })
+        Task {
+            fileSize = await SettingManager.shared.calculateFileSize()
+            tableView.reloadSections([1], with: .none)
         }
     }
     
