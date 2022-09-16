@@ -41,7 +41,7 @@ final class BookcaseFooterView: UIView {
     }()
     
     private func setupUI() {
-        frame = CGRect(x: 0, y: 0, width: 0, height: label.font.lineHeight + 20)
+        frame = CGRect(x: 0, y: 0, width: 0, height: ceil(label.font.lineHeight) + 20)
         addSubview(label)
         
         label.translatesAutoresizingMaskIntoConstraints = false
