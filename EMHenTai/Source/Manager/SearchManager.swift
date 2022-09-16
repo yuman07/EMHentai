@@ -63,11 +63,11 @@ final actor SearchManager {
         guard !ids.isEmpty else { return .success([]) }
         
         guard let value = try? await AF
-                .request(info.source.rawValue + "api.php",
-                         method: .post,
-                         parameters: ["method": "gdata", "gidlist": ids],
-                         encoding: JSONEncoding.default)
-                    .serializingDecodable(Gmetadata.self, automaticallyCancelling: true).value else { return .failure(.netError) }
+            .request(info.source.rawValue + "api.php",
+                     method: .post,
+                     parameters: ["method": "gdata", "gidlist": ids],
+                     encoding: JSONEncoding.default)
+                .serializingDecodable(Gmetadata.self, automaticallyCancelling: true).value else { return .failure(.netError) }
         
         return .success(value.gmetadata)
     }
