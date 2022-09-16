@@ -86,7 +86,7 @@ final class SearchViewController: UITableViewController {
 // MARK: UITableViewDataSource
 extension SearchViewController {
     override func numberOfSections(in tableView: UITableView) -> Int {
-        SearchViewController.sections.count
+        Self.sections.count
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -117,7 +117,6 @@ extension SearchViewController {
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: NSStringFromClass(UITableViewHeaderFooterView.self))
         header?.textLabel?.text = SearchViewController.sections[section]
-        header?.isUserInteractionEnabled = true
         header?.removeGestureRecognizer(doubleTapCategoryGestureRecognizer)
         if section == 4 { header?.addGestureRecognizer(doubleTapCategoryGestureRecognizer) }
         return header

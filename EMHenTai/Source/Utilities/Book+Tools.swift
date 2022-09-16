@@ -23,6 +23,10 @@ extension Book {
         "\(folderPath)/\(gid)-\(index).jpg"
     }
     
+    var coverImagePath: String {
+        "\(folderPath)/\(gid)-cover.jpg"
+    }
+    
     var showTitle: String {
         title_jpn.isEmpty ? title : title_jpn
     }

@@ -16,18 +16,12 @@ final class BookcaseViewController: UITableViewController {
         case download
     }
     
-    enum CellLayout: Int {
-        case normal
-        case thumbnail
-    }
-    
     private let type: BookcaseType
     private let footerView = BookcaseFooterView()
     
     private var searchInfo: SearchInfo?
     private var books = [Book]()
     private var hasMore = false
-    private var cellLayout = CellLayout.normal
     
     init(type: BookcaseType) {
         self.type = type

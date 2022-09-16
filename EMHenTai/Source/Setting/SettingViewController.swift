@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 final class SettingViewController: UITableViewController {
-    private var fileSize = (historySize: 0, downloadSize: 0)
+    private var dataSize = (historySize: 0, downloadSize: 0, otherSize: 0)
     private var token: NSObjectProtocol?
     
     init() {
@@ -32,11 +32,7 @@ final class SettingViewController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        Task {
-            fileSize = await SettingManager.shared.calculateFileSize()
-            tableView.reloadSections([1], with: .none)
-        }
+        reloadDataSize()
     }
     
     private func setupUI() {
@@ -58,6 +54,13 @@ final class SettingViewController: UITableViewController {
             self?.tableView.reloadSections([0], with: .none)
         }
     }
+    
+    private func reloadDataSize() {
+        Task {
+            dataSize = await SettingManager.shared.calculateFileSize()
+            tableView.reloadSections([1], with: .none)
+        }
+    }
 }
 
 // MARK: UITableViewDataSource
@@ -71,7 +74,7 @@ extension SettingViewController {
         case 0:
             return 1
         case 1:
-            return 2
+            return 3
         default:
             return 0
         }
@@ -100,8 +103,17 @@ extension SettingViewController {
             cell.textLabel?.text = SettingManager.shared.isLogin ? "已登录：点击可登出" : "未登录：点击去登录"
             cell.selectionStyle = .default
         case 1:
-            let size = indexPath.row == 0 ? fileSize.historySize : fileSize.downloadSize
-            let text = (indexPath.row == 0 ? "历史数据：" : "下载数据：") + "\(size.diskSizeFormat)"
+            let text: String
+            switch indexPath.row {
+            case 0:
+                text = "历史数据：" + dataSize.historySize.diskSizeFormat
+            case 1:
+                text = "下载数据：" + dataSize.downloadSize.diskSizeFormat
+            case 2:
+                text = "其它数据：" + dataSize.otherSize.diskSizeFormat
+            default:
+                text = ""
+            }
             cell.textLabel?.text = text
             cell.selectionStyle = .none
         default:
@@ -126,7 +138,12 @@ extension SettingViewController {
                 navigationController?.pushViewController(LoginViewController(), animated: true)
             }
         case 1:
-            break
+            if indexPath.row == 2 {
+                Task {
+                    await SettingManager.shared.clearOtherSize()
+                    reloadDataSize()
+                }
+            }
         default:
             break
         }

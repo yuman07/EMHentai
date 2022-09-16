@@ -7,6 +7,7 @@
 
 import Foundation
 import WebKit
+import Kingfisher
 
 final class SettingManager {
     static let shared = SettingManager()
@@ -48,23 +49,32 @@ final class SettingManager {
         }
     }
     
-    func calculateFileSize() async -> (historySize: Int, downloadSize: Int) {
+    func calculateFileSize() async -> (historySize: Int, downloadSize: Int, otherSize: Int) {
         await withUnsafeContinuation { continuation in
             DispatchQueue.global().async {
+                let otherSize = Int((try? KingfisherManager.shared.cache.diskStorage.totalSize()) ?? 0)
                 guard let folders = try? FileManager.default.contentsOfDirectory(atPath: Book.downloadFolderPath), !folders.isEmpty else {
-                    continuation.resume(returning: (0, 0))
+                    continuation.resume(returning: (0, 0, otherSize))
                     return
                 }
                 
                 let size = folders.compactMap({ Int($0) }).reduce(into: (0, 0)) {
                     let folderSize = FileManager.default.folderSizeAt(path: Book.downloadFolderPath + "/\($1)")
-                    if DBManager.shared.contains(gid: $1, of: .history) { $0.0 += folderSize }
                     if DBManager.shared.contains(gid: $1, of: .download) { $0.1 += folderSize }
+                    else if DBManager.shared.contains(gid: $1, of: .history) { $0.0 += folderSize }
                 }
                 
-                continuation.resume(returning: size)
+                continuation.resume(returning: (size.0, size.1, otherSize))
             }
         }
+    }
+    
+    func clearOtherSize() async {
+        await withUnsafeContinuation({ continuation in
+            KingfisherManager.shared.cache.clearDiskCache {
+                continuation.resume()
+            }
+        })
     }
     
     private func checkLogin() -> Bool {

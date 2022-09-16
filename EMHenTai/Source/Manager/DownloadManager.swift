@@ -7,6 +7,7 @@
 
 import Foundation
 import Alamofire
+import Kingfisher
 
 final actor DownloadManager {
     enum DownloadState {
@@ -134,6 +135,12 @@ final actor DownloadManager {
                             .value, FileManager.default.fileExists(atPath: p.path) else { return }
                     
                     NotificationCenter.default.post(name: DownloadManager.DownloadPageSuccessNotification, object: (book.gid, imgIndex), userInfo: nil)
+                    
+                    if !FileManager.default.fileExists(atPath: book.coverImagePath) {
+                        let from = KingfisherManager.shared.cache.diskStorage.cacheFileURL(forKey: book.thumb)
+                        let to = URL(fileURLWithPath: book.coverImagePath)
+                        try? FileManager.default.copyItem(at: from, to: to)
+                    }
                 }
             }
         })
