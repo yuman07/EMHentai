@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Book: Codable {
+struct Book: Codable, Hashable {
     let gid: Int
     let title: String
     let title_jpn: String
@@ -26,7 +26,7 @@ struct Book: Codable {
     let torrents: [Torrent]
 }
 
-struct Torrent: Codable {
+struct Torrent: Codable, Hashable {
     let hash: String
     let added: String
     let name: String

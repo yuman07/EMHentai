@@ -13,7 +13,7 @@ protocol SearchManagerCallbackDelegate: AnyObject {
     func searchFinishCallback(searchInfo: SearchInfo, result: Result<[Book], SearchManager.SearchError>) async
 }
 
-final class SearchManager {
+final actor SearchManager {
     enum SearchError: String, Error {
         case netError
         case ipError = "Your IP address has been temporarily banned for excessive pageloads"
@@ -22,28 +22,38 @@ final class SearchManager {
     static let shared = SearchManager()
     private init() {}
     
-    private let taskInfo = TaskInfo()
-    
+    @MainActor
     weak var delegate: SearchManagerCallbackDelegate?
     
-    func searchWith(info: SearchInfo) {
-        Task {
-            guard await taskInfo.checkNeedRequest(info: info) else { return }
-            
+    private var currentTask: Task<Void, Never>?
+    
+    nonisolated func searchWith(info: SearchInfo) {
+        Task { await p_searchWith(info: info) }
+    }
+    
+    private func p_searchWith(info: SearchInfo) {
+        guard info.pageIndex == 0 || currentTask == nil else {
+            return
+        }
+        
+        currentTask?.cancel()
+        
+        currentTask = Task {
             await delegate?.searchStartCallback(searchInfo: info)
+            guard !Task.isCancelled else { return }
             
-            let result = await p_searchWith(info: info)
+            let result = await pp_searchWith(info: info)
+            guard !Task.isCancelled else { return }
             
-            if let next = await taskInfo.nextInfo() {
-                searchWith(info: next)
-            } else {
-                await delegate?.searchFinishCallback(searchInfo: info, result: result)
-            }
+            currentTask = nil
+            await delegate?.searchFinishCallback(searchInfo: info, result: result)
         }
     }
     
-    private func p_searchWith(info: SearchInfo) async -> Result<[Book], SearchError> {
-        guard let value = try? await AF.request(info.requestString, interceptor: RetryPolicy()).serializingString().value else { return .failure(.netError) }
+    private nonisolated func pp_searchWith(info: SearchInfo) async -> Result<[Book], SearchError> {
+        guard let value = try? await AF.request(info.requestString, interceptor: RetryPolicy()).serializingString(automaticallyCancelling: true).value else {
+            return .failure(.netError)
+        }
         guard !value.contains(SearchError.ipError.rawValue) else { return .failure(.ipError) }
         
         let ids = value
@@ -57,37 +67,9 @@ final class SearchManager {
                          method: .post,
                          parameters: ["method": "gdata", "gidlist": ids],
                          encoding: JSONEncoding.default)
-                .serializingDecodable(Gmetadata.self).value else { return .failure(.netError) }
+                    .serializingDecodable(Gmetadata.self, automaticallyCancelling: true).value else { return .failure(.netError) }
         
         return .success(value.gmetadata)
-    }
-}
-
-final private actor TaskInfo {
-    private var runningInfo: SearchInfo?
-    private var waitingInfo: SearchInfo?
-    
-    func checkNeedRequest(info: SearchInfo) -> Bool {
-        guard let runningInfo = runningInfo else {
-            runningInfo = info
-            return true
-        }
-        guard runningInfo.requestString != info.requestString else { return false }
-        
-        if (info.pageIndex == 0) || (runningInfo.pageIndex > 0 && (waitingInfo == nil || waitingInfo!.pageIndex > 0)) {
-            waitingInfo = info
-        }
-        
-        return false
-    }
-    
-    func nextInfo() -> SearchInfo? {
-        runningInfo = nil
-        if let next = waitingInfo {
-            waitingInfo = nil
-            return next
-        }
-        return nil
     }
 }
 

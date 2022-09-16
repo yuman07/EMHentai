@@ -97,6 +97,7 @@ extension BookcaseViewController: SearchManagerCallbackDelegate {
             hasMore = !books.isEmpty
             if searchInfo.pageIndex == 0 { self.books = books }
             else { self.books += books }
+            self.books = self.books.unique()
             if !hasMore { footerView.hint = self.books.isEmpty ? .noData : .noMoreData }
             else { footerView.hint = .loading }
         case .failure(let error):
