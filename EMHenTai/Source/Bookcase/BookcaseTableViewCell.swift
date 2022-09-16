@@ -131,10 +131,10 @@ final class BookcaseTableViewCell: UITableViewCell {
     
     func updateWith(book: Book) {
         self.book = book
-        if FileManager.default.fileExists(atPath: book.coverImagePath) {
-            thumbImageView.image = (try? Data(contentsOf: URL(fileURLWithPath: book.coverImagePath))).flatMap { UIImage(data: $0) }
-        } else {
+        if !FileManager.default.fileExists(atPath: book.coverImagePath) {
             thumbImageView.kf.setImage(with: URL(string: book.thumb))
+        } else {
+            thumbImageView.image = (try? Data(contentsOf: URL(fileURLWithPath: book.coverImagePath))).flatMap { UIImage(data: $0) }
         }
         titleLabel.text = book.showTitle
         categoryLabel.text = book.category

@@ -18,14 +18,13 @@ final class GalleryCollectionViewCell: UICollectionViewCell {
         view.bouncesZoom = false
         view.delegate = self
         view.maximumZoomScale = 3
-        view.contentInsetAdjustmentBehavior = .never
         return view
     }()
     
     private let imageView = {
-        let img = UIImageView()
-        img.contentMode = .scaleAspectFit
-        return img
+        let view = UIImageView()
+        view.contentMode = .scaleAspectFit
+        return view
     }()
     
     override init(frame: CGRect) {
