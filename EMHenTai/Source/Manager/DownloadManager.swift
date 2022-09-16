@@ -8,7 +8,7 @@
 import Foundation
 import Alamofire
 
-final class DownloadManager {
+final actor DownloadManager {
     enum DownloadState {
         case before
         case ing
@@ -21,57 +21,65 @@ final class DownloadManager {
     static let DownloadStateChangedNotification = NSNotification.Name(rawValue: "EMHenTai.DownloadManager.DownloadStateChangedNotification")
     
     private init() {}
-    private let taskMap = TaskMap()
     private let groupTotalImgNum = 40
     private let maxConcurrentDownloadCount = 8
+    private var taskMap = [Int: Task<Void, Never>]()
     
-    func download(book: Book) {
-        Task {
-            let state = await downloadState(of: book)
-            if state == .ing || state == .finish {
-                return
+    nonisolated func download(_ book: Book) {
+        Task { await p_download(book) }
+    }
+    
+    private func p_download(_ book: Book) {
+        let state = downloadState(of: book)
+        if state == .ing || state == .finish {
+            return
+        }
+        
+        try? FileManager.default.createDirectory(at: URL(fileURLWithPath: book.folderPath), withIntermediateDirectories: true, attributes: nil)
+        
+        taskMap[book.gid] = Task {
+            await pp_download(book)
+            taskMap[book.gid] = nil
+            if book.downloadedFileCount == book.fileCountNum {
+                NotificationCenter.default.post(name: DownloadManager.DownloadStateChangedNotification, object: book.gid, userInfo: nil)
             }
-            
-            try? FileManager.default.createDirectory(at: URL(fileURLWithPath: book.folderPath), withIntermediateDirectories: true, attributes: nil)
-            
-            await taskMap.set(Task {
-                await p_download(of: book)
-                await taskMap.remove(book.gid)
-                if book.downloadedFileCount == book.fileCountNum {
-                    NotificationCenter.default.post(name: DownloadManager.DownloadStateChangedNotification, object: book.gid, userInfo: nil)
-                }
-            }, for: book.gid)
-            
-            NotificationCenter.default.post(name: DownloadManager.DownloadStateChangedNotification, object: book.gid, userInfo: nil)
         }
+        
+        NotificationCenter.default.post(name: DownloadManager.DownloadStateChangedNotification, object: book.gid, userInfo: nil)
     }
     
-    func suspend(book: Book) {
-        Task {
-            await taskMap.remove(book.gid)
-            NotificationCenter.default.post(name: DownloadManager.DownloadStateChangedNotification, object: book.gid, userInfo: nil)
-        }
+    nonisolated func suspend(_ book: Book) {
+        Task { await p_suspend(book) }
     }
     
-    func remove(book: Book) {
-        Task {
-            await taskMap.remove(book.gid)
-            try? FileManager.default.removeItem(atPath: book.folderPath)
-            NotificationCenter.default.post(name: DownloadManager.DownloadStateChangedNotification, object: book.gid, userInfo: nil)
-        }
+    private func p_suspend(_ book: Book) {
+        taskMap[book.gid]?.cancel()
+        taskMap[book.gid] = nil
+        NotificationCenter.default.post(name: DownloadManager.DownloadStateChangedNotification, object: book.gid, userInfo: nil)
     }
     
-    func downloadState(of book: Book) async -> DownloadState {
+    nonisolated func remove(_ book: Book) {
+        Task { await p_remove(book) }
+    }
+    
+    private func p_remove(_ book: Book) {
+        taskMap[book.gid]?.cancel()
+        taskMap[book.gid] = nil
+        try? FileManager.default.removeItem(atPath: book.folderPath)
+        NotificationCenter.default.post(name: DownloadManager.DownloadStateChangedNotification, object: book.gid, userInfo: nil)
+    }
+    
+    func downloadState(of book: Book) -> DownloadState {
         if book.downloadedFileCount == book.fileCountNum {
             return .finish
-        } else if await taskMap.isContain(book.gid) {
+        } else if taskMap[book.gid] != nil {
             return .ing
         } else {
             return book.downloadedFileCount == 0 ? .before : .suspend
         }
     }
     
-    private func p_download(of book: Book) async {
+    private nonisolated func pp_download(_ book: Book) async {
         let urlStream = AsyncStream<String> { continuation in
             Task {
                 await withTaskGroup(of: Void.self, body: { group in
@@ -131,7 +139,7 @@ final class DownloadManager {
         })
     }
     
-    private func checkGroupNeedRequest(of book: Book, groupIndex: Int) -> Bool {
+    private nonisolated func checkGroupNeedRequest(of book: Book, groupIndex: Int) -> Bool {
         for index in 0..<groupTotalImgNum {
             let realIndex = groupIndex * groupTotalImgNum + index
             guard realIndex < book.fileCountNum else { break }
@@ -140,22 +148,6 @@ final class DownloadManager {
             }
         }
         return false
-    }
-}
-
-final private actor TaskMap {
-    private var map = [Int: Task<Void, Never>]()
-    
-    func set(_ task: Task<Void, Never>, for gid: Int) {
-        map[gid] = task
-    }
-    
-    func remove(_ gid: Int) {
-        map.removeValue(forKey: gid)?.cancel()
-    }
-    
-    func isContain(_ gid: Int) -> Bool {
-        map[gid] != nil
     }
 }
 

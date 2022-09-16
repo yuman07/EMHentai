@@ -150,7 +150,7 @@ extension BookcaseViewController {
             vc.addAction(UIAlertAction(title: "清除", style: .default, handler: { _ in
                 DBManager.shared.books(of: .history)
                     .filter { !DBManager.shared.contains(gid: $0.gid, of: .download) }
-                    .forEach { DownloadManager.shared.remove(book: $0) }
+                    .forEach { DownloadManager.shared.remove($0) }
                 DBManager.shared.removeAll(type: .history)
                 self.refreshData()
             }))
@@ -170,7 +170,7 @@ extension BookcaseViewController {
             
             if !DBManager.shared.contains(gid: book.gid, of: .download) {
                 vc.addAction(UIAlertAction(title: "下载", style: .default, handler: { _ in
-                    DownloadManager.shared.download(book: book)
+                    DownloadManager.shared.download(book)
                     DBManager.shared.insert(book: book, of: .download)
                     self.tableView.reloadData()
                 }))
@@ -179,11 +179,11 @@ extension BookcaseViewController {
                 switch state {
                 case .before, .suspend:
                     vc.addAction(UIAlertAction(title: "下载", style: .default, handler: { _ in
-                        DownloadManager.shared.download(book: book)
+                        DownloadManager.shared.download(book)
                     }))
                 case .ing:
                     vc.addAction(UIAlertAction(title: "暂停", style: .default, handler: { _ in
-                        DownloadManager.shared.suspend(book: book)
+                        DownloadManager.shared.suspend(book)
                     }))
                 case .finish:
                     break
@@ -191,7 +191,7 @@ extension BookcaseViewController {
                 
                 if state != .before && type != .history {
                     vc.addAction(UIAlertAction(title: "删除下载", style: .default, handler: { _ in
-                        DownloadManager.shared.remove(book: book)
+                        DownloadManager.shared.remove(book)
                         DBManager.shared.remove(book: book, of: .download)
                         if self.type == .download { self.refreshData() }
                     }))
@@ -201,7 +201,7 @@ extension BookcaseViewController {
             if type == .history {
                 vc.addAction(UIAlertAction(title: "删除历史", style: .default, handler: { _ in
                     if !DBManager.shared.contains(gid: book.gid, of: .download) {
-                        DownloadManager.shared.remove(book: book)
+                        DownloadManager.shared.remove(book)
                     }
                     DBManager.shared.remove(book: book, of: .history)
                     self.refreshData()

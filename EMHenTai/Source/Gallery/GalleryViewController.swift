@@ -48,7 +48,7 @@ final class GalleryViewController: UICollectionViewController {
     deinit {
         token.flatMap { NotificationCenter.default.removeObserver($0) }
         if !DBManager.shared.contains(gid: book.gid, of: .download) {
-            DownloadManager.shared.suspend(book: book)
+            DownloadManager.shared.suspend(book)
         }
     }
     
@@ -115,7 +115,7 @@ final class GalleryViewController: UICollectionViewController {
     }
     
     private func startDownload() {
-        DownloadManager.shared.download(book: book)
+        DownloadManager.shared.download(book)
         DBManager.shared.remove(book: book, of: .history)
         DBManager.shared.insert(book: book, of: .history)
     }
