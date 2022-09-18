@@ -25,7 +25,7 @@ final class BookcaseViewController: UITableViewController {
     
     init(type: BookcaseType) {
         self.type = type
-        super.init(nibName: nil, bundle: nil)
+        super.init(style: .plain)
         hidesBottomBarWhenPushed = false
     }
     

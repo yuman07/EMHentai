@@ -131,15 +131,16 @@ final class BookcaseTableViewCell: UITableViewCell {
     
     func updateWith(book: Book) {
         self.book = book
-        if !FileManager.default.fileExists(atPath: book.coverImagePath) {
-            thumbImageView.kf.setImage(with: URL(string: book.thumb))
+        if let image = (try? Data(contentsOf: URL(fileURLWithPath: book.coverImagePath))).flatMap({ UIImage(data: $0) }) {
+            thumbImageView.image = image
         } else {
-            thumbImageView.image = (try? Data(contentsOf: URL(fileURLWithPath: book.coverImagePath))).flatMap { UIImage(data: $0) }
+            thumbImageView.kf.setImage(with: URL(string: book.thumb))
         }
         titleLabel.text = book.showTitle
         categoryLabel.text = book.category
         scoreLabel.text = book.rating
         fileCountLabel.text = "\(book.fileCountNum)页"
+        progressLabel.text = ""
         updateProgress()
     }
     
