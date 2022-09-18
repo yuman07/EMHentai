@@ -20,7 +20,6 @@ final class DBManager {
     
     private var context: NSManagedObjectContext!
     private let lock = NSLock()
-    private let queue = DispatchQueue(label: "EMHenTai.DBManager.SerialQueue")
     private lazy var booksMap = {
         DBType.allCases.reduce(into: [DBType: [Book]]()) { map, type in
             map[type] = {
@@ -31,7 +30,7 @@ final class DBManager {
     }()
     
     func setup() {
-        context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.newBackgroundContext()
     }
     
     func books(of type: DBType) -> [Book] {
@@ -43,7 +42,7 @@ final class DBManager {
         defer { lock.unlock() }
         booksMap[type]!.insert(book, at: 0)
         
-        queue.async { [weak self] in
+        context.perform { [weak self] in
             guard let self else { return }
             let request = NSFetchRequest<NSFetchRequestResult>(entityName: type.rawValue)
             request.predicate = NSPredicate(format: "gid = %d", book.gid)
@@ -58,7 +57,7 @@ final class DBManager {
         defer { lock.unlock() }
         booksMap[type]?.removeAll { $0.gid == book.gid }
         
-        queue.async { [weak self] in
+        context.perform { [weak self] in
             guard let self else { return }
             let request = NSFetchRequest<NSFetchRequestResult>(entityName: type.rawValue)
             request.predicate = NSPredicate(format: "gid = %d", book.gid)
@@ -74,7 +73,7 @@ final class DBManager {
         defer { lock.unlock() }
         booksMap[type]?.removeAll()
         
-        queue.async { [weak self] in
+        context.perform { [weak self] in
             guard let self else { return }
             let request = NSFetchRequest<NSFetchRequestResult>(entityName: type.rawValue)
             let delRequest = NSBatchDeleteRequest(fetchRequest: request)
