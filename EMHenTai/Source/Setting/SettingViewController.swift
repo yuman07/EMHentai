@@ -61,6 +61,19 @@ final class SettingViewController: UITableViewController {
             tableView.reloadSections([1], with: .none)
         }
     }
+    
+    private func clearOtherData() {
+        guard dataSize.otherSize > 0 else { return }
+        let vc = UIAlertController(title: "提示", message: "确定要清除其他数据吗？\n（包含如封面图等数据）", preferredStyle: .alert)
+        vc.addAction(UIAlertAction(title: "清除", style: .default, handler: { _ in
+            Task {
+                await SettingManager.shared.clearOtherData()
+                self.reloadDataSize()
+            }
+        }))
+        vc.addAction(UIAlertAction(title: "取消", style: .cancel, handler: nil))
+        present(vc, animated: true, completion: nil)
+    }
 }
 
 // MARK: UITableViewDataSource
@@ -139,10 +152,7 @@ extension SettingViewController {
             }
         case 1:
             if indexPath.row == 2 {
-                Task {
-                    await SettingManager.shared.clearOtherSize()
-                    reloadDataSize()
-                }
+                clearOtherData()
             }
         default:
             break

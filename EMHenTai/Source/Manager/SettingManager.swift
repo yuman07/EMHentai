@@ -69,7 +69,7 @@ final class SettingManager {
         }
     }
     
-    func clearOtherSize() async {
+    func clearOtherData() async {
         await withUnsafeContinuation({ continuation in
             KingfisherManager.shared.cache.clearDiskCache {
                 continuation.resume()
