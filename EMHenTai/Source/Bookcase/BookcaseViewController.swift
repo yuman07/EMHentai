@@ -22,6 +22,18 @@ final class BookcaseViewController: UITableViewController {
     private var searchInfo: SearchInfo?
     private var books = [Book]()
     private var hasMore = false
+    private lazy var dataSource = {
+        UITableViewDiffableDataSource<Int, Book>(tableView: tableView) { tableView, indexPath, book in
+            let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(BookcaseTableViewCell.self), for: indexPath)
+            if let cell = cell as? BookcaseTableViewCell {
+                cell.updateWith(book: book)
+                cell.longPressBlock = { [weak self] in
+                    self?.showAlertVC(with: book)
+                }
+            }
+            return cell
+        }
+    }()
     
     init(type: BookcaseType) {
         self.type = type
@@ -74,6 +86,13 @@ final class BookcaseViewController: UITableViewController {
     private func setupDelegate() {
         if type == .home { SearchManager.shared.delegate = self }
     }
+    
+    private func reloadTableViewData() {
+        var snapshot = NSDiffableDataSourceSnapshot<Int, Book>()
+        snapshot.appendSections([0])
+        snapshot.appendItems(books, toSection: 0)
+        dataSource.apply(snapshot, animatingDifferences: true)
+    }
 }
 
 // MARK: SearchManagerCallbackDelegate
@@ -105,7 +124,7 @@ extension BookcaseViewController: SearchManagerCallbackDelegate {
         
         self.searchInfo = searchInfo
         refreshControl?.endRefreshing()
-        tableView.reloadData()
+        reloadTableViewData()
     }
 }
 
@@ -120,7 +139,7 @@ extension BookcaseViewController {
             books = (type == .history) ? DBManager.shared.books(of: .history) : DBManager.shared.books(of: .download)
             if (type == .history) { navigationItem.rightBarButtonItem?.isEnabled = !books.isEmpty }
             footerView.hint = books.isEmpty ? .noData : .noMoreData
-            tableView.reloadData()
+            reloadTableViewData()
         }
     }
     
@@ -166,7 +185,7 @@ extension BookcaseViewController {
                 vc.addAction(UIAlertAction(title: "下载", style: .default, handler: { _ in
                     DownloadManager.shared.download(book)
                     DBManager.shared.insert(book: book, of: .download)
-                    self.tableView.reloadData()
+                    self.reloadTableViewData()
                 }))
             } else {
                 let state = await DownloadManager.shared.downloadState(of: book)
@@ -219,25 +238,6 @@ extension BookcaseViewController {
             
             present(vc, animated: true, completion: nil)
         }
-    }
-}
-
-// MARK: UITableViewDataSource
-extension BookcaseViewController {
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        books.count
-    }
-    
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(BookcaseTableViewCell.self), for: indexPath)
-        if let cell = cell as? BookcaseTableViewCell, indexPath.row < books.count {
-            let book = books[indexPath.row]
-            cell.updateWith(book: book)
-            cell.longPressBlock = { [weak self] in
-                self?.showAlertVC(with: book)
-            }
-        }
-        return cell
     }
 }
 
