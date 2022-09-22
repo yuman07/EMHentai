@@ -22,18 +22,7 @@ final class BookcaseViewController: UITableViewController {
     private var searchInfo: SearchInfo?
     private var books = [Book]()
     private var hasMore = false
-    private lazy var dataSource = {
-        UITableViewDiffableDataSource<Int, Book>(tableView: tableView) { tableView, indexPath, book in
-            let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(BookcaseTableViewCell.self), for: indexPath)
-            if let cell = cell as? BookcaseTableViewCell {
-                cell.updateWith(book: book)
-                cell.longPressBlock = { [weak self] in
-                    self?.showAlertVC(with: book)
-                }
-            }
-            return cell
-        }
-    }()
+    private var dataSource: UITableViewDiffableDataSource<Int, Book>?
     
     init(type: BookcaseType) {
         self.type = type
@@ -48,6 +37,7 @@ final class BookcaseViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        setupDataSource()
         setupDelegate()
         refreshData()
     }
@@ -87,7 +77,21 @@ final class BookcaseViewController: UITableViewController {
         if type == .home { SearchManager.shared.delegate = self }
     }
     
+    private func setupDataSource() {
+        dataSource = UITableViewDiffableDataSource<Int, Book>(tableView: tableView) { tableView, indexPath, book in
+            let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(BookcaseTableViewCell.self), for: indexPath)
+            if let cell = cell as? BookcaseTableViewCell {
+                cell.updateWith(book: book)
+                cell.longPressBlock = { [weak self] in
+                    self?.showAlertVC(with: book)
+                }
+            }
+            return cell
+        }
+    }
+    
     private func reloadTableViewData() {
+        guard let dataSource else { return }
         var snapshot = NSDiffableDataSourceSnapshot<Int, Book>()
         snapshot.appendSections([0])
         snapshot.appendItems(books, toSection: 0)
