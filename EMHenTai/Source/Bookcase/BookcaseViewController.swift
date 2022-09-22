@@ -37,8 +37,8 @@ final class BookcaseViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        setupDataSource()
         setupDelegate()
+        setupDataSource()
         refreshData()
     }
     
