@@ -49,9 +49,11 @@ final class BookcaseViewController: UITableViewController {
     
     private func setupUI() {
         tableView.backgroundColor = .systemGroupedBackground
-        tableView.estimatedRowHeight = 150
+        tableView.rowHeight = 141
+        tableView.estimatedRowHeight = 0
         tableView.estimatedSectionHeaderHeight = 0
         tableView.estimatedSectionFooterHeight = 0
+        tableView.tableHeaderView = UIView()
         tableView.tableFooterView = footerView
         tableView.register(BookcaseTableViewCell.self, forCellReuseIdentifier: NSStringFromClass(BookcaseTableViewCell.self))
         

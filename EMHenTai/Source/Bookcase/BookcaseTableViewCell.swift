@@ -70,13 +70,10 @@ final class BookcaseTableViewCell: UITableViewCell {
         contentView.addSubview(fileCountLabel)
         
         thumbImageView.translatesAutoresizingMaskIntoConstraints = false
-        thumbImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8).isActive = true
-        thumbImageView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 8).isActive = true
-        thumbImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8).isActive = true
+        thumbImageView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 12).isActive = true
+        thumbImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
         thumbImageView.widthAnchor.constraint(equalToConstant: 125).isActive = true
-        let constraint = thumbImageView.heightAnchor.constraint(equalToConstant: 125)
-        constraint.priority = .defaultHigh
-        constraint.isActive = true
+        thumbImageView.heightAnchor.constraint(equalToConstant: 125).isActive = true
         
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.topAnchor.constraint(equalTo: thumbImageView.topAnchor).isActive = true
