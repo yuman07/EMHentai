@@ -97,7 +97,7 @@ final class BookcaseViewController: UITableViewController {
         var snapshot = NSDiffableDataSourceSnapshot<Int, Book>()
         snapshot.appendSections([0])
         snapshot.appendItems(books, toSection: 0)
-        dataSource.apply(snapshot, animatingDifferences: true)
+        dataSource.apply(snapshot, animatingDifferences: dataSource.snapshot().numberOfItems != 0)
     }
 }
 
