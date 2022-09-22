@@ -37,6 +37,7 @@ final class BookcaseFooterView: UIView {
         let label = UILabel()
         label.text = HintType.empty.rawValue
         label.font = .systemFont(ofSize: 14)
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
@@ -44,7 +45,6 @@ final class BookcaseFooterView: UIView {
         frame = CGRect(x: 0, y: 0, width: 0, height: ceil(label.font.lineHeight) + 20)
         addSubview(label)
         
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         label.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
     }

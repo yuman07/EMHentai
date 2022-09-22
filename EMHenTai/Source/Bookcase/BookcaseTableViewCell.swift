@@ -16,6 +16,7 @@ final class BookcaseTableViewCell: UITableViewCell {
     private let thumbImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFit
+        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
@@ -23,30 +24,35 @@ final class BookcaseTableViewCell: UITableViewCell {
         let label = UILabel()
         label.numberOfLines = 0
         label.font = .systemFont(ofSize: 13)
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     private let categoryLabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 12)
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     private let progressLabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 12)
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     private let scoreLabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 12)
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     private let fileCountLabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 12)
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
@@ -69,30 +75,24 @@ final class BookcaseTableViewCell: UITableViewCell {
         contentView.addSubview(scoreLabel)
         contentView.addSubview(fileCountLabel)
         
-        thumbImageView.translatesAutoresizingMaskIntoConstraints = false
         thumbImageView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 12).isActive = true
         thumbImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
         thumbImageView.widthAnchor.constraint(equalToConstant: 125).isActive = true
         thumbImageView.heightAnchor.constraint(equalToConstant: 125).isActive = true
         
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.topAnchor.constraint(equalTo: thumbImageView.topAnchor).isActive = true
         titleLabel.leftAnchor.constraint(equalTo: thumbImageView.rightAnchor, constant: 8).isActive = true
         titleLabel.rightAnchor.constraint(lessThanOrEqualTo: scoreLabel.rightAnchor).isActive = true
         
-        categoryLabel.translatesAutoresizingMaskIntoConstraints = false
         categoryLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8).isActive = true
         categoryLabel.leftAnchor.constraint(equalTo: titleLabel.leftAnchor).isActive = true
         
-        progressLabel.translatesAutoresizingMaskIntoConstraints = false
         progressLabel.bottomAnchor.constraint(equalTo: fileCountLabel.bottomAnchor).isActive = true
         progressLabel.leftAnchor.constraint(equalTo: titleLabel.leftAnchor).isActive = true
         
-        scoreLabel.translatesAutoresizingMaskIntoConstraints = false
         scoreLabel.bottomAnchor.constraint(equalTo: fileCountLabel.topAnchor, constant: -8).isActive = true
         scoreLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -12).isActive = true
         
-        fileCountLabel.translatesAutoresizingMaskIntoConstraints = false
         fileCountLabel.bottomAnchor.constraint(equalTo: thumbImageView.bottomAnchor).isActive = true
         fileCountLabel.rightAnchor.constraint(equalTo: scoreLabel.rightAnchor).isActive = true
     }

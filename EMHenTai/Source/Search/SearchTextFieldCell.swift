@@ -21,6 +21,7 @@ final class SearchTextFieldCell: UITableViewCell {
         view.layer.cornerRadius = 5
         view.font = .systemFont(ofSize: 14)
         view.returnKeyType = .done
+        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
@@ -36,7 +37,6 @@ final class SearchTextFieldCell: UITableViewCell {
     
     private func setupUI() {
         contentView.addSubview(searchTextField)
-        searchTextField.translatesAutoresizingMaskIntoConstraints = false
         searchTextField.leftAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leftAnchor, constant: 15).isActive = true
         searchTextField.rightAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.rightAnchor, constant: -15).isActive = true
         searchTextField.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true

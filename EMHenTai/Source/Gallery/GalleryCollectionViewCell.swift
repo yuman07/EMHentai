@@ -18,12 +18,14 @@ final class GalleryCollectionViewCell: UICollectionViewCell {
         view.bouncesZoom = false
         view.delegate = self
         view.maximumZoomScale = 3
+        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
     private let imageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFit
+        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
@@ -42,13 +44,11 @@ final class GalleryCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(scrollView)
         scrollView.addSubview(imageView)
         
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
         scrollView.leftAnchor.constraint(equalTo: contentView.leftAnchor).isActive = true
         scrollView.rightAnchor.constraint(equalTo: contentView.rightAnchor).isActive = true
         scrollView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
         
-        imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.topAnchor.constraint(equalTo: scrollView.topAnchor).isActive = true
         imageView.leftAnchor.constraint(equalTo: scrollView.leftAnchor).isActive = true
         imageView.rightAnchor.constraint(equalTo: scrollView.rightAnchor).isActive = true
