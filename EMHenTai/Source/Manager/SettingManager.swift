@@ -51,7 +51,7 @@ final class SettingManager {
     
     func calculateFileSize() async -> (historySize: Int, downloadSize: Int, otherSize: Int) {
         await withUnsafeContinuation { continuation in
-            DispatchQueue.global().async {
+            Task.detached {
                 let otherSize = Int((try? KingfisherManager.shared.cache.diskStorage.totalSize()) ?? 0)
                 guard let folders = try? FileManager.default.contentsOfDirectory(atPath: Book.downloadFolderPath), !folders.isEmpty else {
                     continuation.resume(returning: (0, 0, otherSize))
