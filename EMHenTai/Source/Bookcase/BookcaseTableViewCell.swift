@@ -22,7 +22,8 @@ final class BookcaseTableViewCell: UITableViewCell {
     
     private let titleLabel = {
         let label = UILabel()
-        label.numberOfLines = 0
+        label.numberOfLines = 5
+        label.lineBreakMode = .byTruncatingTail
         label.font = .systemFont(ofSize: 13)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
