@@ -6,20 +6,13 @@
 //
 
 import UIKit
-import CoreData
 import Kingfisher
 
 @main
 final class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    
-    lazy var persistentContainer: NSPersistentContainer = {
-        let container = NSPersistentContainer(name: "EMDB")
-        container.loadPersistentStores { _, _ in }
-        return container
-    }()
-    
+
     private func setupDB() {
         DBManager.shared.setup()
     }
