@@ -103,14 +103,14 @@ final class BookcaseViewController: UITableViewController {
 
 // MARK: SearchManagerCallbackDelegate
 extension BookcaseViewController: SearchManagerCallbackDelegate {
-    func searchStartCallback(searchInfo: SearchInfo) async {
+    func searchStartCallback(searchInfo: SearchInfo) {
         guard searchInfo.pageIndex == 0 else { return }
         searchInfo.saveDB()
         tableView.setContentOffset(CGPoint(x: 0, y: -refreshControl!.frame.size.height * 3), animated: false)
         refreshControl?.beginRefreshing()
     }
     
-    func searchFinishCallback(searchInfo: SearchInfo, result: Result<[Book], SearchManager.SearchError>) async {
+    func searchFinishCallback(searchInfo: SearchInfo, result: Result<[Book], SearchManager.SearchError>) {
         switch result {
         case .success(let books):
             hasMore = !books.isEmpty

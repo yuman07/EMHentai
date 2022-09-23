@@ -9,8 +9,8 @@ import Foundation
 import Alamofire
 
 protocol SearchManagerCallbackDelegate: AnyObject {
-    func searchStartCallback(searchInfo: SearchInfo) async
-    func searchFinishCallback(searchInfo: SearchInfo, result: Result<[Book], SearchManager.SearchError>) async
+    func searchStartCallback(searchInfo: SearchInfo)
+    func searchFinishCallback(searchInfo: SearchInfo, result: Result<[Book], SearchManager.SearchError>)
 }
 
 final actor SearchManager {
@@ -39,14 +39,14 @@ final actor SearchManager {
         currentTask?.cancel()
         
         currentTask = Task {
-            await delegate?.searchStartCallback(searchInfo: info)
+            await MainActor.run { delegate?.searchStartCallback(searchInfo: info) }
             guard !Task.isCancelled else { return }
             
             let result = await pp_searchWith(info: info)
             guard !Task.isCancelled else { return }
             
             currentTask = nil
-            await delegate?.searchFinishCallback(searchInfo: info, result: result)
+            await MainActor.run { delegate?.searchFinishCallback(searchInfo: info, result: result) }
         }
     }
     
