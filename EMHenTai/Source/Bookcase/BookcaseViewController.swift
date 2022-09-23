@@ -92,12 +92,12 @@ final class BookcaseViewController: UITableViewController {
         }
     }
     
-    private func reloadTableViewData() {
+    private func reloadTableViewData(animated: Bool) {
         guard let dataSource else { return }
         var snapshot = NSDiffableDataSourceSnapshot<Int, Book>()
         snapshot.appendSections([0])
         snapshot.appendItems(books, toSection: 0)
-        dataSource.apply(snapshot, animatingDifferences: dataSource.snapshot().numberOfItems != 0)
+        dataSource.apply(snapshot, animatingDifferences: animated)
     }
 }
 
@@ -120,6 +120,7 @@ extension BookcaseViewController: SearchManagerCallbackDelegate {
             if !hasMore { footerView.hint = self.books.isEmpty ? .noData : .noMoreData }
             else { footerView.hint = .loading }
         case .failure(let error):
+            if (searchInfo.pageIndex == 0) { books = [] }
             switch error {
             case .netError:
                 footerView.hint = .netError
@@ -130,7 +131,7 @@ extension BookcaseViewController: SearchManagerCallbackDelegate {
         
         self.searchInfo = searchInfo
         refreshControl?.endRefreshing()
-        reloadTableViewData()
+        reloadTableViewData(animated: searchInfo.pageIndex > 0)
     }
 }
 
@@ -142,10 +143,11 @@ extension BookcaseViewController {
         case .home:
             SearchManager.shared.searchWith(info: SearchInfo())
         case .history, .download:
+            let animated = !books.isEmpty
             books = (type == .history) ? DBManager.shared.books(of: .history) : DBManager.shared.books(of: .download)
             if (type == .history) { navigationItem.rightBarButtonItem?.isEnabled = !books.isEmpty }
             footerView.hint = books.isEmpty ? .noData : .noMoreData
-            reloadTableViewData()
+            reloadTableViewData(animated: animated)
         }
     }
     
@@ -191,7 +193,7 @@ extension BookcaseViewController {
                 vc.addAction(UIAlertAction(title: "下载", style: .default, handler: { _ in
                     DownloadManager.shared.download(book)
                     DBManager.shared.insert(book: book, of: .download)
-                    self.reloadTableViewData()
+                    self.reloadTableViewData(animated: true)
                 }))
             } else {
                 let state = await DownloadManager.shared.downloadState(of: book)
