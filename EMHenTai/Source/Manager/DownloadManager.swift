@@ -41,7 +41,7 @@ final actor DownloadManager {
         taskMap[book.gid] = Task {
             await pp_download(book)
             taskMap[book.gid] = nil
-            if book.downloadedFileCount == book.fileCountNum + 1 {
+            if downloadState(of: book) == .finish {
                 NotificationCenter.default.post(name: DownloadManager.DownloadStateChangedNotification, object: book.gid, userInfo: nil)
             }
         }
