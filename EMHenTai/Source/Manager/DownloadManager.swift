@@ -41,7 +41,7 @@ final actor DownloadManager {
         taskMap[book.gid] = Task {
             await pp_download(book)
             taskMap[book.gid] = nil
-            if book.downloadedFileCount == book.fileCountNum {
+            if book.downloadedFileCount == book.fileCountNum + 1 {
                 NotificationCenter.default.post(name: DownloadManager.DownloadStateChangedNotification, object: book.gid, userInfo: nil)
             }
         }
@@ -71,7 +71,7 @@ final actor DownloadManager {
     }
     
     func downloadState(of book: Book) -> DownloadState {
-        if book.downloadedFileCount == book.fileCountNum {
+        if book.downloadedFileCount == book.fileCountNum + 1 {
             return .finish
         } else if taskMap[book.gid] != nil {
             return .ing
@@ -81,6 +81,19 @@ final actor DownloadManager {
     }
     
     private nonisolated func pp_download(_ book: Book) async {
+        if !FileManager.default.fileExists(atPath: book.coverImagePath) {
+            let from = KingfisherManager.shared.cache.diskStorage.cacheFileURL(forKey: book.thumb)
+            if FileManager.default.fileExists(atPath: from.path) {
+                let to = URL(fileURLWithPath: book.coverImagePath)
+                try? FileManager.default.copyItem(at: from, to: to)
+            } else {
+                _ = try? await AF
+                    .download(book.thumb, interceptor: RetryPolicy(), to: { _, _ in (URL(fileURLWithPath: book.coverImagePath), []) })
+                    .serializingDownload(using: URLResponseSerializer(), automaticallyCancelling: true)
+                    .value
+            }
+        }
+        
         let urlStream = AsyncStream<String> { continuation in
             Task {
                 await withTaskGroup(of: Void.self, body: { group in
@@ -135,12 +148,6 @@ final actor DownloadManager {
                             .value, FileManager.default.fileExists(atPath: p.path) else { return }
                     
                     NotificationCenter.default.post(name: DownloadManager.DownloadPageSuccessNotification, object: (book.gid, imgIndex), userInfo: nil)
-                    
-                    if !FileManager.default.fileExists(atPath: book.coverImagePath) {
-                        let from = KingfisherManager.shared.cache.diskStorage.cacheFileURL(forKey: book.thumb)
-                        let to = URL(fileURLWithPath: book.coverImagePath)
-                        try? FileManager.default.copyItem(at: from, to: to)
-                    }
                 }
             }
         })

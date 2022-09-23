@@ -20,4 +20,9 @@ extension UIImage {
     convenience init?(symbol: SFSymbol, size: CGFloat = 14) {
         self.init(systemName: symbol.rawValue, withConfiguration: UIImage.SymbolConfiguration(pointSize: size))
     }
+    
+    convenience init?(filePath: String) {
+        guard let data = try? Data(contentsOf: URL(fileURLWithPath: filePath)) else { return nil }
+        self.init(data: data)
+    }
 }

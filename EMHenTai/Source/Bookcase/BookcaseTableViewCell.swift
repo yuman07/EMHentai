@@ -128,7 +128,7 @@ final class BookcaseTableViewCell: UITableViewCell {
     
     func updateWith(book: Book) {
         self.book = book
-        if let image = (try? Data(contentsOf: URL(fileURLWithPath: book.coverImagePath))).flatMap({ UIImage(data: $0) }) {
+        if let image = UIImage(filePath: book.coverImagePath) {
             thumbImageView.image = image
         } else {
             thumbImageView.kf.setImage(with: URL(string: book.thumb))
