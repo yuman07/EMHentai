@@ -10,9 +10,14 @@ import UIKit
 import WebKit
 
 class WebViewController: UIViewController {
-    let webView = WKWebView()
     private let url: URL
     private let shareItem: (shareTitle: String?, shareImage: UIImage?)?
+    
+    let webView = {
+        let view = WKWebView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
     
     init(url: URL, shareItem: (shareTitle: String?, shareImage: UIImage?)? = nil) {
         self.url = url
@@ -35,7 +40,6 @@ class WebViewController: UIViewController {
         view.backgroundColor = .systemGroupedBackground
         view.addSubview(webView)
         
-        webView.translatesAutoresizingMaskIntoConstraints = false
         webView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
         webView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         webView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true

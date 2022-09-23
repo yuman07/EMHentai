@@ -20,6 +20,7 @@ final class GalleryViewController: UICollectionViewController {
     private let navBarBackgroundView = {
         let view = UIView()
         view.backgroundColor = .systemGroupedBackground
+        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
@@ -61,7 +62,6 @@ final class GalleryViewController: UICollectionViewController {
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.register(GalleryCollectionViewCell.self, forCellWithReuseIdentifier: NSStringFromClass(GalleryCollectionViewCell.self))
         
-        navBarBackgroundView.translatesAutoresizingMaskIntoConstraints = false
         navBarBackgroundView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         navBarBackgroundView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor).isActive = true
         navBarBackgroundView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor).isActive = true
@@ -74,8 +74,7 @@ final class GalleryViewController: UICollectionViewController {
         token = NotificationCenter.default.addObserver(forName: DownloadManager.DownloadPageSuccessNotification,
                                                        object: nil,
                                                        queue: .main) { [weak self] notification in
-            guard let self else { return }
-            guard let (gid, index) = notification.object as? (Int, Int), gid == self.book.gid else { return }
+            guard let self, let (gid, index) = notification.object as? (Int, Int), gid == self.book.gid else { return }
             self.collectionView.reloadItems(at: [IndexPath(row: index, section: 0)])
         }
     }

@@ -37,6 +37,7 @@ final class SearchTextFieldCell: UITableViewCell {
     
     private func setupUI() {
         contentView.addSubview(searchTextField)
+        
         searchTextField.leftAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leftAnchor, constant: 15).isActive = true
         searchTextField.rightAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.rightAnchor, constant: -15).isActive = true
         searchTextField.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true

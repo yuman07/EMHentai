@@ -32,8 +32,7 @@ final class TranslateManager {
     private var dictCn = [String: String]()
     
     func translateEn(_ en: String) -> String {
-        guard let value = dictEn[en] else { return "" }
-        return "(\(value))"
+        dictEn[en].flatMap { "(\($0))" } ?? ""
     }
     
     func translateCn(_ cn: String) -> String {
