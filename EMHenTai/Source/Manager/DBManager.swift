@@ -25,7 +25,7 @@ final class DBManager {
             map[type] = {
                 guard let context else { return [Book]() }
                 let request = NSFetchRequest<NSFetchRequestResult>(entityName: type.rawValue)
-                return (try? context.fetch(request) as? [NSManagedObject]).flatMap { $0.map { bookFrom(obj: $0) }.reversed() } ?? [Book]()
+                return (try? context.fetch(request) as? [NSManagedObject]).flatMap { $0.map { Self.bookFrom(obj: $0) }.reversed() } ?? [Book]()
             }()
         }
     }()
@@ -47,12 +47,11 @@ final class DBManager {
         booksMap[type]?.insert(book, at: 0)
         
         guard let context else { return }
-        context.perform { [weak self] in
-            guard let self else { return }
+        context.perform {
             let request = NSFetchRequest<NSFetchRequestResult>(entityName: type.rawValue)
             request.predicate = NSPredicate(format: "gid = %d", book.gid)
             let obj = NSEntityDescription.insertNewObject(forEntityName: type.rawValue, into: context)
-            self.update(obj: obj, with: book)
+            Self.update(obj: obj, with: book)
             try? context.save()
         }
     }
@@ -94,7 +93,7 @@ final class DBManager {
         return booksMap[type]?.contains(where: { $0.gid == gid }) ?? false
     }
     
-    private func bookFrom(obj: NSManagedObject) -> Book {
+    private static func bookFrom(obj: NSManagedObject) -> Book {
         Book(gid: obj.value(forKey: "gid") as? Int ?? 0,
              title: obj.value(forKey: "title") as? String ?? "",
              title_jpn: obj.value(forKey: "title_jpn") as? String ?? "",
@@ -113,7 +112,7 @@ final class DBManager {
              torrents: (obj.value(forKey: "torrents") as? String ?? "").data(using: .utf8).flatMap { try? JSONDecoder().decode([Torrent].self, from: $0) } ?? [Torrent]())
     }
     
-    private func update(obj: NSManagedObject, with book: Book) {
+    private static func update(obj: NSManagedObject, with book: Book) {
         obj.setValue(book.gid, forKey: "gid")
         obj.setValue(book.title, forKey: "title")
         obj.setValue(book.title_jpn, forKey: "title_jpn")
