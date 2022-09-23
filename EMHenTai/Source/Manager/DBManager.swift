@@ -38,13 +38,13 @@ final class DBManager {
     }
     
     func books(of type: DBType) -> [Book] {
-        booksMap[type]!
+        booksMap[type] ?? [Book]()
     }
     
     func insert(book: Book, of type: DBType) {
         lock.lock()
         defer { lock.unlock() }
-        booksMap[type]!.insert(book, at: 0)
+        booksMap[type]?.insert(book, at: 0)
         
         guard let context else { return }
         context.perform { [weak self] in
@@ -91,7 +91,7 @@ final class DBManager {
     func contains(gid: Int, of type: DBType) -> Bool {
         lock.lock()
         defer { lock.unlock() }
-        return booksMap[type]!.contains(where: { $0.gid == gid })
+        return booksMap[type]?.contains(where: { $0.gid == gid }) ?? false
     }
     
     private func bookFrom(obj: NSManagedObject) -> Book {
