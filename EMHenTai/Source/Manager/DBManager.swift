@@ -19,8 +19,8 @@ final class DBManager {
     private init() {}
     
     private var context: NSManagedObjectContext?
-    private let queue = DispatchQueue(label: "com.DBManager.ConcurrentQueue", attributes: .concurrent)
     private var booksMap = [DBType: [Book]]()
+    private let queue = DispatchQueue(label: "com.DBManager.ConcurrentQueue", attributes: .concurrent)
     
     func setup() {
         queue.async(flags: .barrier) { [weak self] in
