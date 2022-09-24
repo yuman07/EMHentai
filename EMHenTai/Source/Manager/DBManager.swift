@@ -15,13 +15,12 @@ final class DBManager {
     }
     
     static let shared = DBManager()
-    private init() {}
     
     private var context: NSManagedObjectContext?
     private var booksMap = [DBType: [Book]]()
     private let queue = DispatchQueue(label: "com.DBManager.ConcurrentQueue", attributes: .concurrent)
     
-    func setup() {
+    private init() {
         queue.async(flags: .barrier) { [weak self] in
             guard let self else { return }
             

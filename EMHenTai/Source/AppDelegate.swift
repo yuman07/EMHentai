@@ -12,10 +12,6 @@ import Kingfisher
 final class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
-    private func setupDB() {
-        DBManager.shared.setup()
-    }
     
     private func setupKingfisher() {
         let c = KingfisherManager.shared.downloader.sessionConfiguration
@@ -31,7 +27,6 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        setupDB()
         setupKingfisher()
         setupUI()
         return true
