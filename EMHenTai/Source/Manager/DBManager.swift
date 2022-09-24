@@ -7,7 +7,6 @@
 
 import Foundation
 import CoreData
-import UIKit
 
 final class DBManager {
     enum DBType: String, CaseIterable {
