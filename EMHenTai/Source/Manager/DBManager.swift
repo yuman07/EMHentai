@@ -19,78 +19,86 @@ final class DBManager {
     private init() {}
     
     private var context: NSManagedObjectContext?
-    private let lock = NSLock()
-    private lazy var booksMap = {
-        DBType.allCases.reduce(into: [DBType: [Book]]()) { map, type in
-            map[type] = {
-                guard let context else { return [Book]() }
-                let request = NSFetchRequest<NSFetchRequestResult>(entityName: type.rawValue)
-                return (try? context.fetch(request) as? [NSManagedObject]).flatMap { $0.map { Self.bookFrom(obj: $0) }.reversed() } ?? [Book]()
-            }()
-        }
-    }()
+    private let queue = DispatchQueue(label: "com.DBManager.ConcurrentQueue", attributes: .concurrent)
+    private var booksMap = [DBType: [Book]]()
     
     func setup() {
-        let container = NSPersistentContainer(name: "EMDB")
-        container.loadPersistentStores { _, error in
-            if error == nil { self.context = container.newBackgroundContext() }
+        queue.async(flags: .barrier) { [weak self] in
+            guard let self else { return }
+            
+            let container = NSPersistentContainer(name: "EMDB")
+            container.loadPersistentStores { _, error in
+                if error == nil { self.context = container.newBackgroundContext() }
+            }
+            
+            self.booksMap = DBType.allCases.reduce(into: [DBType: [Book]]()) { map, type in
+                map[type] = {
+                    guard let context = self.context else { return [Book]() }
+                    let request = NSFetchRequest<NSFetchRequestResult>(entityName: type.rawValue)
+                    return (try? context.fetch(request) as? [NSManagedObject]).flatMap { $0.map { Self.bookFrom(obj: $0) }.reversed() } ?? [Book]()
+                }()
+            }
         }
     }
     
     func books(of type: DBType) -> [Book] {
-        booksMap[type] ?? [Book]()
+        queue.sync { booksMap[type] ?? [Book]() }
+    }
+    
+    func contains(gid: Int, of type: DBType) -> Bool {
+        queue.sync { booksMap[type]?.contains(where: { $0.gid == gid }) ?? false }
     }
     
     func insert(book: Book, of type: DBType) {
-        lock.lock()
-        defer { lock.unlock() }
-        booksMap[type]?.insert(book, at: 0)
-        
-        guard let context else { return }
-        context.perform {
-            let request = NSFetchRequest<NSFetchRequestResult>(entityName: type.rawValue)
-            request.predicate = NSPredicate(format: "gid = %d", book.gid)
-            let obj = NSEntityDescription.insertNewObject(forEntityName: type.rawValue, into: context)
-            Self.update(obj: obj, with: book)
-            try? context.save()
+        queue.async(flags: .barrier) { [weak self] in
+            guard let self else { return }
+            
+            self.booksMap[type]?.insert(book, at: 0)
+            
+            guard let context = self.context else { return }
+            context.perform {
+                let request = NSFetchRequest<NSFetchRequestResult>(entityName: type.rawValue)
+                request.predicate = NSPredicate(format: "gid = %d", book.gid)
+                let obj = NSEntityDescription.insertNewObject(forEntityName: type.rawValue, into: context)
+                Self.update(obj: obj, with: book)
+                try? context.save()
+            }
         }
     }
     
     func remove(book: Book, of type: DBType) {
-        lock.lock()
-        defer { lock.unlock() }
-        booksMap[type]?.removeAll { $0.gid == book.gid }
-        
-        guard let context else { return }
-        context.perform {
-            let request = NSFetchRequest<NSFetchRequestResult>(entityName: type.rawValue)
-            request.predicate = NSPredicate(format: "gid = %d", book.gid)
-            let delRequest = NSBatchDeleteRequest(fetchRequest: request)
-            if (try? context.execute(delRequest)) != nil {
-                try? context.save()
+        queue.async(flags: .barrier) { [weak self] in
+            guard let self else { return }
+            
+            self.booksMap[type]?.removeAll { $0.gid == book.gid }
+            
+            guard let context = self.context else { return }
+            context.perform {
+                let request = NSFetchRequest<NSFetchRequestResult>(entityName: type.rawValue)
+                request.predicate = NSPredicate(format: "gid = %d", book.gid)
+                let delRequest = NSBatchDeleteRequest(fetchRequest: request)
+                if (try? context.execute(delRequest)) != nil {
+                    try? context.save()
+                }
             }
         }
     }
     
     func removeAll(type: DBType) {
-        lock.lock()
-        defer { lock.unlock() }
-        booksMap[type]?.removeAll()
-        
-        guard let context else { return }
-        context.perform {
-            let request = NSFetchRequest<NSFetchRequestResult>(entityName: type.rawValue)
-            let delRequest = NSBatchDeleteRequest(fetchRequest: request)
-            if (try? context.execute(delRequest)) != nil {
-                try? context.save()
+        queue.async(flags: .barrier) { [weak self] in
+            guard let self else { return }
+            
+            self.booksMap[type]?.removeAll()
+            
+            guard let context = self.context else { return }
+            context.perform {
+                let request = NSFetchRequest<NSFetchRequestResult>(entityName: type.rawValue)
+                let delRequest = NSBatchDeleteRequest(fetchRequest: request)
+                if (try? context.execute(delRequest)) != nil {
+                    try? context.save()
+                }
             }
         }
-    }
-    
-    func contains(gid: Int, of type: DBType) -> Bool {
-        lock.lock()
-        defer { lock.unlock() }
-        return booksMap[type]?.contains(where: { $0.gid == gid }) ?? false
     }
     
     private static func bookFrom(obj: NSManagedObject) -> Book {
