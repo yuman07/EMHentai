@@ -11,7 +11,7 @@ import UIKit
 final class SettingViewController: UITableViewController {
     private var dataSize = (historySize: 0, downloadSize: 0, otherSize: 0)
     private var token: NSObjectProtocol?
-    private var cookieTextField: UITextField?
+    private weak var cookieTextField: UITextField?
     
     init() {
         super.init(style: .grouped)
