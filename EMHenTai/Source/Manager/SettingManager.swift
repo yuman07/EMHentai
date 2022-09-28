@@ -61,7 +61,7 @@ final class SettingManager {
             cookies.forEach { HTTPCookieStorage.shared.deleteCookie($0) }
         }
         WKWebsiteDataStore.default().httpCookieStore.getAllCookies { cookies in
-            cookies.forEach { WKWebsiteDataStore.default().httpCookieStore.delete($0, completionHandler: nil) }
+            cookies.forEach { WKWebsiteDataStore.default().httpCookieStore.delete($0) }
         }
     }
     

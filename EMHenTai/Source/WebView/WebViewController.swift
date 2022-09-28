@@ -61,7 +61,7 @@ class WebViewController: UIViewController {
         let image = shareItem.shareImage ?? UIApplication.shared.APPIcon ?? UIImage()
         let vc = UIActivityViewController(activityItems: [title, image, url], applicationActivities: nil)
         vc.completionWithItemsHandler = { [weak vc] _, _, _, _ in
-            vc?.dismiss(animated: true, completion: nil)
+            vc?.dismiss(animated: true)
         }
         present(vc, animated: true)
     }

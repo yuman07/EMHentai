@@ -175,7 +175,7 @@ extension BookcaseViewController {
                 DBManager.shared.removeAll(type: .history)
                 self.refreshData()
             }))
-            vc.addAction(UIAlertAction(title: "取消", style: .cancel, handler: nil))
+            vc.addAction(UIAlertAction(title: "取消", style: .cancel))
             present(vc, animated: true)
         case .download:
             break
@@ -242,7 +242,7 @@ extension BookcaseViewController {
                 }))
             }
             
-            vc.addAction(UIAlertAction(title: "没事", style: .cancel, handler: nil))
+            vc.addAction(UIAlertAction(title: "没事", style: .cancel))
             
             present(vc, animated: true)
         }
@@ -262,7 +262,7 @@ extension BookcaseViewController {
             vc.addAction(UIAlertAction(title: "确认", style: .default, handler: { _ in
                 self.navigationController?.pushViewController(GalleryViewController(book: book), animated: true)
             }))
-            vc.addAction(UIAlertAction(title: "算了", style: .cancel, handler: nil))
+            vc.addAction(UIAlertAction(title: "算了", style: .cancel))
             present(vc, animated: true)
         }
     }

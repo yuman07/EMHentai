@@ -36,17 +36,17 @@ final actor DownloadManager {
             return
         }
         
-        try? FileManager.default.createDirectory(at: URL(fileURLWithPath: book.folderPath), withIntermediateDirectories: true, attributes: nil)
+        try? FileManager.default.createDirectory(at: URL(fileURLWithPath: book.folderPath), withIntermediateDirectories: true)
         
         taskMap[book.gid] = Task {
             await pp_download(book)
             taskMap[book.gid] = nil
             if downloadState(of: book) == .finish {
-                NotificationCenter.default.post(name: DownloadManager.DownloadStateChangedNotification, object: book.gid, userInfo: nil)
+                NotificationCenter.default.post(name: DownloadManager.DownloadStateChangedNotification, object: book.gid)
             }
         }
         
-        NotificationCenter.default.post(name: DownloadManager.DownloadStateChangedNotification, object: book.gid, userInfo: nil)
+        NotificationCenter.default.post(name: DownloadManager.DownloadStateChangedNotification, object: book.gid)
     }
     
     nonisolated func suspend(_ book: Book) {
@@ -56,7 +56,7 @@ final actor DownloadManager {
     private func p_suspend(_ book: Book) {
         taskMap[book.gid]?.cancel()
         taskMap[book.gid] = nil
-        NotificationCenter.default.post(name: DownloadManager.DownloadStateChangedNotification, object: book.gid, userInfo: nil)
+        NotificationCenter.default.post(name: DownloadManager.DownloadStateChangedNotification, object: book.gid)
     }
     
     nonisolated func remove(_ book: Book) {
@@ -67,7 +67,7 @@ final actor DownloadManager {
         taskMap[book.gid]?.cancel()
         taskMap[book.gid] = nil
         try? FileManager.default.removeItem(atPath: book.folderPath)
-        NotificationCenter.default.post(name: DownloadManager.DownloadStateChangedNotification, object: book.gid, userInfo: nil)
+        NotificationCenter.default.post(name: DownloadManager.DownloadStateChangedNotification, object: book.gid)
     }
     
     func downloadState(of book: Book) -> DownloadState {
@@ -147,7 +147,7 @@ final actor DownloadManager {
                             .serializingDownload(using: URLResponseSerializer(), automaticallyCancelling: true)
                             .value, FileManager.default.fileExists(atPath: p.path) else { return }
                     
-                    NotificationCenter.default.post(name: DownloadManager.DownloadPageSuccessNotification, object: (book.gid, imgIndex), userInfo: nil)
+                    NotificationCenter.default.post(name: DownloadManager.DownloadPageSuccessNotification, object: (book.gid, imgIndex))
                 }
             }
         })

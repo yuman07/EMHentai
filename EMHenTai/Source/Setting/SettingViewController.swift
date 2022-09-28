@@ -52,7 +52,14 @@ final class SettingViewController: UITableViewController {
         token = NotificationCenter.default.addObserver(forName: SettingManager.LoginStateChangedNotification,
                                                        object: nil,
                                                        queue: .main) { [weak self] _ in
-            self?.tableView.reloadSections([0], with: .none)
+            guard let self else { return }
+            self.tableView.reloadSections([0], with: .none)
+            
+            if SettingManager.shared.isLogin {
+                let vc = UIAlertController(title: "提示", message: "登录成功", preferredStyle: .alert)
+                vc.addAction(UIAlertAction(title: "好的", style: .default))
+                UIApplication.shared.keyWindow?.rootViewController?.present(vc, animated: true)
+            }
         }
     }
     
@@ -74,10 +81,10 @@ final class SettingViewController: UITableViewController {
             alertVC.addAction(UIAlertAction(title: "提交", style: .default, handler: { _ in
                 SettingManager.shared.loginWith(cookie: self.cookieTextField?.text ?? "")
             }))
-            alertVC.addAction(UIAlertAction(title: "取消", style: .cancel, handler: nil))
+            alertVC.addAction(UIAlertAction(title: "取消", style: .cancel))
             self.present(alertVC, animated: true)
         }))
-        vc.addAction(UIAlertAction(title: "取消", style: .cancel, handler: nil))
+        vc.addAction(UIAlertAction(title: "取消", style: .cancel))
         present(vc, animated: true)
     }
     
@@ -90,7 +97,7 @@ final class SettingViewController: UITableViewController {
                 self.reloadDataSize()
             }
         }))
-        vc.addAction(UIAlertAction(title: "取消", style: .cancel, handler: nil))
+        vc.addAction(UIAlertAction(title: "取消", style: .cancel))
         present(vc, animated: true)
     }
 }
