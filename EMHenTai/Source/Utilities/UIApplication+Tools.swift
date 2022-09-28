@@ -5,7 +5,6 @@
 //  Created by yuman on 2022/2/1.
 //
 
-import Foundation
 import UIKit
 
 extension UIApplication {

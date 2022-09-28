@@ -5,7 +5,6 @@
 //  Created by yuman on 2022/1/18.
 //
 
-import Foundation
 import WebKit
 import Kingfisher
 
