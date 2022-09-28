@@ -62,6 +62,18 @@ final class SettingViewController: UITableViewController {
         }
     }
     
+    private func login() {
+        let vc = UIAlertController(title: "请选择登录方式", message: nil, preferredStyle: .actionSheet)
+        vc.addAction(UIAlertAction(title: "账号密码", style: .default, handler: { _ in
+            self.navigationController?.pushViewController(LoginViewController(), animated: true)
+        }))
+        vc.addAction(UIAlertAction(title: "Cookie", style: .default, handler: { _ in
+         //   self.navigationController?.pushViewController(LoginViewController(), animated: true)
+        }))
+        vc.addAction(UIAlertAction(title: "取消", style: .cancel, handler: nil))
+        present(vc, animated: true)
+    }
+    
     private func clearOtherData() {
         guard dataSize.otherSize > 0 else { return }
         let vc = UIAlertController(title: "提示", message: "确定要清除其他数据吗？\n（包含如封面图等数据）", preferredStyle: .alert)
@@ -72,7 +84,7 @@ final class SettingViewController: UITableViewController {
             }
         }))
         vc.addAction(UIAlertAction(title: "取消", style: .cancel, handler: nil))
-        present(vc, animated: true, completion: nil)
+        present(vc, animated: true)
     }
 }
 
@@ -148,7 +160,7 @@ extension SettingViewController {
                 SettingManager.shared.logout()
             } else {
                 SettingManager.shared.logout()
-                navigationController?.pushViewController(LoginViewController(), animated: true)
+                login()
             }
         case 1:
             if indexPath.row == 2 {

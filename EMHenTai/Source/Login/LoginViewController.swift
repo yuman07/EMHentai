@@ -38,7 +38,7 @@ final class LoginViewController: WebViewController {
             vc.addAction(UIAlertAction(title: "好的", style: .default, handler: { _ in
                 self.navigationController?.popViewController(animated: true)
             }))
-            self.present(vc, animated: true, completion: nil)
+            self.present(vc, animated: true)
         }
     }
 }
