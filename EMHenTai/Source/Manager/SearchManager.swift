@@ -5,7 +5,6 @@
 //  Created by yuman on 2022/1/14.
 //
 
-import Foundation
 import Alamofire
 
 protocol SearchManagerCallbackDelegate: AnyObject {

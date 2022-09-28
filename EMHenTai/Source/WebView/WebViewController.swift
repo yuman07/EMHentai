@@ -5,7 +5,6 @@
 //  Created by yuman on 2022/2/18.
 //
 
-import UIKit
 import WebKit
 
 class WebViewController: UIViewController {

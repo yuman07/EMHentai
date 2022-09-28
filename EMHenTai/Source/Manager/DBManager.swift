@@ -5,7 +5,6 @@
 //  Created by yuman on 2022/1/20.
 //
 
-import Foundation
 import CoreData
 
 final class DBManager {
