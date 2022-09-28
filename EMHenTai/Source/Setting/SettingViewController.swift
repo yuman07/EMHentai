@@ -11,6 +11,7 @@ import UIKit
 final class SettingViewController: UITableViewController {
     private var dataSize = (historySize: 0, downloadSize: 0, otherSize: 0)
     private var token: NSObjectProtocol?
+    private var cookieTextField: UITextField?
     
     init() {
         super.init(style: .grouped)
@@ -68,7 +69,13 @@ final class SettingViewController: UITableViewController {
             self.navigationController?.pushViewController(LoginViewController(), animated: true)
         }))
         vc.addAction(UIAlertAction(title: "Cookie", style: .default, handler: { _ in
-         //   self.navigationController?.pushViewController(LoginViewController(), animated: true)
+            let alertVC = UIAlertController(title: "登录", message: "请在此输入Cookie", preferredStyle: .alert)
+            alertVC.addTextField { self.cookieTextField = $0 }
+            alertVC.addAction(UIAlertAction(title: "提交", style: .default, handler: { _ in
+                SettingManager.shared.loginWith(cookie: self.cookieTextField?.text ?? "")
+            }))
+            alertVC.addAction(UIAlertAction(title: "取消", style: .cancel, handler: nil))
+            self.present(alertVC, animated: true)
         }))
         vc.addAction(UIAlertAction(title: "取消", style: .cancel, handler: nil))
         present(vc, animated: true)
