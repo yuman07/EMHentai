@@ -12,7 +12,7 @@ final class BookcaseFooterView: UIView {
         case empty = " "
         case loading = "加载中..."
         case noData = "无数据"
-        case noMoreData = "没有更多数据了"
+        case noMoreData = "没有更多了"
         case netError = "网络错误：请检查网络连接或VPN设置"
         case ipError = "IP错误：IP地址被禁，请尝试更换节点"
     }

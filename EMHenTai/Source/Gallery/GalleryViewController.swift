@@ -83,8 +83,10 @@ final class GalleryViewController: UICollectionViewController {
         
         isRotating = true
         let currentIndex = lastSeenPageIndex
+        collectionView.collectionViewLayout.invalidateLayout()
         coordinator.animate(alongsideTransition: nil) { _ in
             self.isRotating = false
+            self.collectionView.collectionViewLayout.invalidateLayout()
             self.collectionView.scrollToItem(at: IndexPath(row: currentIndex, section: 0), at: .left, animated: false)
         }
     }
@@ -129,7 +131,7 @@ final class GalleryViewController: UICollectionViewController {
 // MARK: UICollectionViewDelegateFlowLayout
 extension GalleryViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        collectionView.bounds.size
+        isRotating ? .zero : collectionView.bounds.size
     }
 }
 
