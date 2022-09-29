@@ -70,7 +70,7 @@ final class SettingViewController: UITableViewController {
     }
     
     private func login() {
-        let vc = UIAlertController(title: "请选择登录方式", message: nil, preferredStyle: .actionSheet)
+        let vc = UIAlertController(title: "请选择登录方式", message: nil, preferredStyle: .alert)
         vc.addAction(UIAlertAction(title: "账号密码", style: .default, handler: { _ in
             self.navigationController?.pushViewController(LoginViewController(), animated: true)
         }))

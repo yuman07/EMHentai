@@ -186,7 +186,7 @@ extension BookcaseViewController {
 extension BookcaseViewController {
     private func showAlertVC(with book: Book) {
         Task {
-            let vc = UIAlertController(title: "", message: book.showTitle, preferredStyle: .actionSheet)
+            let vc = UIAlertController(title: "", message: book.showTitle, preferredStyle: .alert)
             
             if !DBManager.shared.contains(gid: book.gid, of: .download) {
                 vc.addAction(UIAlertAction(title: "下载", style: .default, handler: { _ in
