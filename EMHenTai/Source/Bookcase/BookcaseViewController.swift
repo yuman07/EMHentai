@@ -73,11 +73,7 @@ final class BookcaseViewController: UITableViewController {
     }
     
     private func setupViewModel() {
-        if type == .home {
-            SearchManager.shared.delegate = viewModel
-        } else {
-            DBManager.shared.delegate = viewModel
-        }
+        if type == .home { SearchManager.shared.delegate = viewModel }
     }
     
     private func setupCombine() {
@@ -85,7 +81,7 @@ final class BookcaseViewController: UITableViewController {
             .receive(on: DispatchQueue.main)
             .scan([Book](), { [weak self] oldValue, newValue in
                 guard let self else { return newValue }
-                self.navigationItem.rightBarButtonItem?.isEnabled = !newValue.isEmpty
+                if self.type == .history { self.navigationItem.rightBarButtonItem?.isEnabled = !newValue.isEmpty }
                 var animated = !oldValue.isEmpty
                 if self.type == .home { animated = animated && self.viewModel.searchInfo.pageIndex > 0 }
                 self.reloadTableViewData(animated: animated)

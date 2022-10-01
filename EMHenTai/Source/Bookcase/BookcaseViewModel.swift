@@ -16,9 +16,22 @@ final class BookcaseViewModel {
     private let type: BookcaseViewController.BookcaseType
     private var hasMore = true
     private(set) var searchInfo = SearchInfo()
+    private var cancelBag = Set<AnyCancellable>()
     
     init(type: BookcaseViewController.BookcaseType) {
         self.type = type
+        setupCombine()
+    }
+    
+    private func setupCombine() {
+        guard type != .home else { return }
+        NotificationCenter.default
+            .publisher(for: DBManager.DBChangedNotification)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] notification in
+                self?.refreshData()
+            }
+            .store(in: &cancelBag)
     }
     
     func refreshData() {
@@ -65,11 +78,5 @@ extension BookcaseViewModel: SearchManagerCallbackDelegate {
         
         isRefreshing = false
         self.searchInfo = searchInfo
-    }
-}
-
-extension BookcaseViewModel: DBManagerDelegate {
-    func DBChanged(of type: DBManager.DBType) {
-        refreshData()
     }
 }

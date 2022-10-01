@@ -7,10 +7,6 @@
 
 import CoreData
 
-protocol DBManagerDelegate: AnyObject {
-    func DBChanged(of type: DBManager.DBType)
-}
-
 final class DBManager {
     enum DBType: String, CaseIterable {
         case history = "HistoryBook"
@@ -19,7 +15,7 @@ final class DBManager {
     
     static let shared = DBManager()
     
-    weak var delegate: DBManagerDelegate?
+    static let DBChangedNotification = NSNotification.Name(rawValue: "EMHenTai.DBManager.DBChangedNotification")
     
     private var context: NSManagedObjectContext?
     private var booksMap = [DBType: [Book]]()
@@ -58,9 +54,7 @@ final class DBManager {
             
             self.booksMap[type]?.insert(book, at: 0)
             
-            DispatchQueue.main.async { [weak self] in
-                self?.delegate?.DBChanged(of: type)
-            }
+            NotificationCenter.default.post(name: Self.DBChangedNotification, object: nil)
             
             guard let context = self.context else { return }
             context.perform {
@@ -79,9 +73,7 @@ final class DBManager {
             
             self.booksMap[type]?.removeAll { $0.gid == book.gid }
             
-            DispatchQueue.main.async { [weak self] in
-                self?.delegate?.DBChanged(of: type)
-            }
+            NotificationCenter.default.post(name: Self.DBChangedNotification, object: nil)
             
             guard let context = self.context else { return }
             context.perform {
@@ -101,9 +93,7 @@ final class DBManager {
             
             self.booksMap[type]?.removeAll()
             
-            DispatchQueue.main.async { [weak self] in
-                self?.delegate?.DBChanged(of: type)
-            }
+            NotificationCenter.default.post(name: Self.DBChangedNotification, object: nil)
             
             guard let context = self.context else { return }
             context.perform {
