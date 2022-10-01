@@ -29,9 +29,6 @@ final class TagViewController: UITableViewController {
     private func setupUI() {
         tableView.backgroundColor = .systemGroupedBackground
         tableView.rowHeight = 44
-        tableView.estimatedRowHeight = 0
-        tableView.estimatedSectionHeaderHeight = 0
-        tableView.estimatedSectionFooterHeight = 0
         tableView.tableHeaderView = UIView()
         tableView.bounces = false
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: NSStringFromClass(UITableViewCell.self))

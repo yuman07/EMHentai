@@ -22,12 +22,10 @@ final class SearchViewController: UITableViewController {
     
     private var searchInfo = SearchInfo() {
         didSet {
-            navigationItem.rightBarButtonItem?.isEnabled = {
+            navigationItem.rightBarButtonItem?.isEnabled =
                 !searchInfo.categories.isEmpty && (searchInfo.source == .EHentai || SettingManager.shared.isLogin)
-            }()
-            if oldValue.keyWord == searchInfo.keyWord {
-                tableView.reloadData()
-            }
+            
+            if oldValue.keyWord == searchInfo.keyWord { tableView.reloadData() }
         }
     }
     
@@ -57,9 +55,8 @@ final class SearchViewController: UITableViewController {
         
         tableView.backgroundColor = .systemGroupedBackground
         tableView.rowHeight = 44
-        tableView.estimatedRowHeight = 0
-        tableView.estimatedSectionHeaderHeight = 0
-        tableView.estimatedSectionFooterHeight = 0
+        tableView.sectionHeaderHeight = 40
+        tableView.sectionFooterHeight = 0
         tableView.bounces = false
         tableView.register(SearchTextFieldCell.self, forCellReuseIdentifier: NSStringFromClass(SearchTextFieldCell.self))
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: NSStringFromClass(UITableViewCell.self))
@@ -103,14 +100,6 @@ extension SearchViewController {
         default:
             return 0
         }
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        40
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        .leastNormalMagnitude
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
