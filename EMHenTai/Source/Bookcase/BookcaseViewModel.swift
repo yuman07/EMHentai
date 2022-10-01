@@ -45,7 +45,6 @@ extension BookcaseViewModel: SearchManagerCallbackDelegate {
         guard searchInfo.pageIndex == 0 else { return }
         searchInfo.saveDB()
         isRefreshing = true
-
     }
     
     func searchFinishCallback(searchInfo: SearchInfo, result: Result<[Book], SearchManager.SearchError>) {
@@ -72,10 +71,6 @@ extension BookcaseViewModel: SearchManagerCallbackDelegate {
 
 extension BookcaseViewModel: DBManagerDelegate {
     func DBChanged(of type: DBManager.DBType) {
-        if self.type == .history && type == .history {
-            self.books = DBManager.shared.books(of: .history)
-        } else if self.type == .download && type == .download {
-            self.books = DBManager.shared.books(of: .download)
-        }
+        refreshData()
     }
 }
