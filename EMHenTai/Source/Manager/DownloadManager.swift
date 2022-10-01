@@ -10,7 +10,7 @@ import Alamofire
 import Kingfisher
 
 final actor DownloadManager {
-    enum DownloadState {
+    enum State {
         case before
         case ing
         case suspend
@@ -70,7 +70,7 @@ final actor DownloadManager {
         NotificationCenter.default.post(name: DownloadManager.DownloadStateChangedNotification, object: book.gid)
     }
     
-    func downloadState(of book: Book) -> DownloadState {
+    func downloadState(of book: Book) -> State {
         if book.downloadedFileCount == book.fileCountNum + 1 {
             return .finish
         } else if taskMap[book.gid] != nil {

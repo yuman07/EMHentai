@@ -46,7 +46,7 @@ extension BookcaseViewModel: SearchManagerCallbackDelegate {
         isRefreshing = true
     }
     
-    func searchFinishCallback(searchInfo: SearchInfo, result: Result<[Book], SearchManager.SearchError>) {
+    func searchFinishCallback(searchInfo: SearchInfo, result: Result<[Book], SearchManager.Error>) {
         switch result {
         case .success(let newBooks):
             hasMore = !newBooks.isEmpty

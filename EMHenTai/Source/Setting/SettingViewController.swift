@@ -11,7 +11,6 @@ import Combine
 final class SettingViewController: UITableViewController {
     private var dataSize = (historySize: 0, downloadSize: 0, otherSize: 0)
     private var cancelBag = Set<AnyCancellable>()
-    private weak var cookieTextField: UITextField?
     
     init() {
         super.init(style: .grouped)
@@ -72,9 +71,11 @@ final class SettingViewController: UITableViewController {
         }))
         vc.addAction(UIAlertAction(title: "Cookie", style: .default, handler: { _ in
             let alertVC = UIAlertController(title: "登录", message: "请在此输入Cookie", preferredStyle: .alert)
-            alertVC.addTextField { self.cookieTextField = $0 }
-            alertVC.addAction(UIAlertAction(title: "提交", style: .default, handler: { _ in
-                SettingManager.shared.loginWith(cookie: self.cookieTextField?.text ?? "")
+            alertVC.addTextField()
+            alertVC.addAction(UIAlertAction(title: "提交", style: .default, handler: { [weak alertVC] _ in
+                if let cookie = alertVC?.textFields?.first?.text, !cookie.isEmpty {
+                    SettingManager.shared.loginWith(cookie: cookie)
+                }
             }))
             alertVC.addAction(UIAlertAction(title: "取消", style: .cancel))
             self.present(alertVC, animated: true)

@@ -9,11 +9,11 @@ import Alamofire
 
 protocol SearchManagerCallbackDelegate: AnyObject {
     func searchStartCallback(searchInfo: SearchInfo)
-    func searchFinishCallback(searchInfo: SearchInfo, result: Result<[Book], SearchManager.SearchError>)
+    func searchFinishCallback(searchInfo: SearchInfo, result: Result<[Book], SearchManager.Error>)
 }
 
 final actor SearchManager {
-    enum SearchError: String, Error {
+    enum Error: String, Swift.Error {
         case netError
         case ipError = "Your IP address has been temporarily banned for excessive pageloads"
     }
@@ -49,11 +49,11 @@ final actor SearchManager {
         }
     }
     
-    private nonisolated func pp_searchWith(info: SearchInfo) async -> Result<[Book], SearchError> {
+    private nonisolated func pp_searchWith(info: SearchInfo) async -> Result<[Book], Error> {
         guard let value = try? await AF.request(info.requestString, interceptor: RetryPolicy()).serializingString(automaticallyCancelling: true).value else {
             return .failure(.netError)
         }
-        guard !value.contains(SearchError.ipError.rawValue) else { return .failure(.ipError) }
+        guard !value.contains(Error.ipError.rawValue) else { return .failure(.ipError) }
         
         let ids = value
             .allSubStringOf(target: info.source.rawValue + "g/", endCharater: "/", count: 2)
