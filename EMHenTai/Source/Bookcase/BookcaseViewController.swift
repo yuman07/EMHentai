@@ -86,7 +86,9 @@ final class BookcaseViewController: UITableViewController {
             .scan([Book](), { [weak self] oldValue, newValue in
                 guard let self else { return newValue }
                 self.navigationItem.rightBarButtonItem?.isEnabled = !newValue.isEmpty
-                self.reloadTableViewData(animated: !oldValue.isEmpty)
+                var animated = !oldValue.isEmpty
+                if self.type == .home { animated = animated && self.viewModel.searchInfo.pageIndex > 0 }
+                self.reloadTableViewData(animated: animated)
                 return newValue
             })
             .sink(receiveValue: { _ in })

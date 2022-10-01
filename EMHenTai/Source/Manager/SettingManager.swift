@@ -15,7 +15,7 @@ final class SettingManager {
     
     private var cancelBag = Set<AnyCancellable>()
     
-    lazy var isLogin = checkLogin() {
+    lazy private(set) var isLogin = checkLogin() {
         didSet {
             if isLogin != oldValue {
                 NotificationCenter.default.post(name: SettingManager.LoginStateChangedNotification, object: nil)

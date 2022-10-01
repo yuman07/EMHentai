@@ -9,13 +9,13 @@ import Foundation
 import Combine
 
 final class BookcaseViewModel {
-    @Published var books = [Book]()
-    @Published var hint = BookcaseFooterView.HintType.empty
-    @Published var isRefreshing = false
+    @Published private(set) var books = [Book]()
+    @Published private(set) var hint = BookcaseFooterView.HintType.empty
+    @Published private(set) var isRefreshing = false
     
     private let type: BookcaseViewController.BookcaseType
     private var hasMore = true
-    private var searchInfo = SearchInfo()
+    private(set) var searchInfo = SearchInfo()
     
     init(type: BookcaseViewController.BookcaseType) {
         self.type = type
