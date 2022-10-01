@@ -6,11 +6,12 @@
 //
 
 import UIKit
+import Combine
 
 final class GalleryViewController: UICollectionViewController {
     private let book: Book
     private var isRotating = false
-    private var token: NSObjectProtocol?
+    private var cancelBag = Set<AnyCancellable>()
     private var lastSeenPageIndex: Int {
         get { UserDefaults.standard.integer(forKey: "GalleryViewController_lastSeenPageIndex_\(book.gid)") }
         set { UserDefaults.standard.set(newValue, forKey: "GalleryViewController_lastSeenPageIndex_\(book.gid)") }
@@ -40,13 +41,12 @@ final class GalleryViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        setupNotification()
+        setupCombine()
         backToLastSeenPage()
         startDownload()
     }
     
     deinit {
-        token.flatMap { NotificationCenter.default.removeObserver($0) }
         if !DBManager.shared.contains(gid: book.gid, of: .download) {
             DownloadManager.shared.suspend(book)
         }
@@ -69,13 +69,15 @@ final class GalleryViewController: UICollectionViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "回到首页", style: .plain, target: self, action: #selector(backToFirstPage))
     }
     
-    private func setupNotification() {
-        token = NotificationCenter.default.addObserver(forName: DownloadManager.DownloadPageSuccessNotification,
-                                                       object: nil,
-                                                       queue: .main) { [weak self] notification in
-            guard let self, let (gid, index) = notification.object as? (Int, Int), gid == self.book.gid else { return }
-            self.collectionView.reloadItems(at: [IndexPath(row: index, section: 0)])
-        }
+    private func setupCombine() {
+        NotificationCenter.default
+            .publisher(for: DownloadManager.DownloadPageSuccessNotification)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] notification in
+                guard let self, let (gid, index) = notification.object as? (Int, Int), gid == self.book.gid else { return }
+                self.collectionView.reloadItems(at: [IndexPath(row: index, section: 0)])
+            }
+            .store(in: &cancelBag)
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {

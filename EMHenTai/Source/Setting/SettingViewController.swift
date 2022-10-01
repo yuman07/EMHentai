@@ -6,10 +6,11 @@
 //
 
 import UIKit
+import Combine
 
 final class SettingViewController: UITableViewController {
     private var dataSize = (historySize: 0, downloadSize: 0, otherSize: 0)
-    private var token: NSObjectProtocol?
+    private var cancelBag = Set<AnyCancellable>()
     private weak var cookieTextField: UITextField?
     
     init() {
@@ -20,14 +21,10 @@ final class SettingViewController: UITableViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    deinit {
-        token.flatMap { NotificationCenter.default.removeObserver($0) }
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        setupNotification()
+        setupCombine()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -47,19 +44,21 @@ final class SettingViewController: UITableViewController {
         navigationItem.title = "设置"
     }
     
-    private func setupNotification() {
-        token = NotificationCenter.default.addObserver(forName: SettingManager.LoginStateChangedNotification,
-                                                       object: nil,
-                                                       queue: .main) { [weak self] _ in
-            guard let self else { return }
-            self.tableView.reloadSections([0], with: .none)
-            
-            if SettingManager.shared.isLogin {
-                let vc = UIAlertController(title: "提示", message: "登录成功", preferredStyle: .alert)
-                vc.addAction(UIAlertAction(title: "好的", style: .default))
-                UIApplication.shared.keyWindow?.rootViewController?.present(vc, animated: true)
+    private func setupCombine() {
+        NotificationCenter.default
+            .publisher(for: SettingManager.LoginStateChangedNotification)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                guard let self else { return }
+                self.tableView.reloadSections([0], with: .none)
+                
+                if SettingManager.shared.isLogin {
+                    let vc = UIAlertController(title: "提示", message: "登录成功", preferredStyle: .alert)
+                    vc.addAction(UIAlertAction(title: "好的", style: .default))
+                    UIApplication.shared.keyWindow?.rootViewController?.present(vc, animated: true)
+                }
             }
-        }
+            .store(in: &cancelBag)
     }
     
     private func reloadDataSize() {

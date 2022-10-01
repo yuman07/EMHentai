@@ -7,10 +7,13 @@
 
 import UIKit
 import Kingfisher
+import Combine
 
 final class BookcaseTableViewCell: UITableViewCell {
     var book: Book?
     var longPressBlock: (() -> Void)?
+    
+    private var cancelBag = Set<AnyCancellable>()
     
     private let thumbImageView = {
         let view = UIImageView()
@@ -60,7 +63,7 @@ final class BookcaseTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
         setupGesture()
-        setupNoticication()
+        setupCombine()
     }
     
     required init?(coder: NSCoder) {
@@ -101,9 +104,21 @@ final class BookcaseTableViewCell: UITableViewCell {
         contentView.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(longPressAction)))
     }
     
-    private func setupNoticication() {
-        NotificationCenter.default.addObserver(self, selector: #selector(downloadStatusChanged(notification:)), name: DownloadManager.DownloadPageSuccessNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(downloadStatusChanged(notification:)), name: DownloadManager.DownloadStateChangedNotification, object: nil)
+    private func setupCombine() {
+        NotificationCenter.default.publisher(for: DownloadManager.DownloadPageSuccessNotification)
+            .merge(with: NotificationCenter.default.publisher(for: DownloadManager.DownloadStateChangedNotification))
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] notification in
+                guard let self, let book = self.book else { return }
+                var gid: Int?
+                if notification.name == DownloadManager.DownloadPageSuccessNotification {
+                    gid = (notification.object as? (Int, Int))?.0
+                } else if notification.name == DownloadManager.DownloadStateChangedNotification {
+                    gid = notification.object as? Int
+                }
+                if let gid, gid == book.gid { self.updateProgress() }
+            }
+            .store(in: &cancelBag)
     }
     
     private func updateProgress() {
@@ -139,17 +154,6 @@ final class BookcaseTableViewCell: UITableViewCell {
         fileCountLabel.text = "\(book.fileCountNum)页"
         progressLabel.text = ""
         updateProgress()
-    }
-    
-    @objc
-    private func downloadStatusChanged(notification: Notification) {
-        var gid: Int?
-        if notification.name == DownloadManager.DownloadPageSuccessNotification {
-            gid = (notification.object as? (Int, Int))?.0
-        } else if notification.name == DownloadManager.DownloadStateChangedNotification {
-            gid = notification.object as? Int
-        }
-        if let gid, let book, book.gid == gid { updateProgress() }
     }
     
     @objc

@@ -7,12 +7,13 @@
 
 import WebKit
 import Kingfisher
+import Combine
 
 final class SettingManager {
     static let shared = SettingManager()
     static let LoginStateChangedNotification = NSNotification.Name(rawValue: "EMHenTai.SettingManager.LoginStateChangedNotification")
     
-    private var token: NSObjectProtocol?
+    private var cancelBag = Set<AnyCancellable>()
     
     lazy var isLogin = checkLogin() {
         didSet {
@@ -23,20 +24,18 @@ final class SettingManager {
     }
     
     private init() {
-        setupNotification()
+        setupCombine()
     }
     
-    deinit {
-        token.flatMap { NotificationCenter.default.removeObserver($0) }
-    }
-    
-    private func setupNotification() {
-        token = NotificationCenter.default.addObserver(forName: NSNotification.Name.NSHTTPCookieManagerCookiesChanged,
-                                                       object: nil,
-                                                       queue: .main) { [weak self] _ in
-            guard let self else { return }
-            self.isLogin = self.checkLogin()
-        }
+    private func setupCombine() {
+        NotificationCenter.default
+            .publisher(for: .NSHTTPCookieManagerCookiesChanged)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                guard let self else { return }
+                self.isLogin = self.checkLogin()
+            }
+            .store(in: &cancelBag)
     }
     
     func loginWith(cookie: String) {
