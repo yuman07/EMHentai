@@ -7,6 +7,10 @@
 
 import CoreData
 
+protocol DBManagerDelegate: AnyObject {
+    func DBChanged(of type: DBManager.DBType)
+}
+
 final class DBManager {
     enum DBType: String, CaseIterable {
         case history = "HistoryBook"
@@ -14,6 +18,8 @@ final class DBManager {
     }
     
     static let shared = DBManager()
+    
+    weak var delegate: DBManagerDelegate?
     
     private var context: NSManagedObjectContext?
     private var booksMap = [DBType: [Book]]()
@@ -52,6 +58,8 @@ final class DBManager {
             
             self.booksMap[type]?.insert(book, at: 0)
             
+            self.delegate?.DBChanged(of: type)
+            
             guard let context = self.context else { return }
             context.perform {
                 let request = NSFetchRequest<NSFetchRequestResult>(entityName: type.rawValue)
@@ -68,6 +76,8 @@ final class DBManager {
             guard let self else { return }
             
             self.booksMap[type]?.removeAll { $0.gid == book.gid }
+            
+            self.delegate?.DBChanged(of: type)
             
             guard let context = self.context else { return }
             context.perform {
@@ -86,6 +96,8 @@ final class DBManager {
             guard let self else { return }
             
             self.booksMap[type]?.removeAll()
+            
+            self.delegate?.DBChanged(of: type)
             
             guard let context = self.context else { return }
             context.perform {

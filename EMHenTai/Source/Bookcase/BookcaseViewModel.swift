@@ -69,3 +69,13 @@ extension BookcaseViewModel: SearchManagerCallbackDelegate {
         self.searchInfo = searchInfo
     }
 }
+
+extension BookcaseViewModel: DBManagerDelegate {
+    func DBChanged(of type: DBManager.DBType) {
+        if self.type == .history && type == .history {
+            self.books = DBManager.shared.books(of: .history)
+        } else if self.type == .download && type == .download {
+            self.books = DBManager.shared.books(of: .download)
+        }
+    }
+}
