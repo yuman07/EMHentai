@@ -19,6 +19,7 @@
 		7A1C12B327995C5E00ADD54E /* EMDB.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7A1C12B127995C5E00ADD54E /* EMDB.xcdatamodeld */; };
 		7A1C12B5279A8CC000ADD54E /* FileManager+Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1C12B4279A8CC000ADD54E /* FileManager+Tools.swift */; };
 		7A1C12B7279A8EE400ADD54E /* Int+Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1C12B6279A8EE400ADD54E /* Int+Tools.swift */; };
+		7A3F29DA28E8342E00F8CC6B /* BookcaseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A3F29D928E8342E00F8CC6B /* BookcaseViewModel.swift */; };
 		7A5CA04C27A9770C00E9FDF9 /* UIApplication+Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A5CA04B27A9770C00E9FDF9 /* UIApplication+Tools.swift */; };
 		7A5FE79527D384ED0042B712 /* UIImage+Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A5FE79427D384ED0042B712 /* UIImage+Tools.swift */; };
 		7A5FE79927D389310042B712 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A5FE79827D389310042B712 /* LoginViewController.swift */; };
@@ -55,6 +56,7 @@
 		7A1C12B227995C5E00ADD54E /* EMDB.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = EMDB.xcdatamodel; sourceTree = "<group>"; };
 		7A1C12B4279A8CC000ADD54E /* FileManager+Tools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileManager+Tools.swift"; sourceTree = "<group>"; };
 		7A1C12B6279A8EE400ADD54E /* Int+Tools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Tools.swift"; sourceTree = "<group>"; };
+		7A3F29D928E8342E00F8CC6B /* BookcaseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookcaseViewModel.swift; sourceTree = "<group>"; };
 		7A5CA04B27A9770C00E9FDF9 /* UIApplication+Tools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+Tools.swift"; sourceTree = "<group>"; };
 		7A5FE79427D384ED0042B712 /* UIImage+Tools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Tools.swift"; sourceTree = "<group>"; };
 		7A5FE79827D389310042B712 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -149,6 +151,7 @@
 				7A6C95C627911DC200077093 /* BookcaseViewController.swift */,
 				7A11677927954C7A00C200CA /* BookcaseTableViewCell.swift */,
 				7A1167922797D80B00C200CA /* BookcaseFooterView.swift */,
+				7A3F29D928E8342E00F8CC6B /* BookcaseViewModel.swift */,
 			);
 			path = Bookcase;
 			sourceTree = "<group>";
@@ -331,6 +334,7 @@
 				7A1C12B327995C5E00ADD54E /* EMDB.xcdatamodeld in Sources */,
 				7A1167852796970F00C200CA /* SettingManager.swift in Sources */,
 				7A11677A27954C7A00C200CA /* BookcaseTableViewCell.swift in Sources */,
+				7A3F29DA28E8342E00F8CC6B /* BookcaseViewModel.swift in Sources */,
 				7A1167932797D80B00C200CA /* BookcaseFooterView.swift in Sources */,
 				7AD3B2E9279E810A000702C6 /* TranslateManager.swift in Sources */,
 				7ACADDC027BF3E2700D8FC9B /* WebViewController.swift in Sources */,

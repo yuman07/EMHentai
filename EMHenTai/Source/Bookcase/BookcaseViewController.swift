@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 import Kingfisher
 
 final class BookcaseViewController: UITableViewController {
@@ -16,15 +17,14 @@ final class BookcaseViewController: UITableViewController {
     }
     
     private let type: BookcaseType
+    private let viewModel: BookcaseViewModel
     private let footerView = BookcaseFooterView()
-    
-    private var searchInfo: SearchInfo?
-    private var books = [Book]()
-    private var hasMore = false
     private var dataSource: UITableViewDiffableDataSource<Int, Book>?
+    private var cancelBag = Set<AnyCancellable>()
     
     init(type: BookcaseType) {
         self.type = type
+        self.viewModel = BookcaseViewModel(type: type)
         super.init(style: .plain)
         hidesBottomBarWhenPushed = false
     }
@@ -36,7 +36,8 @@ final class BookcaseViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        setupDelegate()
+        setupViewModel()
+        setupCombine()
         setupDataSource()
         refreshData()
     }
@@ -74,8 +75,39 @@ final class BookcaseViewController: UITableViewController {
         }
     }
     
-    private func setupDelegate() {
-        if type == .home { SearchManager.shared.delegate = self }
+    private func setupViewModel() {
+        if type == .home { SearchManager.shared.delegate = viewModel }
+    }
+    
+    private func setupCombine() {
+        viewModel.$books
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] value in
+                guard let self else { return }
+                self.navigationItem.rightBarButtonItem?.isEnabled = !value.isEmpty
+                self.reloadTableViewData(animated: true)
+            }
+            .store(in: &cancelBag)
+        
+        viewModel.$hint
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] value in
+                self?.footerView.hint = value
+            }
+            .store(in: &cancelBag)
+        
+        viewModel.$isRefreshing
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] value in
+                guard let self else { return }
+                if value {
+                    self.tableView.setContentOffset(CGPoint(x: 0, y: -self.refreshControl!.frame.size.height * 3), animated: false)
+                    self.refreshControl?.beginRefreshing()
+                } else {
+                    self.refreshControl?.endRefreshing()
+                }
+            }
+            .store(in: &cancelBag)
     }
     
     private func setupDataSource() {
@@ -95,42 +127,8 @@ final class BookcaseViewController: UITableViewController {
         guard let dataSource else { return }
         var snapshot = NSDiffableDataSourceSnapshot<Int, Book>()
         snapshot.appendSections([0])
-        snapshot.appendItems(books, toSection: 0)
+        snapshot.appendItems(viewModel.books, toSection: 0)
         dataSource.apply(snapshot, animatingDifferences: animated)
-    }
-}
-
-// MARK: SearchManagerCallbackDelegate
-extension BookcaseViewController: SearchManagerCallbackDelegate {
-    func searchStartCallback(searchInfo: SearchInfo) {
-        guard searchInfo.pageIndex == 0 else { return }
-        searchInfo.saveDB()
-        tableView.setContentOffset(CGPoint(x: 0, y: -refreshControl!.frame.size.height * 3), animated: false)
-        refreshControl?.beginRefreshing()
-    }
-    
-    func searchFinishCallback(searchInfo: SearchInfo, result: Result<[Book], SearchManager.SearchError>) {
-        switch result {
-        case .success(let books):
-            hasMore = !books.isEmpty
-            if searchInfo.pageIndex == 0 { self.books = books }
-            else { self.books += books }
-            self.books = self.books.unique()
-            if !hasMore { footerView.hint = self.books.isEmpty ? .noData : .noMoreData }
-            else { footerView.hint = .loading }
-        case .failure(let error):
-            if (searchInfo.pageIndex == 0) { books = [] }
-            switch error {
-            case .netError:
-                footerView.hint = .netError
-            case .ipError:
-                footerView.hint = .ipError
-            }
-        }
-        
-        self.searchInfo = searchInfo
-        refreshControl?.endRefreshing()
-        reloadTableViewData(animated: searchInfo.pageIndex > 0)
     }
 }
 
@@ -138,22 +136,11 @@ extension BookcaseViewController: SearchManagerCallbackDelegate {
 extension BookcaseViewController {
     @objc
     private func refreshData() {
-        switch type {
-        case .home:
-            SearchManager.shared.searchWith(info: SearchInfo())
-        case .history, .download:
-            let animated = !books.isEmpty
-            books = (type == .history) ? DBManager.shared.books(of: .history) : DBManager.shared.books(of: .download)
-            if (type == .history) { navigationItem.rightBarButtonItem?.isEnabled = !books.isEmpty }
-            footerView.hint = books.isEmpty ? .noData : .noMoreData
-            reloadTableViewData(animated: animated)
-        }
+        viewModel.refreshData()
     }
     
     private func loadMoreData() {
-        guard type == .home, var nextInfo = searchInfo, hasMore else { return }
-        nextInfo.pageIndex += 1
-        SearchManager.shared.searchWith(info: nextInfo)
+        viewModel.loadMoreData()
     }
 }
 
@@ -165,7 +152,7 @@ extension BookcaseViewController {
         case .home:
             navigationController?.pushViewController(SearchViewController(), animated: true)
         case .history:
-            guard !books.isEmpty else { return }
+            guard !viewModel.books.isEmpty else { return }
             let vc = UIAlertController(title: "提示", message: "确定要清除所有历史记录吗？\n（不会影响已下载内容）", preferredStyle: .alert)
             vc.addAction(UIAlertAction(title: "清除", style: .default, handler: { _ in
                 DBManager.shared.books(of: .history)
@@ -252,8 +239,8 @@ extension BookcaseViewController {
 extension BookcaseViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        guard indexPath.row < books.count else { return }
-        let book = books[indexPath.row]
+        guard indexPath.row < viewModel.books.count else { return }
+        let book = viewModel.books[indexPath.row]
         if !book.isOffensive {
             navigationController?.pushViewController(GalleryViewController(book: book), animated: true)
         } else {
@@ -267,7 +254,7 @@ extension BookcaseViewController {
     }
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        let prefetchPoint = Int(Double(books.count) * 0.7)
+        let prefetchPoint = Int(Double(viewModel.books.count) * 0.7)
         if indexPath.row >= prefetchPoint { loadMoreData() }
     }
 }
