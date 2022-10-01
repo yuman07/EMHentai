@@ -58,7 +58,9 @@ final class DBManager {
             
             self.booksMap[type]?.insert(book, at: 0)
             
-            self.delegate?.DBChanged(of: type)
+            DispatchQueue.main.async { [weak self] in
+                self?.delegate?.DBChanged(of: type)
+            }
             
             guard let context = self.context else { return }
             context.perform {
@@ -77,7 +79,9 @@ final class DBManager {
             
             self.booksMap[type]?.removeAll { $0.gid == book.gid }
             
-            self.delegate?.DBChanged(of: type)
+            DispatchQueue.main.async { [weak self] in
+                self?.delegate?.DBChanged(of: type)
+            }
             
             guard let context = self.context else { return }
             context.perform {
@@ -97,7 +101,9 @@ final class DBManager {
             
             self.booksMap[type]?.removeAll()
             
-            self.delegate?.DBChanged(of: type)
+            DispatchQueue.main.async { [weak self] in
+                self?.delegate?.DBChanged(of: type)
+            }
             
             guard let context = self.context else { return }
             context.perform {

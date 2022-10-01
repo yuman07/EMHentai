@@ -136,17 +136,10 @@ final class BookcaseViewController: UITableViewController {
         snapshot.appendItems(viewModel.books, toSection: 0)
         dataSource.apply(snapshot, animatingDifferences: animated)
     }
-}
-
-// MARK: load Data
-extension BookcaseViewController {
+    
     @objc
     private func refreshData() {
         viewModel.refreshData()
-    }
-    
-    private func loadMoreData() {
-        viewModel.loadMoreData()
     }
 }
 
@@ -158,7 +151,6 @@ extension BookcaseViewController {
         case .home:
             navigationController?.pushViewController(SearchViewController(), animated: true)
         case .history:
-            guard !viewModel.books.isEmpty else { return }
             let vc = UIAlertController(title: "提示", message: "确定要清除所有历史记录吗？\n（不会影响已下载内容）", preferredStyle: .alert)
             vc.addAction(UIAlertAction(title: "清除", style: .default, handler: { _ in
                 DBManager.shared.books(of: .history)
@@ -257,7 +249,7 @@ extension BookcaseViewController {
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         let prefetchPoint = Int(Double(viewModel.books.count) * 0.7)
-        if indexPath.row >= prefetchPoint { loadMoreData() }
+        if indexPath.row >= prefetchPoint { viewModel.loadMoreData() }
     }
 }
 
