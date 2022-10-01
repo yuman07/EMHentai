@@ -20,6 +20,7 @@
 		7A1C12B5279A8CC000ADD54E /* FileManager+Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1C12B4279A8CC000ADD54E /* FileManager+Tools.swift */; };
 		7A1C12B7279A8EE400ADD54E /* Int+Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1C12B6279A8EE400ADD54E /* Int+Tools.swift */; };
 		7A3F29DA28E8342E00F8CC6B /* BookcaseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A3F29D928E8342E00F8CC6B /* BookcaseViewModel.swift */; };
+		7A3F29DC28E8907300F8CC6B /* SearchInfo+Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A3F29DB28E8907300F8CC6B /* SearchInfo+Tools.swift */; };
 		7A5CA04C27A9770C00E9FDF9 /* UIApplication+Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A5CA04B27A9770C00E9FDF9 /* UIApplication+Tools.swift */; };
 		7A5FE79527D384ED0042B712 /* UIImage+Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A5FE79427D384ED0042B712 /* UIImage+Tools.swift */; };
 		7A5FE79927D389310042B712 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A5FE79827D389310042B712 /* LoginViewController.swift */; };
@@ -57,6 +58,7 @@
 		7A1C12B4279A8CC000ADD54E /* FileManager+Tools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileManager+Tools.swift"; sourceTree = "<group>"; };
 		7A1C12B6279A8EE400ADD54E /* Int+Tools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Tools.swift"; sourceTree = "<group>"; };
 		7A3F29D928E8342E00F8CC6B /* BookcaseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookcaseViewModel.swift; sourceTree = "<group>"; };
+		7A3F29DB28E8907300F8CC6B /* SearchInfo+Tools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SearchInfo+Tools.swift"; sourceTree = "<group>"; };
 		7A5CA04B27A9770C00E9FDF9 /* UIApplication+Tools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+Tools.swift"; sourceTree = "<group>"; };
 		7A5FE79427D384ED0042B712 /* UIImage+Tools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Tools.swift"; sourceTree = "<group>"; };
 		7A5FE79827D389310042B712 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -106,12 +108,13 @@
 			isa = PBXGroup;
 			children = (
 				7A1C12B6279A8EE400ADD54E /* Int+Tools.swift */,
-				7A1167942797DEA600C200CA /* Book+Tools.swift */,
 				7AE1CBF028D42EEF00888582 /* Array+Tools.swift */,
 				7A11677C2795690500C200CA /* String+Tools.swift */,
 				7A5FE79427D384ED0042B712 /* UIImage+Tools.swift */,
 				7A1C12B4279A8CC000ADD54E /* FileManager+Tools.swift */,
 				7A5CA04B27A9770C00E9FDF9 /* UIApplication+Tools.swift */,
+				7A1167942797DEA600C200CA /* Book+Tools.swift */,
+				7A3F29DB28E8907300F8CC6B /* SearchInfo+Tools.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -329,6 +332,7 @@
 				7AB967F5279117CC0006466A /* AppDelegate.swift in Sources */,
 				7A1167812796887500C200CA /* GalleryCollectionViewCell.swift in Sources */,
 				7A6C95D327911EB200077093 /* Book.swift in Sources */,
+				7A3F29DC28E8907300F8CC6B /* SearchInfo+Tools.swift in Sources */,
 				7A1C12B5279A8CC000ADD54E /* FileManager+Tools.swift in Sources */,
 				7A6C95D727911EF300077093 /* DownloadManager.swift in Sources */,
 				7A1C12B327995C5E00ADD54E /* EMDB.xcdatamodeld in Sources */,
