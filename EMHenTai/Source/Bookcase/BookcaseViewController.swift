@@ -205,16 +205,16 @@ extension BookcaseViewController {
                 }))
             }
             
-            if !book.tags.isEmpty {
-                vc.addAction(UIAlertAction(title: "搜索相关Tag", style: .default, handler: { _ in
-                    self.navigationController?.pushViewController(TagViewController(book: book), animated: true)
-                }))
-            }
-            
             if let url = URL(string: book.webURLString(with: SettingManager.shared.isLogin ? .ExHentai : .EHentai)) {
                 vc.addAction(UIAlertAction(title: "打开原网页", style: .default, handler: { _ in
                     let image = ImageCache.default.retrieveImageInMemoryCache(forKey: book.thumb)
                     self.navigationController?.pushViewController(WebViewController(url: url, shareItem: (book.showTitle, image)), animated: true)
+                }))
+            }
+            
+            if !book.tags.isEmpty {
+                vc.addAction(UIAlertAction(title: "搜索相关Tag", style: .default, handler: { _ in
+                    self.navigationController?.pushViewController(TagViewController(book: book), animated: true)
                 }))
             }
             
