@@ -42,11 +42,6 @@ final class BookcaseViewController: UITableViewController {
         refreshData()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        if type != .home { refreshData() }
-    }
-    
     private func setupUI() {
         tableView.backgroundColor = .systemGroupedBackground
         tableView.rowHeight = 141
