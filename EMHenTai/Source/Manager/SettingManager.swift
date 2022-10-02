@@ -11,17 +11,9 @@ import Combine
 
 final class SettingManager {
     static let shared = SettingManager()
-    static let LoginStateChangedNotification = NSNotification.Name(rawValue: "EMHenTai.SettingManager.LoginStateChangedNotification")
     
+    private(set) lazy var loginStateSubject = CurrentValueSubject<Bool, Never>(checkLogin())
     private var cancelBag = Set<AnyCancellable>()
-    
-    lazy private(set) var isLogin = checkLogin() {
-        didSet {
-            if isLogin != oldValue {
-                NotificationCenter.default.post(name: SettingManager.LoginStateChangedNotification, object: nil)
-            }
-        }
-    }
     
     private init() {
         setupCombine()
@@ -33,7 +25,9 @@ final class SettingManager {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 guard let self else { return }
-                self.isLogin = self.checkLogin()
+                if case let newValue = self.checkLogin(), self.loginStateSubject.value != newValue {
+                    self.loginStateSubject.send(newValue)
+                }
             }
             .store(in: &cancelBag)
     }

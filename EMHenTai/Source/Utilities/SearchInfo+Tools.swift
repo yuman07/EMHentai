@@ -31,7 +31,7 @@ extension SearchInfo.Source: searchVCItemDataSource {
         case .EHentai:
             return "E-Hentai"
         case .ExHentai:
-            return "ExHentai" + (SettingManager.shared.isLogin ? "" : "(登录后可用)")
+            return "ExHentai" + (SettingManager.shared.loginStateSubject.value ? "" : "(登录后可用)")
         }
     }
 }

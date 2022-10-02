@@ -41,14 +41,13 @@ final class SettingViewController: UITableViewController {
     }
     
     private func setupCombine() {
-        NotificationCenter.default
-            .publisher(for: SettingManager.LoginStateChangedNotification)
+        SettingManager.shared.loginStateSubject
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
+            .sink { [weak self] isLogin in
                 guard let self else { return }
                 self.tableView.reloadSections([0], with: .none)
                 
-                if SettingManager.shared.isLogin {
+                if isLogin {
                     let vc = UIAlertController(title: "提示", message: "登录成功", preferredStyle: .alert)
                     vc.addAction(UIAlertAction(title: "好的", style: .default))
                     UIApplication.shared.keyWindow?.rootViewController?.present(vc, animated: true)
@@ -135,7 +134,7 @@ extension SettingViewController {
         
         switch indexPath.section {
         case 0:
-            cell.textLabel?.text = SettingManager.shared.isLogin ? "已登录：点击可登出" : "未登录：点击去登录"
+            cell.textLabel?.text = SettingManager.shared.loginStateSubject.value ? "已登录：点击可登出" : "未登录：点击去登录"
             cell.selectionStyle = .default
         case 1:
             let text: String
@@ -166,7 +165,7 @@ extension SettingViewController {
         
         switch indexPath.section {
         case 0:
-            if SettingManager.shared.isLogin {
+            if SettingManager.shared.loginStateSubject.value {
                 SettingManager.shared.logout()
             } else {
                 SettingManager.shared.logout()
