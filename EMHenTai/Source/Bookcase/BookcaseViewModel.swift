@@ -60,6 +60,9 @@ extension BookcaseViewModel: SearchManagerCallbackDelegate {
     }
     
     func searchFinishCallback(searchInfo: SearchInfo, result: Result<[Book], SearchManager.Error>) {
+        self.searchInfo = searchInfo
+        isRefreshing = false
+        
         switch result {
         case .success(let newBooks):
             hasMore = !newBooks.isEmpty
@@ -75,8 +78,5 @@ extension BookcaseViewModel: SearchManagerCallbackDelegate {
                 hint = .ipError
             }
         }
-        
-        isRefreshing = false
-        self.searchInfo = searchInfo
     }
 }

@@ -87,8 +87,9 @@ final class SettingManager {
     }
     
     private func createCookies(name: String, value: String) -> [HTTPCookie?] {
-        [HTTPCookie(properties: [.domain: ".exhentai.org", .name: name, .value: value, .path: "/", .expires: Date(timeInterval: 157784760, since: Date())]),
-         HTTPCookie(properties: [.domain: ".e-hentai.org", .name: name, .value: value, .path: "/", .expires: Date(timeInterval: 157784760, since: Date())])]
+        [".exhentai.org", ".e-hentai.org"].map {
+            HTTPCookie(properties: [.domain: $0, .name: name, .value: value, .path: "/", .expires: Date(timeInterval: 157784760, since: Date())])
+        }
     }
     
     private func checkLogin() -> Bool {
