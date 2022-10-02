@@ -44,9 +44,10 @@ final class SettingManager {
         let memberIDs = createCookies(name: "ipb_member_id", value: "\(coms[0].suffix(coms[0].count - 32))")
         let igneouss = createCookies(name: "igneous", value: "\(coms[1])")
         
-        for cookie in [passHashs, memberIDs, igneouss].flatMap({ $0 }).compactMap({ $0 }) {
-            HTTPCookieStorage.shared.setCookie(cookie)
-        }
+        [passHashs, memberIDs, igneouss]
+            .flatMap({ $0 })
+            .compactMap({ $0 })
+            .forEach { HTTPCookieStorage.shared.setCookie($0) }
     }
     
     func logout() {
