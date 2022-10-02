@@ -6,6 +6,7 @@
 //
 
 import CoreData
+import Combine
 
 final class DBManager {
     enum DBType: String, CaseIterable {
@@ -15,11 +16,11 @@ final class DBManager {
     
     static let shared = DBManager()
     
-    static let DBChangedNotification = NSNotification.Name(rawValue: "EMHenTai.DBManager.DBChangedNotification")
-    
+    let DBChangedSubject = PassthroughSubject<DBType, Never>()
     private var context: NSManagedObjectContext?
-    private var booksMap = [DBType: [Book]]()
+    @Published private var booksMap = [DBType: [Book]]()
     private let queue = DispatchQueue(label: "com.DBManager.ConcurrentQueue", attributes: .concurrent)
+    private var cancelBag = Set<AnyCancellable>()
     
     private init() {
         queue.async(flags: .barrier) { [weak self] in
@@ -37,6 +38,20 @@ final class DBManager {
                     return (try? context.fetch(request) as? [NSManagedObject]).flatMap { $0.map { Self.bookFrom(obj: $0) }.reversed() } ?? [Book]()
                 }()
             }
+            
+            self.$booksMap
+                .receive(on: DispatchQueue.main)
+                .scan([DBType: [Book]]()) { [weak self] oldValue, newValue in
+                    guard let self else { return newValue }
+                    DBType.allCases.forEach {
+                        if let old = oldValue[$0], let new = newValue[$0], old.count != new.count {
+                            self.DBChangedSubject.send($0)
+                        }
+                    }
+                    return newValue
+                }
+                .sink { _ in }
+                .store(in: &self.cancelBag)
         }
     }
     
@@ -53,8 +68,6 @@ final class DBManager {
             guard let self else { return }
             
             self.booksMap[type]?.insert(book, at: 0)
-            
-            NotificationCenter.default.post(name: Self.DBChangedNotification, object: nil)
             
             guard let context = self.context else { return }
             context.perform {
@@ -73,8 +86,6 @@ final class DBManager {
             
             self.booksMap[type]?.removeAll { $0.gid == book.gid }
             
-            NotificationCenter.default.post(name: Self.DBChangedNotification, object: nil)
-            
             guard let context = self.context else { return }
             context.perform {
                 let request = NSFetchRequest<NSFetchRequestResult>(entityName: type.rawValue)
@@ -92,8 +103,6 @@ final class DBManager {
             guard let self else { return }
             
             self.booksMap[type]?.removeAll()
-            
-            NotificationCenter.default.post(name: Self.DBChangedNotification, object: nil)
             
             guard let context = self.context else { return }
             context.perform {

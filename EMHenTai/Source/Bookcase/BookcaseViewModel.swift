@@ -25,11 +25,18 @@ final class BookcaseViewModel {
     
     private func setupCombine() {
         guard type != .home else { return }
-        NotificationCenter.default
-            .publisher(for: DBManager.DBChangedNotification)
+        DBManager.shared.DBChangedSubject
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] notification in
-                self?.refreshData()
+            .sink { [weak self] type in
+                guard let self else { return }
+                switch (type, self.type) {
+                case (.history, .history):
+                    fallthrough
+                case (.download, .download):
+                    self.refreshData()
+                default:
+                    break
+                }
             }
             .store(in: &cancelBag)
     }
