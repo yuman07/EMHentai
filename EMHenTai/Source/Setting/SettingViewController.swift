@@ -43,6 +43,7 @@ final class SettingViewController: UITableViewController {
     private func setupCombine() {
         SettingManager.shared.loginStateSubject
             .receive(on: DispatchQueue.main)
+            .dropFirst()
             .sink { [weak self] isLogin in
                 guard let self else { return }
                 self.tableView.reloadSections([0], with: .none)
