@@ -17,6 +17,7 @@ final class DBManager {
     static let shared = DBManager()
     
     let DBChangedSubject = PassthroughSubject<DBType, Never>()
+    
     private var context: NSManagedObjectContext?
     @Published private var booksMap = [DBType: [Book]]()
     private let queue = DispatchQueue(label: "com.DBManager.ConcurrentQueue", attributes: .concurrent)
@@ -40,7 +41,7 @@ final class DBManager {
             }
             
             self.$booksMap
-                .receive(on: DispatchQueue.main)
+                .receive(on: self.queue)
                 .scan([DBType: [Book]]()) { [weak self] oldValue, newValue in
                     guard let self else { return newValue }
                     DBType.allCases.forEach {
