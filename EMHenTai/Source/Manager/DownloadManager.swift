@@ -8,6 +8,7 @@
 import Foundation
 import Alamofire
 import Kingfisher
+import Combine
 
 final actor DownloadManager {
     enum State {
@@ -18,8 +19,9 @@ final actor DownloadManager {
     }
     
     static let shared = DownloadManager()
-    static let DownloadPageSuccessNotification = NSNotification.Name(rawValue: "EMHenTai.DownloadManager.DownloadPageSuccessNotification")
-    static let DownloadStateChangedNotification = NSNotification.Name(rawValue: "EMHenTai.DownloadManager.DownloadStateChangedNotification")
+    
+    nonisolated let downloadStateChangedSubject = PassthroughSubject<Book, Never>()
+    nonisolated let downloadPageSuccessSubject = PassthroughSubject<(book: Book, index: Int), Never>()
     
     private init() {}
     private let groupTotalImgNum = 40
@@ -42,11 +44,11 @@ final actor DownloadManager {
             await pp_download(book)
             taskMap[book.gid] = nil
             if downloadState(of: book) == .finish {
-                NotificationCenter.default.post(name: DownloadManager.DownloadStateChangedNotification, object: book.gid)
+                downloadStateChangedSubject.send(book)
             }
         }
         
-        NotificationCenter.default.post(name: DownloadManager.DownloadStateChangedNotification, object: book.gid)
+        downloadStateChangedSubject.send(book)
     }
     
     nonisolated func suspend(_ book: Book) {
@@ -56,7 +58,7 @@ final actor DownloadManager {
     private func p_suspend(_ book: Book) {
         taskMap[book.gid]?.cancel()
         taskMap[book.gid] = nil
-        NotificationCenter.default.post(name: DownloadManager.DownloadStateChangedNotification, object: book.gid)
+        downloadStateChangedSubject.send(book)
     }
     
     nonisolated func remove(_ book: Book) {
@@ -67,7 +69,7 @@ final actor DownloadManager {
         taskMap[book.gid]?.cancel()
         taskMap[book.gid] = nil
         try? FileManager.default.removeItem(atPath: book.folderPath)
-        NotificationCenter.default.post(name: DownloadManager.DownloadStateChangedNotification, object: book.gid)
+        downloadStateChangedSubject.send(book)
     }
     
     func downloadState(of book: Book) -> State {
@@ -147,7 +149,7 @@ final actor DownloadManager {
                             .serializingDownload(using: URLResponseSerializer(), automaticallyCancelling: true)
                             .value, FileManager.default.fileExists(atPath: p.path) else { return }
                     
-                    NotificationCenter.default.post(name: DownloadManager.DownloadPageSuccessNotification, object: (book.gid, imgIndex))
+                    self.downloadPageSuccessSubject.send((book, imgIndex))
                 }
             }
         })

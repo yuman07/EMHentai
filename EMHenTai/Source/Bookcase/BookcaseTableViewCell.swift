@@ -105,18 +105,12 @@ final class BookcaseTableViewCell: UITableViewCell {
     }
     
     private func setupCombine() {
-        NotificationCenter.default.publisher(for: DownloadManager.DownloadPageSuccessNotification)
-            .merge(with: NotificationCenter.default.publisher(for: DownloadManager.DownloadStateChangedNotification))
+        DownloadManager.shared.downloadPageSuccessSubject
+            .merge(with: DownloadManager.shared.downloadStateChangedSubject.map { (book: $0, index: 0) })
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] notification in
-                guard let self, let book = self.book else { return }
-                var gid: Int?
-                if notification.name == DownloadManager.DownloadPageSuccessNotification {
-                    gid = (notification.object as? (Int, Int))?.0
-                } else if notification.name == DownloadManager.DownloadStateChangedNotification {
-                    gid = notification.object as? Int
-                }
-                if let gid, gid == book.gid { self.updateProgress() }
+            .sink { [weak self] obj in
+                guard let self, let book = self.book, obj.book.gid == book.gid else { return }
+                self.updateProgress()
             }
             .store(in: &cancelBag)
     }

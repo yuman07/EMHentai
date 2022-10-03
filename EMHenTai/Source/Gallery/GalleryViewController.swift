@@ -70,12 +70,11 @@ final class GalleryViewController: UICollectionViewController {
     }
     
     private func setupCombine() {
-        NotificationCenter.default
-            .publisher(for: DownloadManager.DownloadPageSuccessNotification)
+        DownloadManager.shared.downloadPageSuccessSubject
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] notification in
-                guard let self, let (gid, index) = notification.object as? (Int, Int), gid == self.book.gid else { return }
-                self.collectionView.reloadItems(at: [IndexPath(row: index, section: 0)])
+            .sink { [weak self] obj in
+                guard let self, obj.book.gid == self.book.gid else { return }
+                self.collectionView.reloadItems(at: [IndexPath(row: obj.index, section: 0)])
             }
             .store(in: &cancelBag)
     }
