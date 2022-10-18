@@ -104,7 +104,7 @@
 			path = Search;
 			sourceTree = "<group>";
 		};
-		7A11677B279568D200C200CA /* Utilities */ = {
+		7A11677B279568D200C200CA /* Tools */ = {
 			isa = PBXGroup;
 			children = (
 				7A1C12B6279A8EE400ADD54E /* Int+Tools.swift */,
@@ -116,7 +116,7 @@
 				7A1167942797DEA600C200CA /* Book+Tools.swift */,
 				7A3F29DB28E8907300F8CC6B /* SearchInfo+Tools.swift */,
 			);
-			path = Utilities;
+			path = Tools;
 			sourceTree = "<group>";
 		};
 		7A5FE79727D389170042B712 /* Login */ = {
@@ -204,7 +204,7 @@
 		7AB96808279118950006466A /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				7A11677B279568D200C200CA /* Utilities */,
+				7A11677B279568D200C200CA /* Tools */,
 				7A6C95C827911DD700077093 /* Model */,
 				7A6C95CA27911DF400077093 /* Manager */,
 				7A6C95CD27911E4C00077093 /* Bookcase */,
