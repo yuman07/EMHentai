@@ -12,7 +12,7 @@ import Combine
 final class SettingManager {
     static let shared = SettingManager()
     
-    private(set) lazy var loginStateSubject = CurrentValueSubject<Bool, Never>(checkLogin())
+    private(set) lazy var isLoginSubject = CurrentValueSubject<Bool, Never>(checkLogin())
     private var cancelBag = Set<AnyCancellable>()
     
     private init() {
@@ -25,8 +25,8 @@ final class SettingManager {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 guard let self else { return }
-                if case let newValue = self.checkLogin(), self.loginStateSubject.value != newValue {
-                    self.loginStateSubject.send(newValue)
+                if case let newValue = self.checkLogin(), self.isLoginSubject.value != newValue {
+                    self.isLoginSubject.send(newValue)
                 }
             }
             .store(in: &cancelBag)

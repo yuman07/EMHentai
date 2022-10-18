@@ -200,7 +200,7 @@ extension BookcaseViewController {
                 }))
             }
             
-            if let url = URL(string: book.webURLString(with: SettingManager.shared.loginStateSubject.value ? .ExHentai : .EHentai)) {
+            if let url = URL(string: book.webURLString(with: SettingManager.shared.isLoginSubject.value ? .ExHentai : .EHentai)) {
                 vc.addAction(UIAlertAction(title: "打开原网页", style: .default, handler: { _ in
                     let image = ImageCache.default.retrieveImageInMemoryCache(forKey: book.thumb)
                     self.navigationController?.pushViewController(WebViewController(url: url, shareItem: (book.showTitle, image)), animated: true)

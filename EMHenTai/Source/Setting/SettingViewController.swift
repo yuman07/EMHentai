@@ -41,7 +41,7 @@ final class SettingViewController: UITableViewController {
     }
     
     private func setupCombine() {
-        SettingManager.shared.loginStateSubject
+        SettingManager.shared.isLoginSubject
             .receive(on: DispatchQueue.main)
             .dropFirst()
             .sink { [weak self] isLogin in
@@ -135,7 +135,7 @@ extension SettingViewController {
         
         switch indexPath.section {
         case 0:
-            cell.textLabel?.text = SettingManager.shared.loginStateSubject.value ? "已登录：点击可登出" : "未登录：点击去登录"
+            cell.textLabel?.text = SettingManager.shared.isLoginSubject.value ? "已登录：点击可登出" : "未登录：点击去登录"
             cell.selectionStyle = .default
         case 1:
             let text: String
@@ -166,7 +166,7 @@ extension SettingViewController {
         
         switch indexPath.section {
         case 0:
-            if SettingManager.shared.loginStateSubject.value {
+            if SettingManager.shared.isLoginSubject.value {
                 SettingManager.shared.logout()
             } else {
                 SettingManager.shared.logout()
