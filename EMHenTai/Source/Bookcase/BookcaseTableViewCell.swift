@@ -10,9 +10,9 @@ import Kingfisher
 import Combine
 
 final class BookcaseTableViewCell: UITableViewCell {
-    var book: Book?
     var longPressBlock: (() -> Void)?
     
+    private var book: Book?
     private var cancelBag = Set<AnyCancellable>()
     
     private let thumbImageView = {
@@ -111,6 +111,12 @@ final class BookcaseTableViewCell: UITableViewCell {
             .sink { [weak self] obj in
                 guard let self, let book = self.book, obj.book.gid == book.gid else { return }
                 self.updateProgress()
+            }
+            .store(in: &cancelBag)
+        DBManager.shared.DBChangedSubject
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.updateProgress()
             }
             .store(in: &cancelBag)
     }

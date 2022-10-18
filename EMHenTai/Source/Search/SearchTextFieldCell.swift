@@ -8,7 +8,6 @@
 import UIKit
 
 final class SearchTextFieldCell: UITableViewCell {
-    
     var textChangedAction: ((String) -> Void)?
     
     lazy var searchTextField = {
