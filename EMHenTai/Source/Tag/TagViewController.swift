@@ -58,6 +58,7 @@ extension TagViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(UITableViewCell.self), for: indexPath)
         let tag = book.tags[indexPath.row]
         cell.textLabel?.text = tag + TranslateManager.shared.translateEn(tag)
+        cell.textLabel?.adjustsFontSizeToFitWidth = true
         return cell
     }
 }
