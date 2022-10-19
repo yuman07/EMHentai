@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol searchVCItemDataSource {
+protocol SearchVCItemDataSource {
     var searchItemTitle: String { get }
 }
 

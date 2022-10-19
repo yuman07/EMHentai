@@ -25,7 +25,7 @@ extension SearchInfo {
     }
 }
 
-extension SearchInfo.Source: searchVCItemDataSource {
+extension SearchInfo.Source: SearchVCItemDataSource {
     var searchItemTitle: String {
         switch self {
         case .EHentai:
@@ -36,7 +36,7 @@ extension SearchInfo.Source: searchVCItemDataSource {
     }
 }
 
-extension SearchInfo.Language: searchVCItemDataSource {
+extension SearchInfo.Language: SearchVCItemDataSource {
     var searchItemTitle: String {
         switch self {
         case .all:
@@ -47,7 +47,7 @@ extension SearchInfo.Language: searchVCItemDataSource {
     }
 }
 
-extension SearchInfo.Rating: searchVCItemDataSource {
+extension SearchInfo.Rating: SearchVCItemDataSource {
     var searchItemTitle: String {
         switch self {
         case .all:
@@ -64,7 +64,7 @@ extension SearchInfo.Rating: searchVCItemDataSource {
     }
 }
 
-extension SearchInfo.Category: searchVCItemDataSource {
+extension SearchInfo.Category: SearchVCItemDataSource {
     var searchItemTitle: String {
         switch self {
         case .doujinshi:
