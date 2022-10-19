@@ -15,13 +15,11 @@ final class TranslateManager {
         guard let url = Bundle.main.urls(forResourcesWithExtension: ".json", subdirectory: nil)?.first,
               let data = try? Data(contentsOf: url),
               let obj = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
-              let content = obj["data"] as? [[String: Any]]
-        else { return }
+              let content = obj["data"] as? [[String: Any]] else { return }
         
         for dic in content {
             guard let namespace = dic["namespace"] as? String, namespace != "rows",
-                  let data = dic["data"] as? [String: [String: String]]
-            else { continue }
+                  let data = dic["data"] as? [String: [String: String]] else { continue }
             
             for (key, value) in data {
                 guard !key.isEmpty, let name = value["name"], !name.isEmpty, key.lowercased() != name.lowercased() else { continue }
