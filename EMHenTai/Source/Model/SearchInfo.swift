@@ -40,7 +40,6 @@ struct SearchInfo: Codable {
     }
     
     static let dbKey = "EMHenTai.SearchInfo.dbKey"
-    
     static var currentSource = SearchInfo().source
     
     var pageIndex = 0
