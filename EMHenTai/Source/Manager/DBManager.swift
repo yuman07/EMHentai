@@ -18,9 +18,9 @@ final class DBManager {
     
     let DBChangedSubject = PassthroughSubject<DBType, Never>()
     
-    private var context: NSManagedObjectContext?
     @Published private var booksMap = [DBType: [Book]]()
     private let queue = DispatchQueue(label: "com.DBManager.ConcurrentQueue", attributes: .concurrent)
+    private var context: NSManagedObjectContext?
     private var cancelBag = Set<AnyCancellable>()
     
     private init() {
