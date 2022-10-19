@@ -33,10 +33,7 @@ final actor DownloadManager {
     }
     
     private func p_download(_ book: Book) {
-        let state = downloadState(of: book)
-        if state == .ing || state == .finish {
-            return
-        }
+        guard case let state = downloadState(of: book), state != .ing && state != .finish else { return }
         
         try? FileManager.default.createDirectory(at: URL(fileURLWithPath: book.folderPath), withIntermediateDirectories: true)
         
@@ -157,8 +154,9 @@ final actor DownloadManager {
     
     private nonisolated func checkGroupNeedRequest(of book: Book, groupIndex: Int) -> Bool {
         for index in 0..<groupTotalImgNum {
-            let realIndex = groupIndex * groupTotalImgNum + index
-            guard realIndex < book.fileCountNum else { break }
+            guard case let realIndex = groupIndex * groupTotalImgNum + index, realIndex < book.fileCountNum else {
+                break
+            }
             if !FileManager.default.fileExists(atPath: book.imagePath(at: realIndex)) {
                 return true
             }
