@@ -24,36 +24,32 @@ final class DBManager {
     private var cancelBag = Set<AnyCancellable>()
     
     private init() {
-        queue.async(flags: .barrier) { [weak self] in
-            guard let self else { return }
-            
-            let container = NSPersistentContainer(name: "EMDB")
-            container.loadPersistentStores { _, error in
-                if error == nil { self.context = container.newBackgroundContext() }
-            }
-            
-            self.booksMap = DBType.allCases.reduce(into: [DBType: [Book]]()) { map, type in
-                map[type] = {
-                    guard let context = self.context else { return [Book]() }
-                    let request = NSFetchRequest<NSFetchRequestResult>(entityName: type.rawValue)
-                    return (try? context.fetch(request) as? [NSManagedObject]).flatMap { $0.map { Self.bookFrom(obj: $0) }.reversed() } ?? [Book]()
-                }()
-            }
-            
-            self.$booksMap
-                .receive(on: self.queue)
-                .scan([DBType: [Book]]()) { [weak self] oldValue, newValue in
-                    guard let self else { return newValue }
-                    DBType.allCases.forEach {
-                        if let old = oldValue[$0], let new = newValue[$0], old.count != new.count {
-                            self.DBChangedSubject.send($0)
-                        }
-                    }
-                    return newValue
-                }
-                .sink { _ in }
-                .store(in: &self.cancelBag)
+        let container = NSPersistentContainer(name: "EMDB")
+        container.loadPersistentStores { _, error in
+            if error == nil { self.context = container.newBackgroundContext() }
         }
+        
+        booksMap = DBType.allCases.reduce(into: [DBType: [Book]]()) { map, type in
+            map[type] = {
+                guard let context = self.context else { return [Book]() }
+                let request = NSFetchRequest<NSFetchRequestResult>(entityName: type.rawValue)
+                return (try? context.fetch(request) as? [NSManagedObject]).flatMap { $0.map { Self.bookFrom(obj: $0) }.reversed() } ?? [Book]()
+            }()
+        }
+        
+        $booksMap
+            .receive(on: queue)
+            .scan([DBType: [Book]]()) { [weak self] oldValue, newValue in
+                guard let self else { return newValue }
+                DBType.allCases.forEach {
+                    if let old = oldValue[$0], let new = newValue[$0], old.count != new.count {
+                        self.DBChangedSubject.send($0)
+                    }
+                }
+                return newValue
+            }
+            .sink { _ in }
+            .store(in: &cancelBag)
     }
     
     func books(of type: DBType) -> [Book] {
