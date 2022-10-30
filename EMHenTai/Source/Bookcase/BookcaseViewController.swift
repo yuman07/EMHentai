@@ -36,7 +36,6 @@ final class BookcaseViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        setupViewModel()
         setupCombine()
         setupDataSource()
         refreshData()
@@ -65,10 +64,6 @@ final class BookcaseViewController: UITableViewController {
         case .download:
             navigationItem.title = "下载"
         }
-    }
-    
-    private func setupViewModel() {
-        if type == .home { SearchManager.shared.delegate = viewModel }
     }
     
     private func setupCombine() {

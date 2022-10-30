@@ -24,50 +24,45 @@ final class BookcaseViewModel {
     }
     
     private func setupCombine() {
-        guard type != .home else { return }
-        DBManager.shared.DBChangedSubject
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] type in
-                guard let self else { return }
-                switch (type, self.type) {
-                case (.history, .history):
-                    fallthrough
-                case (.download, .download):
-                    self.refreshData()
-                default:
-                    break
+        if type == .home {
+            SearchManager.shared.eventSubject
+                .receive(on: DispatchQueue.main)
+                .sink { [weak self] evnet in
+                    guard let self else { return }
+                    switch evnet {
+                    case let .start(info: info):
+                        self.onSearchStart(info: info)
+                    case let .finish(info: info, result: result):
+                        self.onSearchFinish(info: info, result: result)
+                    }
                 }
-            }
-            .store(in: &cancelBag)
-    }
-    
-    func refreshData() {
-        switch type {
-        case .home:
-            searchInfo.pageIndex = 0
-            SearchManager.shared.searchWith(info: searchInfo)
-        case .history, .download:
-            books = (type == .history) ? DBManager.shared.books(of: .history) : DBManager.shared.books(of: .download)
-            hint = books.isEmpty ? .noData : .noMoreData
+                .store(in: &cancelBag)
+        } else {
+            DBManager.shared.DBChangedSubject
+                .receive(on: DispatchQueue.main)
+                .sink { [weak self] type in
+                    guard let self else { return }
+                    switch (type, self.type) {
+                    case (.history, .history):
+                        fallthrough
+                    case (.download, .download):
+                        self.refreshData()
+                    default:
+                        break
+                    }
+                }
+                .store(in: &cancelBag)
         }
     }
     
-    func loadMoreData() {
-        guard type == .home, hasMore, case var nextInfo = searchInfo else { return }
-        nextInfo.pageIndex += 1
-        SearchManager.shared.searchWith(info: nextInfo)
-    }
-}
-
-extension BookcaseViewModel: SearchManagerCallbackDelegate {
-    func searchStartCallback(searchInfo: SearchInfo) {
-        guard searchInfo.pageIndex == 0 else { return }
-        searchInfo.saveDB()
+    private func onSearchStart(info: SearchInfo) {
+        guard info.pageIndex == 0 else { return }
+        info.saveDB()
         isRefreshing = true
     }
     
-    func searchFinishCallback(searchInfo: SearchInfo, result: Result<[Book], SearchManager.Error>) {
-        self.searchInfo = searchInfo
+    private func onSearchFinish(info: SearchInfo, result: Result<[Book], SearchManager.Error>) {
+        searchInfo = info
         isRefreshing = false
         
         switch result {
@@ -85,5 +80,22 @@ extension BookcaseViewModel: SearchManagerCallbackDelegate {
                 hint = .ipError
             }
         }
+    }
+    
+    func refreshData() {
+        switch type {
+        case .home:
+            searchInfo.pageIndex = 0
+            SearchManager.shared.searchWith(info: searchInfo)
+        case .history, .download:
+            books = (type == .history) ? DBManager.shared.books(of: .history) : DBManager.shared.books(of: .download)
+            hint = books.isEmpty ? .noData : .noMoreData
+        }
+    }
+    
+    func loadMoreData() {
+        guard type == .home, hasMore, case var nextInfo = searchInfo else { return }
+        nextInfo.pageIndex += 1
+        SearchManager.shared.searchWith(info: nextInfo)
     }
 }

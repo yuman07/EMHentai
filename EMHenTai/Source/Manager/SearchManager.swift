@@ -6,13 +6,14 @@
 //
 
 import Alamofire
-
-protocol SearchManagerCallbackDelegate: AnyObject {
-    func searchStartCallback(searchInfo: SearchInfo)
-    func searchFinishCallback(searchInfo: SearchInfo, result: Result<[Book], SearchManager.Error>)
-}
+import Combine
 
 final actor SearchManager {
+    enum SearchEvent {
+        case start(info: SearchInfo)
+        case finish(info: SearchInfo, result: Result<[Book], SearchManager.Error>)
+    }
+    
     enum Error: String, Swift.Error {
         case netError
         case ipError = "Your IP address has been temporarily banned for excessive pageloads"
@@ -21,10 +22,9 @@ final actor SearchManager {
     static let shared = SearchManager()
     private init() {}
     
-    @MainActor
-    weak var delegate: SearchManagerCallbackDelegate?
-    
     private var currentTask: Task<Void, Never>?
+    
+    nonisolated let eventSubject = PassthroughSubject<SearchEvent, Never>()
     
     nonisolated func searchWith(info: SearchInfo) {
         Task { await p_searchWith(info: info) }
@@ -38,14 +38,12 @@ final actor SearchManager {
         currentTask?.cancel()
         
         currentTask = Task {
-            await MainActor.run { delegate?.searchStartCallback(searchInfo: info) }
-            guard !Task.isCancelled else { return }
+            eventSubject.send(.start(info: info))
             
             let result = await pp_searchWith(info: info)
-            guard !Task.isCancelled else { return }
             
             currentTask = nil
-            await MainActor.run { delegate?.searchFinishCallback(searchInfo: info, result: result) }
+            eventSubject.send(.finish(info: info, result: result))
         }
     }
     
