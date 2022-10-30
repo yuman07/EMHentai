@@ -20,7 +20,7 @@ final actor DownloadManager {
     
     static let shared = DownloadManager()
     
-    nonisolated let downloadStateChangedSubject = PassthroughSubject<Book, Never>()
+    nonisolated let downloadStateChangedSubject = PassthroughSubject<(book: Book, state: State), Never>()
     nonisolated let downloadPageSuccessSubject = PassthroughSubject<(book: Book, index: Int), Never>()
     
     private init() {}
@@ -41,11 +41,11 @@ final actor DownloadManager {
             await pp_download(book)
             taskMap[book.gid] = nil
             if downloadState(of: book) == .finish {
-                downloadStateChangedSubject.send(book)
+                downloadStateChangedSubject.send((book, .finish))
             }
         }
         
-        downloadStateChangedSubject.send(book)
+        downloadStateChangedSubject.send((book, .ing))
     }
     
     nonisolated func suspend(_ book: Book) {
@@ -55,7 +55,7 @@ final actor DownloadManager {
     private func p_suspend(_ book: Book) {
         taskMap[book.gid]?.cancel()
         taskMap[book.gid] = nil
-        downloadStateChangedSubject.send(book)
+        downloadStateChangedSubject.send((book, .suspend))
     }
     
     nonisolated func remove(_ book: Book) {
@@ -66,7 +66,7 @@ final actor DownloadManager {
         taskMap[book.gid]?.cancel()
         taskMap[book.gid] = nil
         try? FileManager.default.removeItem(atPath: book.folderPath)
-        downloadStateChangedSubject.send(book)
+        downloadStateChangedSubject.send((book, .before))
     }
     
     func downloadState(of book: Book) -> State {
