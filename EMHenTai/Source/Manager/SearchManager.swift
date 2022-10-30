@@ -42,8 +42,11 @@ final actor SearchManager {
             
             let result = await pp_searchWith(info: info)
             
+            if !Task.isCancelled {
+                eventSubject.send(.finish(info: info, result: result))
+            }
+            
             currentTask = nil
-            eventSubject.send(.finish(info: info, result: result))
         }
     }
     
