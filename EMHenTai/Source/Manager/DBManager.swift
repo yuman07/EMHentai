@@ -25,8 +25,8 @@ final class DBManager {
     
     private init() {
         let container = NSPersistentContainer(name: "EMDB")
-        container.loadPersistentStores { _, error in
-            if error == nil { self.context = container.newBackgroundContext() }
+        container.loadPersistentStores { [weak self] _, error in
+            if error == nil { self?.context = container.newBackgroundContext() }
         }
         
         booksMap = DBType.allCases.reduce(into: [DBType: [Book]]()) { map, type in
@@ -68,8 +68,6 @@ final class DBManager {
             
             guard let context = self.context else { return }
             context.perform {
-                let request = NSFetchRequest<NSFetchRequestResult>(entityName: type.rawValue)
-                request.predicate = NSPredicate(format: "gid = %d", book.gid)
                 let obj = NSEntityDescription.insertNewObject(forEntityName: type.rawValue, into: context)
                 Self.update(obj: obj, with: book)
                 try? context.save()
@@ -121,14 +119,14 @@ final class DBManager {
              uploader: obj.value(forKey: "uploader") as? String ?? "",
              filecount: obj.value(forKey: "filecount") as? String ?? "",
              filesize: obj.value(forKey: "filesize") as? Int ?? 0,
-             tags: (obj.value(forKey: "tags") as? String ?? "").components(separatedBy: ","),
+             tags: (obj.value(forKey: "tags") as? [String] ?? []),
              token: obj.value(forKey: "token") as? String ?? "",
              rating: obj.value(forKey: "rating") as? String ?? "",
              archiver_key: obj.value(forKey: "archiver_key") as? String ?? "",
              posted: obj.value(forKey: "posted") as? String ?? "",
              expunged: obj.value(forKey: "expunged") as? Bool ?? false,
              torrentcount: obj.value(forKey: "torrentcount") as? String ?? "",
-             torrents: (obj.value(forKey: "torrents") as? String ?? "").data(using: .utf8).flatMap { try? JSONDecoder().decode([Torrent].self, from: $0) } ?? [Torrent]())
+             torrents: (obj.value(forKey: "torrents") as? [Torrent] ?? []))
     }
     
     private static func update(obj: NSManagedObject, with book: Book) {
@@ -147,6 +145,6 @@ final class DBManager {
         obj.setValue(book.posted, forKey: "posted")
         obj.setValue(book.expunged, forKey: "expunged")
         obj.setValue(book.torrentcount, forKey: "torrentcount")
-        obj.setValue((try? JSONEncoder().encode(book.torrents)).flatMap { String(data: $0, encoding: .utf8) } ?? "", forKey: "torrents")
+        obj.setValue(book.torrents, forKey: "torrents")
     }
 }
