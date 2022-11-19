@@ -47,12 +47,16 @@ final class DBManager {
     }
     
     func contains(gid: Int, of type: DBType) -> Bool {
-        queue.sync { booksMap[type]?.contains(where: { $0.gid == gid }) ?? false }
+        queue.sync { p_contains(gid: gid, of: type) }
+    }
+    
+    private func p_contains(gid: Int, of type: DBType) -> Bool {
+        booksMap[type]?.contains(where: { $0.gid == gid }) ?? false
     }
     
     func insert(book: Book, of type: DBType) {
         queue.async(flags: .barrier) { [weak self] in
-            guard let self else { return }
+            guard let self, !self.p_contains(gid: book.gid, of: type) else { return }
             
             self.booksMap[type]?.insert(book, at: 0)
             self.DBChangedSubject.send(type)

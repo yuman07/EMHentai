@@ -20,6 +20,11 @@
         <fetchIndex name="bygid">
             <fetchIndexElement property="gid" type="Binary" order="ascending"/>
         </fetchIndex>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="gid"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
     </entity>
     <entity name="HistoryBook" representedClassName="HistoryBook" syncable="YES" codeGenerationType="class">
         <attribute name="archiver_key" attributeType="String"/>
@@ -41,5 +46,10 @@
         <fetchIndex name="bygid">
             <fetchIndexElement property="gid" type="Binary" order="ascending"/>
         </fetchIndex>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="gid"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
     </entity>
 </model>
