@@ -23,13 +23,5 @@ struct Book: Codable, Hashable {
     let posted: String
     let expunged: Bool
     let torrentcount: String
-    let torrents: [Torrent]
-}
-
-struct Torrent: Codable, Hashable {
-    let hash: String
-    let added: String
-    let name: String
-    let tsize: String
-    let fsize: String
+    let torrents: [[String: String]]
 }
