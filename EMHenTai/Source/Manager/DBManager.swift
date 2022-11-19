@@ -43,7 +43,7 @@ final class DBManager {
     }
     
     func books(of type: DBType) -> [Book] {
-        queue.sync { booksMap[type] ?? [Book]() }
+        queue.sync { booksMap[type] ?? [] }
     }
     
     func contains(gid: Int, of type: DBType) -> Bool {
