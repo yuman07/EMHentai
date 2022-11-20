@@ -29,7 +29,7 @@
 
 ## 预览图
 
-更多预览图可以在Screenshots文件夹中参看
+更多预览图可以去Screenshots文件夹中查看
 
 ![](https://github.com/yuman07/EMHentai/blob/main/Screenshots/IMG_1136.PNG?raw=true)
 
