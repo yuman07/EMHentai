@@ -27,6 +27,16 @@
 
 
 
+## 预览图
+
+更多预览图可以在Screenshots文件夹中参看
+
+![](https://github.com/yuman07/EMHentai/blob/main/Screenshots/IMG_1136.PNG?raw=true)
+
+![](https://github.com/yuman07/EMHentai/blob/main/Screenshots/IMG_1141.PNG?raw=true)
+
+![](https://github.com/yuman07/EMHentai/blob/main/Screenshots/IMG_1140.PNG?raw=true)
+
 ## 安装
 
 因为考虑到Ehentai的法律风险，这里就不直接提供IPA安装包了。
