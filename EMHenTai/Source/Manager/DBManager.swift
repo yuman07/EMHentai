@@ -25,10 +25,9 @@ final class DBManager {
     private init() {}
     
     func setupDB() {
-        let container = NSPersistentContainer(name: "EMDB")
-        
         queue.async(flags: .barrier) { [weak self] in
             guard let self else { return }
+            let container = NSPersistentContainer(name: "EMDB")
             container.loadPersistentStores { [weak self] _, error in
                 guard let self else { return }
                 if error == nil { self.context = container.newBackgroundContext() }
