@@ -20,23 +20,31 @@ final class DBManager {
     
     private var booksMap = [DBType: [Book]]()
     private let queue = DispatchQueue(label: "com.DBManager.ConcurrentQueue", attributes: .concurrent)
+    private let semaphore = DispatchSemaphore(value: 0)
     private var context: NSManagedObjectContext?
     private init() {}
     
     func setupDB() {
         let container = NSPersistentContainer(name: "EMDB")
-        container.loadPersistentStores { [weak self] _, error in
-            guard let self, error == nil else { return }
-            self.queue.async(flags: .barrier) { [weak self] in
+        
+        queue.async(flags: .barrier) { [weak self] in
+            guard let self else { return }
+            container.loadPersistentStores { [weak self] _, error in
                 guard let self else { return }
-                self.context = container.newBackgroundContext()
-                self.booksMap = DBType.allCases.reduce(into: [DBType: [Book]]()) { map, type in
-                    map[type] = {
-                        guard let context = self.context else { return [] }
-                        let request = NSFetchRequest<NSFetchRequestResult>(entityName: type.rawValue)
-                        return (try? context.fetch(request) as? [NSManagedObject]).flatMap { $0.map { Self.bookFrom(obj: $0) }.reversed() } ?? []
-                    }()
-                }
+                if error == nil { self.context = container.newBackgroundContext() }
+                self.semaphore.signal()
+            }
+            self.semaphore.wait()
+        }
+        
+        queue.async(flags: .barrier) { [weak self] in
+            guard let self else { return }
+            self.booksMap = DBType.allCases.reduce(into: [DBType: [Book]]()) { map, type in
+                map[type] = {
+                    guard let context = self.context else { return [] }
+                    let request = NSFetchRequest<NSFetchRequestResult>(entityName: type.rawValue)
+                    return (try? context.fetch(request) as? [NSManagedObject]).flatMap { $0.map { Self.bookFrom(obj: $0) }.reversed() } ?? []
+                }()
             }
         }
     }
