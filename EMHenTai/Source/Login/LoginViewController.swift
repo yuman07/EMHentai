@@ -26,8 +26,8 @@ extension LoginViewController: WKNavigationDelegate {
         webView.configuration.websiteDataStore.httpCookieStore.getAllCookies { cookies in
             cookies.forEach { HTTPCookieStorage.shared.setCookie($0) }
         }
-        if webView.url?.absoluteString == Self.forums {
-            webView.load(URLRequest(url: URL(string: SearchInfo.Source.ExHentai.rawValue)!))
+        if webView.url?.absoluteString == Self.forums, let homeURL = URL(string: SearchInfo.Source.ExHentai.rawValue) {
+            webView.load(URLRequest(url: homeURL))
         }
     }
 }

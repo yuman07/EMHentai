@@ -13,14 +13,14 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     
-    private func setupDB() {
-        DBManager.shared.setupDB()
-    }
-    
     private func setupKingfisher() {
         let c = KingfisherManager.shared.downloader.sessionConfiguration
         c.httpCookieStorage = HTTPCookieStorage.shared
         KingfisherManager.shared.downloader.sessionConfiguration = c
+    }
+    
+    private func setupDB() {
+        DBManager.shared.setupDB()
     }
     
     private func setupUI() {
@@ -32,8 +32,8 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         setupKingfisher()
-        setupUI()
         setupDB()
+        setupUI()
         return true
     }
 }
