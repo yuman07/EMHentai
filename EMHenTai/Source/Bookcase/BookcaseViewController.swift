@@ -5,9 +5,9 @@
 //  Created by yuman on 2022/1/14.
 //
 
-import UIKit
 import Combine
 import Kingfisher
+import UIKit
 
 final class BookcaseViewController: UITableViewController {
     enum BookcaseType {

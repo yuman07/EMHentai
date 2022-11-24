@@ -5,10 +5,10 @@
 //  Created by yuman on 2022/1/14.
 //
 
-import Foundation
 import Alamofire
-import Kingfisher
 import Combine
+import Foundation
+import Kingfisher
 
 final actor DownloadManager {
     enum State {

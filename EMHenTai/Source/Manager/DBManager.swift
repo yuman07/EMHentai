@@ -5,8 +5,8 @@
 //  Created by yuman on 2022/1/20.
 //
 
-import CoreData
 import Combine
+import CoreData
 
 final class DBManager {
     enum DBType: String, CaseIterable {

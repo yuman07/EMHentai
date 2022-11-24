@@ -5,9 +5,9 @@
 //  Created by yuman on 2022/1/18.
 //
 
-import WebKit
-import Kingfisher
 import Combine
+import Kingfisher
+import WebKit
 
 final class SettingManager {
     static let shared = SettingManager()

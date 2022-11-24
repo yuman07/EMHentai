@@ -5,8 +5,8 @@
 //  Created by yuman on 2022/1/14.
 //
 
-import UIKit
 import Kingfisher
+import UIKit
 
 @main
 final class AppDelegate: UIResponder, UIApplicationDelegate {

@@ -5,8 +5,8 @@
 //  Created by yuman on 2022/1/14.
 //
 
-import UIKit
 import Combine
+import UIKit
 
 final class SettingViewController: UITableViewController {
     private var dataSize = (historySize: 0, downloadSize: 0, otherSize: 0)

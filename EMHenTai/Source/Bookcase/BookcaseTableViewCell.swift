@@ -5,9 +5,8 @@
 //  Created by yuman on 2022/1/17.
 //
 
-import UIKit
-import Kingfisher
 import Combine
+import UIKit
 
 final class BookcaseTableViewCell: UITableViewCell {
     var longPressBlock: (() -> Void)?
