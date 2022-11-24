@@ -21,7 +21,6 @@ final class DBManager {
     private var booksMap = [DBType: [Book]]()
     private let queue = DispatchQueue(label: "com.DBManager.ConcurrentQueue", attributes: .concurrent)
     private var context: NSManagedObjectContext?
-    private var cancelBag = Set<AnyCancellable>()
     private init() {}
     
     func setupDB() {
