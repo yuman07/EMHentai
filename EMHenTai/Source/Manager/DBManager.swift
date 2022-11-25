@@ -34,13 +34,10 @@ final class DBManager {
                 self.semaphore.signal()
             }
             self.semaphore.wait()
-        }
-        
-        queue.async(flags: .barrier) { [weak self] in
-            guard let self else { return }
+            
+            guard let context = self.context else { return }
             self.booksMap = DBType.allCases.reduce(into: [DBType: [Book]]()) { map, type in
                 map[type] = {
-                    guard let context = self.context else { return [] }
                     let request = NSFetchRequest<NSFetchRequestResult>(entityName: type.rawValue)
                     return (try? context.fetch(request) as? [NSManagedObject]).flatMap { $0.map { Self.bookFrom(obj: $0) }.reversed() } ?? []
                 }()
