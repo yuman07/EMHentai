@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7A02F74729139EAE0036A898 /* tag-v6.5556.1-221103.json in Resources */ = {isa = PBXBuildFile; fileRef = 7A02F74629139EAE0036A898 /* tag-v6.5556.1-221103.json */; };
 		7A05E65D27948098001EE48F /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A05E65C27948098001EE48F /* SearchViewController.swift */; };
 		7A11677A27954C7A00C200CA /* BookcaseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A11677927954C7A00C200CA /* BookcaseTableViewCell.swift */; };
 		7A11677D2795690500C200CA /* String+Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A11677C2795690500C200CA /* String+Tools.swift */; };
@@ -35,6 +34,7 @@
 		7AB96801279117CD0006466A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7AB967FF279117CD0006466A /* LaunchScreen.storyboard */; };
 		7AB9680B279118F90006466A /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB9680A279118F90006466A /* RootViewController.swift */; };
 		7ACADDC027BF3E2700D8FC9B /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ACADDBF27BF3E2700D8FC9B /* WebViewController.swift */; };
+		7ACDAF5A295424AF0091B197 /* tag-v6.5850.1-221222.json in Resources */ = {isa = PBXBuildFile; fileRef = 7ACDAF59295424AF0091B197 /* tag-v6.5850.1-221222.json */; };
 		7AD3B2E7279E79D8000702C6 /* TagViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD3B2E6279E79D8000702C6 /* TagViewController.swift */; };
 		7AD3B2E9279E810A000702C6 /* TranslateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD3B2E8279E810A000702C6 /* TranslateManager.swift */; };
 		7AE1CBF128D42EEF00888582 /* Array+Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE1CBF028D42EEF00888582 /* Array+Tools.swift */; };
@@ -45,7 +45,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		7A02F74629139EAE0036A898 /* tag-v6.5556.1-221103.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "tag-v6.5556.1-221103.json"; sourceTree = "<group>"; };
 		7A05E65C27948098001EE48F /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		7A11677927954C7A00C200CA /* BookcaseTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookcaseTableViewCell.swift; sourceTree = "<group>"; };
 		7A11677C2795690500C200CA /* String+Tools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Tools.swift"; sourceTree = "<group>"; };
@@ -75,6 +74,7 @@
 		7AB96802279117CD0006466A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7AB9680A279118F90006466A /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 		7ACADDBF27BF3E2700D8FC9B /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
+		7ACDAF59295424AF0091B197 /* tag-v6.5850.1-221222.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "tag-v6.5850.1-221222.json"; sourceTree = "<group>"; };
 		7AD3B2E6279E79D8000702C6 /* TagViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagViewController.swift; sourceTree = "<group>"; };
 		7AD3B2E8279E810A000702C6 /* TranslateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslateManager.swift; sourceTree = "<group>"; };
 		7AE1CBF028D42EEF00888582 /* Array+Tools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Tools.swift"; sourceTree = "<group>"; };
@@ -223,7 +223,7 @@
 		7AB96809279118C00006466A /* Support */ = {
 			isa = PBXGroup;
 			children = (
-				7A02F74629139EAE0036A898 /* tag-v6.5556.1-221103.json */,
+				7ACDAF59295424AF0091B197 /* tag-v6.5850.1-221222.json */,
 				7AB967FD279117CD0006466A /* Assets.xcassets */,
 				7AB967FF279117CD0006466A /* LaunchScreen.storyboard */,
 				7AB96802279117CD0006466A /* Info.plist */,
@@ -315,8 +315,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				7AB96801279117CD0006466A /* LaunchScreen.storyboard in Resources */,
-				7A02F74729139EAE0036A898 /* tag-v6.5556.1-221103.json in Resources */,
 				7AB967FE279117CD0006466A /* Assets.xcassets in Resources */,
+				7ACDAF5A295424AF0091B197 /* tag-v6.5850.1-221222.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
