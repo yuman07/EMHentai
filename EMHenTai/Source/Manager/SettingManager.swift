@@ -77,17 +77,19 @@ final class SettingManager {
     func clearOtherData() async {
         await withUnsafeContinuation({ continuation in
             KingfisherManager.shared.cache.clearDiskCache {
-                guard let folders = try? FileManager.default.contentsOfDirectory(atPath: Book.downloadFolderPath), !folders.isEmpty else {
-                    continuation.resume()
-                    return
-                }
-                folders.compactMap({ Int($0) }).forEach {
-                    let path = Book.downloadFolderPath + "/\($0)"
-                    if !DBManager.shared.contains(gid: $0, of: .download) && !DBManager.shared.contains(gid: $0, of: .history) {
-                        try? FileManager.default.removeItem(atPath: path)
+                Task.detached {
+                    guard let folders = try? FileManager.default.contentsOfDirectory(atPath: Book.downloadFolderPath), !folders.isEmpty else {
+                        continuation.resume()
+                        return
                     }
+                    folders.compactMap({ Int($0) }).forEach {
+                        let path = Book.downloadFolderPath + "/\($0)"
+                        if !DBManager.shared.contains(gid: $0, of: .download) && !DBManager.shared.contains(gid: $0, of: .history) {
+                            try? FileManager.default.removeItem(atPath: path)
+                        }
+                    }
+                    continuation.resume()
                 }
-                continuation.resume()
             }
         })
     }
