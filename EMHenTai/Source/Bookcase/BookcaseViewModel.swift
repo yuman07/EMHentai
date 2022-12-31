@@ -69,7 +69,7 @@ final class BookcaseViewModel {
         case .success(let newBooks):
             let preBooks = books
             books = (searchInfo.pageIndex == 0 ? newBooks : books + newBooks).unique()
-            hasMore = preBooks != books
+            hasMore = (searchInfo.pageIndex == 0 ? !books.isEmpty : preBooks != books)
             if !hasMore { hint = books.isEmpty ? .noData : .noMoreData }
             else { hint = .loading }
         case .failure(let error):
