@@ -9,9 +9,10 @@ import Foundation
 
 extension SearchInfo {
     var requestString: String {
-        var url = source.rawValue + "?page=\(pageIndex)"
+        var url = source.rawValue + "/?"
+        url += "f_search=\((keyWord + language.rawValue).components(separatedBy: " ").map({ TranslateManager.shared.translateCn($0) }).joined(separator: "+"))"
         Category.allCases.forEach { url += "&f_\($0.rawValue)=\(categories.contains($0) ? 1 : 0)" }
-        url += "&f_search=\((keyWord + language.rawValue).components(separatedBy: " ").map({ TranslateManager.shared.translateCn($0) }).joined(separator: "+"))"
+        if !lastGid.isEmpty { url += "&next=\(lastGid)" }
         if rating.rawValue > 0 { url += "&advsearch=1&f_srdd=\(rating.rawValue + 1)" }
         return url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? url
     }

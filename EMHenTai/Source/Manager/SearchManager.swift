@@ -31,7 +31,7 @@ final actor SearchManager {
     }
     
     private func p_searchWith(info: SearchInfo) {
-        guard info.pageIndex == 0 || currentTask == nil else {
+        guard info.lastGid.isEmpty || currentTask == nil else {
             return
         }
         

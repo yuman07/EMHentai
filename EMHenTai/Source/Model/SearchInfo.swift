@@ -42,12 +42,13 @@ struct SearchInfo: Codable {
     static let dbKey = "EMHenTai.SearchInfo.dbKey"
     static var currentSource = SearchInfo().source
     
-    var pageIndex = 0
     var keyWord = ""
     var source = Source.EHentai
     var language = Language.all
     var rating = Rating.all
     var categories = Category.allCases
+    
+    var lastGid = ""
     
     init() {
         if let data = UserDefaults.standard.object(forKey: SearchInfo.dbKey) as? Data,

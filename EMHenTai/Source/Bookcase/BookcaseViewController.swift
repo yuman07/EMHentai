@@ -73,7 +73,7 @@ final class BookcaseViewController: UITableViewController {
                 guard let self else { return newValue }
                 if self.type == .history { self.navigationItem.rightBarButtonItem?.isEnabled = !newValue.isEmpty }
                 self.reloadTableViewData(animated: {
-                    if self.type == .home { return self.viewModel.searchInfo.pageIndex > 0 }
+                    if self.type == .home { return !self.viewModel.searchInfo.lastGid.isEmpty }
                     else { return !oldValue.isEmpty }
                 }())
                 return newValue

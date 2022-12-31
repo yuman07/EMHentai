@@ -56,7 +56,7 @@ final class BookcaseViewModel {
     }
     
     private func onSearchStart(info: SearchInfo) {
-        guard info.pageIndex == 0 else { return }
+        guard info.lastGid.isEmpty else { return }
         info.saveDB()
         isRefreshing = true
     }
@@ -68,12 +68,12 @@ final class BookcaseViewModel {
         switch result {
         case .success(let newBooks):
             let preBooks = books
-            books = (searchInfo.pageIndex == 0 ? newBooks : books + newBooks).unique()
-            hasMore = (searchInfo.pageIndex == 0 ? !books.isEmpty : preBooks != books)
+            books = (info.lastGid.isEmpty ? newBooks : books + newBooks).unique()
+            hasMore = (info.lastGid.isEmpty ? !books.isEmpty : preBooks != books)
             if !hasMore { hint = books.isEmpty ? .noData : .noMoreData }
             else { hint = .loading }
         case .failure(let error):
-            if (searchInfo.pageIndex == 0) { books = [] }
+            if (info.lastGid.isEmpty) { books = [] }
             switch error {
             case .netError:
                 hint = .netError
@@ -86,7 +86,7 @@ final class BookcaseViewModel {
     func refreshData() {
         switch type {
         case .home:
-            searchInfo.pageIndex = 0
+            searchInfo.lastGid = ""
             SearchManager.shared.searchWith(info: searchInfo)
         case .history, .download:
             books = (type == .history) ? DBManager.shared.books(of: .history) : DBManager.shared.books(of: .download)
@@ -96,7 +96,7 @@ final class BookcaseViewModel {
     
     func loadMoreData() {
         guard type == .home, hasMore, case var nextInfo = searchInfo else { return }
-        nextInfo.pageIndex += 1
+        nextInfo.lastGid = books.last.flatMap({ String($0.gid) }) ?? ""
         SearchManager.shared.searchWith(info: nextInfo)
     }
 }
