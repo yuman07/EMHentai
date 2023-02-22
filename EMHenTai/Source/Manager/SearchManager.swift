@@ -57,7 +57,7 @@ final actor SearchManager {
         guard !value.contains(Error.ipError.rawValue) else { return .failure(.ipError) }
         
         let ids = value
-            .allSubStringOf(target: info.source.rawValue + "g/", endCharater: "/", count: 2)
+            .allSubString(of: info.source.rawValue + "g/", endCharater: "/", count: 2)
             .map { $0.split(separator: "/") }
             .filter { $0.count == 2 }
         guard !ids.isEmpty else { return .success([]) }

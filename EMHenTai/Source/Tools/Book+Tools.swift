@@ -12,7 +12,7 @@ private let offensiveTags = Set(["guro", "snuff", "scat"])
 
 extension Book {
     static var downloadFolderPath: String {
-        NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first.flatMap { $0 + "/EMDownload" } ?? NSHomeDirectory() + "/Documents/EMDownload"
+        NSHomeDirectory() + "/Documents/EMDownload"
     }
     
     var folderPath: String {
@@ -39,8 +39,9 @@ extension Book {
         "\(source.rawValue)g/\(gid)/\(token)/"
     }
     
+    // content plus a cover
     var fileCountNum: Int {
-        Int(filecount) ?? 0
+        (Int(filecount) ?? 0) + 1
     }
     
     var downloadedFileCount: Int {

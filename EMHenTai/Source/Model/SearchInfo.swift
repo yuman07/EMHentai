@@ -47,7 +47,6 @@ struct SearchInfo: Codable {
     var language = Language.all
     var rating = Rating.all
     var categories = Category.allCases
-    
     var lastGid = ""
     
     init() {

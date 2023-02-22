@@ -103,7 +103,7 @@ final actor DownloadManager {
                             let url = book.currentWebURLString + (groupIndex > 0 ? "?p=\(groupIndex)" : "") + "/?nw=session"
                             guard let value = try? await AF.request(url, interceptor: RetryPolicy()).serializingString(automaticallyCancelling: true).value else { return }
                             let baseURL = SearchInfo.currentSource.rawValue + "s/"
-                            value.allSubStringOf(target: baseURL, endCharater: "\"").forEach { continuation.yield(baseURL + $0) }
+                            value.allSubString(of: baseURL, endCharater: "\"").forEach { continuation.yield(baseURL + $0) }
                         }
                         await group.waitForAll()
                     }
@@ -125,7 +125,7 @@ final actor DownloadManager {
                 
                 group.addTask {
                     guard let value = try? await AF.request(url, interceptor: RetryPolicy()).serializingString(automaticallyCancelling: true).value else { return }
-                    guard let showKey = value.allSubStringOf(target: "showkey=\"", endCharater: "\"").first else { return }
+                    guard let showKey = value.allSubString(of: "showkey=\"", endCharater: "\"").first else { return }
                     
                     guard let source = try? await AF.request(
                         SearchInfo.currentSource.rawValue + "api.php",
@@ -139,7 +139,7 @@ final actor DownloadManager {
                         encoding: JSONEncoding.default
                     ).serializingDecodable(GroupModel.self, automaticallyCancelling: true).value.i3 else { return }
                     
-                    guard let imgURL = source.allSubStringOf(target: "src=\"", endCharater: "\"").first else { return }
+                    guard let imgURL = source.allSubString(of: "src=\"", endCharater: "\"").first else { return }
                     
                     guard let p = try? await AF
                             .download(imgURL, interceptor: RetryPolicy(), to: { _, _ in (URL(fileURLWithPath: book.imagePath(at: imgIndex)), []) })

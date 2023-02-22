@@ -8,7 +8,7 @@
 import Foundation
 
 extension String {
-    private func allIndicesOf(string: String) -> [Int] {
+    private func allIndices(of string: String) -> [Int] {
         var indices = [Int]()
         var start = startIndex
         while start < endIndex, let range = range(of: string, range: start..<endIndex), !range.isEmpty {
@@ -18,8 +18,8 @@ extension String {
         return indices
     }
     
-    func allSubStringOf(target: String, endCharater: Character, count: Int = 1) -> [String] {
-        allIndicesOf(string: target).map {
+    func allSubString(of target: String, endCharater: Character, count: Int = 1) -> [String] {
+        allIndices(of: target).map {
             guard case let start = index(startIndex, offsetBy: $0 + target.count), start < endIndex else { return "" }
             var end = index(after: start)
             var meet = 0
