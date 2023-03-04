@@ -125,9 +125,7 @@ final class GalleryViewController: UICollectionViewController {
     
     @objc
     private func backToFirstPage() {
-        if !collectionView.visibleCells.isEmpty {
-            collectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .left, animated: true)
-        }
+        collectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .left, animated: true)
     }
 }
 

@@ -24,7 +24,6 @@ final class SearchViewController: UITableViewController {
         didSet {
             navigationItem.rightBarButtonItem?.isEnabled =
                 !searchInfo.categories.isEmpty && (searchInfo.source == .EHentai || SettingManager.shared.isLoginSubject.value)
-            
             if oldValue.keyWord == searchInfo.keyWord { tableView.reloadData() }
         }
     }
@@ -104,8 +103,10 @@ extension SearchViewController {
         let sectionType = SectionType.allCases[section]
         let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: NSStringFromClass(UITableViewHeaderFooterView.self))
         header?.textLabel?.text = sectionType.rawValue
-        header?.removeGestureRecognizer(doubleTapCategoryGestureRecognizer)
-        if sectionType == .category { header?.addGestureRecognizer(doubleTapCategoryGestureRecognizer) }
+        if sectionType == .category {
+            header?.removeGestureRecognizer(doubleTapCategoryGestureRecognizer)
+            header?.addGestureRecognizer(doubleTapCategoryGestureRecognizer)
+        }
         return header
     }
     

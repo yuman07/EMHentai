@@ -166,20 +166,18 @@ extension SettingViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        switch indexPath.section {
-        case 0:
+        switch SectionType.allCases[indexPath.section] {
+        case .loginState:
             if SettingManager.shared.isLoginSubject.value {
                 SettingManager.shared.logout()
             } else {
                 SettingManager.shared.logout()
                 login()
             }
-        case 1:
-            if indexPath.row == 2 {
+        case .dateSize:
+            if DataSizeType.allCases[indexPath.row] == .other {
                 clearOtherData()
             }
-        default:
-            break
         }
     }
 }
