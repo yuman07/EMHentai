@@ -39,11 +39,11 @@ extension Book {
         "\(source.rawValue)g/\(gid)/\(token)/"
     }
     
-    var fileCountNum: Int {
+    var contentImgCount: Int {
         Int(filecount) ?? 0
     }
     
-    var downloadedFileCount: Int {
+    var downloadedImgCount: Int {
         (try? FileManager.default.contentsOfDirectory(atPath: folderPath))?.count ?? 0
     }
     

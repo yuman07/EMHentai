@@ -105,7 +105,7 @@ final class GalleryViewController: UICollectionViewController {
     }
     
     private func backToLastSeenPage() {
-        if book.downloadedFileCount == 0 {
+        if book.downloadedImgCount == 0 {
             lastSeenPageIndex = 0
         } else if lastSeenPageIndex > 0 {
             let index = lastSeenPageIndex
@@ -139,7 +139,7 @@ extension GalleryViewController: UICollectionViewDelegateFlowLayout {
 // MARK: UICollectionViewDataSource
 extension GalleryViewController {
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        book.fileCountNum
+        book.contentImgCount
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -158,7 +158,7 @@ extension GalleryViewController {
 extension GalleryViewController {
     override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         guard !isRotating else { return }
-        navigationItem.title = "\(indexPath.row + 1)/\(book.fileCountNum)"
+        navigationItem.title = "\(indexPath.row + 1)/\(book.contentImgCount)"
         lastSeenPageIndex = indexPath.row
     }
 }

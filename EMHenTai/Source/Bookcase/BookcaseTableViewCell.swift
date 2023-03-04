@@ -131,9 +131,9 @@ final class BookcaseTableViewCell: UITableViewCell {
             case .before:
                 progressLabel.text = ""
             case .ing:
-                progressLabel.text = "下载中：" + "\(book.downloadedFileCount)/\(book.fileCountNum)"
+                progressLabel.text = "下载中：" + "\(book.downloadedImgCount)/\(book.contentImgCount)"
             case .suspend:
-                progressLabel.text = "已暂停：" + "\(book.downloadedFileCount)/\(book.fileCountNum)"
+                progressLabel.text = "已暂停：" + "\(book.downloadedImgCount)/\(book.contentImgCount)"
             case .finish:
                 progressLabel.text = "已下载"
             }
@@ -150,7 +150,7 @@ final class BookcaseTableViewCell: UITableViewCell {
         titleLabel.text = book.showTitle
         categoryLabel.text = book.category
         scoreLabel.text = book.rating
-        fileCountLabel.text = "\(book.fileCountNum)页"
+        fileCountLabel.text = "\(book.contentImgCount)页"
         progressLabel.text = ""
         updateProgress()
     }

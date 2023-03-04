@@ -69,12 +69,12 @@ final actor DownloadManager {
     }
     
     func downloadState(of book: Book) -> State {
-        if book.downloadedFileCount == book.fileCountNum + 1 {
+        if book.downloadedImgCount == book.contentImgCount + 1 {
             return .finish
         } else if taskMap[book.gid] != nil {
             return .ing
         } else {
-            return book.downloadedFileCount == 0 ? .before : .suspend
+            return book.downloadedImgCount == 0 ? .before : .suspend
         }
     }
     
@@ -95,7 +95,7 @@ final actor DownloadManager {
         let urlStream = AsyncStream<String> { continuation in
             Task {
                 await withTaskGroup(of: Void.self, body: { group in
-                    let groupNum = book.fileCountNum / groupTotalImgNum + (book.fileCountNum % groupTotalImgNum == 0 ? 0 : 1)
+                    let groupNum = book.contentImgCount / groupTotalImgNum + (book.contentImgCount % groupTotalImgNum == 0 ? 0 : 1)
                     for groupIndex in 0..<groupNum {
                         guard checkGroupNeedRequest(of: book, groupIndex: groupIndex) else { continue }
                         group.addTask {
@@ -149,7 +149,7 @@ final actor DownloadManager {
     
     private nonisolated func checkGroupNeedRequest(of book: Book, groupIndex: Int) -> Bool {
         for index in 0..<groupTotalImgNum {
-            guard case let realIndex = groupIndex * groupTotalImgNum + index, realIndex < book.fileCountNum else {
+            guard case let realIndex = groupIndex * groupTotalImgNum + index, realIndex < book.contentImgCount else {
                 break
             }
             if !FileManager.default.fileExists(atPath: book.imagePath(at: realIndex)) {
