@@ -128,7 +128,6 @@ final class BookcaseViewController: UITableViewController {
 extension BookcaseViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        guard indexPath.row < viewModel.books.count else { return }
         let book = viewModel.books[indexPath.row]
         if !book.isOffensive {
             navigationController?.pushViewController(GalleryViewController(book: book), animated: true)

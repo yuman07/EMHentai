@@ -36,10 +36,12 @@ final class SearchTextFieldCell: UITableViewCell {
     private func setupUI() {
         contentView.addSubview(searchTextField)
         
-        searchTextField.leftAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leftAnchor, constant: 15).isActive = true
-        searchTextField.rightAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.rightAnchor, constant: -15).isActive = true
-        searchTextField.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
-        searchTextField.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        NSLayoutConstraint.activate([
+            searchTextField.leftAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leftAnchor, constant: 15),
+            searchTextField.rightAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.rightAnchor, constant: -15),
+            searchTextField.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            searchTextField.heightAnchor.constraint(equalToConstant: 30),
+        ])
     }
     
     private func setupAction() {

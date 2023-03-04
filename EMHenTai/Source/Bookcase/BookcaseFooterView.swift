@@ -44,7 +44,9 @@ final class BookcaseFooterView: UIView {
         frame = CGRect(x: 0, y: 0, width: 0, height: ceil(label.font.lineHeight) + 20)
         addSubview(label)
         
-        label.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-        label.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        NSLayoutConstraint.activate([
+            label.centerXAnchor.constraint(equalTo: centerXAnchor),
+            label.centerYAnchor.constraint(equalTo: centerYAnchor),
+        ])
     }
 }

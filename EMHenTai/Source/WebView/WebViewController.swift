@@ -38,10 +38,12 @@ class WebViewController: UIViewController {
         view.backgroundColor = .systemGroupedBackground
         view.addSubview(webView)
         
-        webView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
-        webView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        webView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-        webView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        NSLayoutConstraint.activate([
+            webView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            webView.leftAnchor.constraint(equalTo: view.leftAnchor),
+            webView.rightAnchor.constraint(equalTo: view.rightAnchor),
+            webView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+        ])
         
         if shareItem != nil {
             navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(shareAction))

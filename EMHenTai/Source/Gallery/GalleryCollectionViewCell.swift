@@ -43,17 +43,19 @@ final class GalleryCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(scrollView)
         scrollView.addSubview(imageView)
         
-        scrollView.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
-        scrollView.leftAnchor.constraint(equalTo: contentView.leftAnchor).isActive = true
-        scrollView.rightAnchor.constraint(equalTo: contentView.rightAnchor).isActive = true
-        scrollView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
-        
-        imageView.topAnchor.constraint(equalTo: scrollView.topAnchor).isActive = true
-        imageView.leftAnchor.constraint(equalTo: scrollView.leftAnchor).isActive = true
-        imageView.rightAnchor.constraint(equalTo: scrollView.rightAnchor).isActive = true
-        imageView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor).isActive = true
-        imageView.widthAnchor.constraint(equalTo: scrollView.widthAnchor).isActive = true
-        imageView.heightAnchor.constraint(equalTo: scrollView.heightAnchor).isActive = true
+        NSLayoutConstraint.activate([
+            scrollView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            scrollView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+            scrollView.rightAnchor.constraint(equalTo: contentView.rightAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            
+            imageView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            imageView.leftAnchor.constraint(equalTo: scrollView.leftAnchor),
+            imageView.rightAnchor.constraint(equalTo: scrollView.rightAnchor),
+            imageView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            imageView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+            imageView.heightAnchor.constraint(equalTo: scrollView.heightAnchor),
+        ])
     }
     
     private func setupGesture() {

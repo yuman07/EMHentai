@@ -77,26 +77,28 @@ final class BookcaseTableViewCell: UITableViewCell {
         contentView.addSubview(scoreLabel)
         contentView.addSubview(fileCountLabel)
         
-        thumbImageView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 12).isActive = true
-        thumbImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
-        thumbImageView.widthAnchor.constraint(equalToConstant: 125).isActive = true
-        thumbImageView.heightAnchor.constraint(equalToConstant: 125).isActive = true
-        
-        titleLabel.topAnchor.constraint(equalTo: thumbImageView.topAnchor).isActive = true
-        titleLabel.leftAnchor.constraint(equalTo: thumbImageView.rightAnchor, constant: 8).isActive = true
-        titleLabel.rightAnchor.constraint(lessThanOrEqualTo: scoreLabel.rightAnchor).isActive = true
-        
-        categoryLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8).isActive = true
-        categoryLabel.leftAnchor.constraint(equalTo: titleLabel.leftAnchor).isActive = true
-        
-        progressLabel.bottomAnchor.constraint(equalTo: fileCountLabel.bottomAnchor).isActive = true
-        progressLabel.leftAnchor.constraint(equalTo: titleLabel.leftAnchor).isActive = true
-        
-        scoreLabel.bottomAnchor.constraint(equalTo: fileCountLabel.topAnchor, constant: -8).isActive = true
-        scoreLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -12).isActive = true
-        
-        fileCountLabel.bottomAnchor.constraint(equalTo: thumbImageView.bottomAnchor).isActive = true
-        fileCountLabel.rightAnchor.constraint(equalTo: scoreLabel.rightAnchor).isActive = true
+        NSLayoutConstraint.activate([
+            thumbImageView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 12),
+            thumbImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            thumbImageView.widthAnchor.constraint(equalToConstant: 125),
+            thumbImageView.heightAnchor.constraint(equalToConstant: 125),
+            
+            titleLabel.topAnchor.constraint(equalTo: thumbImageView.topAnchor),
+            titleLabel.leftAnchor.constraint(equalTo: thumbImageView.rightAnchor, constant: 8),
+            titleLabel.rightAnchor.constraint(lessThanOrEqualTo: scoreLabel.rightAnchor),
+            
+            categoryLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
+            categoryLabel.leftAnchor.constraint(equalTo: titleLabel.leftAnchor),
+            
+            progressLabel.bottomAnchor.constraint(equalTo: fileCountLabel.bottomAnchor),
+            progressLabel.leftAnchor.constraint(equalTo: titleLabel.leftAnchor),
+            
+            scoreLabel.bottomAnchor.constraint(equalTo: fileCountLabel.topAnchor, constant: -8),
+            scoreLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -12),
+            
+            fileCountLabel.bottomAnchor.constraint(equalTo: thumbImageView.bottomAnchor),
+            fileCountLabel.rightAnchor.constraint(equalTo: scoreLabel.rightAnchor),
+        ])
     }
     
     private func setupGesture() {

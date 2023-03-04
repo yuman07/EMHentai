@@ -61,10 +61,12 @@ final class GalleryViewController: UICollectionViewController {
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.register(GalleryCollectionViewCell.self, forCellWithReuseIdentifier: NSStringFromClass(GalleryCollectionViewCell.self))
         
-        navBarBackgroundView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        navBarBackgroundView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor).isActive = true
-        navBarBackgroundView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor).isActive = true
-        navBarBackgroundView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        NSLayoutConstraint.activate([
+            navBarBackgroundView.topAnchor.constraint(equalTo: view.topAnchor),
+            navBarBackgroundView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
+            navBarBackgroundView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
+            navBarBackgroundView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+        ])
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "回到首页", style: .plain, target: self, action: #selector(backToFirstPage))
     }
