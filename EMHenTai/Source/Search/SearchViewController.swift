@@ -12,13 +12,15 @@ protocol SearchVCItemDataSource {
 }
 
 final class SearchViewController: UITableViewController {
-    private static let sections = [
-        "关键词",
-        "数据源",
-        "语言",
-        "评分",
-        "分类",
-    ]
+    private enum SectionType: String, CaseIterable {
+        case keyword = "关键词"
+        case dateSource = "数据源"
+        case language = "语言"
+        case rating = "评分"
+        case category = "分类"
+    }
+    
+    private let sections = SectionType.allCases
     
     private var searchInfo = SearchInfo() {
         didSet {
@@ -82,41 +84,39 @@ final class SearchViewController: UITableViewController {
 // MARK: UITableViewDataSource
 extension SearchViewController {
     override func numberOfSections(in tableView: UITableView) -> Int {
-        Self.sections.count
+        sections.count
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch section {
-        case 0:
+        switch sections[section] {
+        case .keyword:
             return 1
-        case 1:
+        case .dateSource:
             return SearchInfo.Source.allCases.count
-        case 2:
+        case .language:
             return SearchInfo.Language.allCases.count
-        case 3:
+        case .rating:
             return SearchInfo.Rating.allCases.count
-        case 4:
+        case .category:
             return SearchInfo.Category.allCases.count
-        default:
-            return 0
         }
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: NSStringFromClass(UITableViewHeaderFooterView.self))
-        header?.textLabel?.text = SearchViewController.sections[section]
+        header?.textLabel?.text = sections[section].rawValue
         header?.removeGestureRecognizer(doubleTapCategoryGestureRecognizer)
-        if section == 4 { header?.addGestureRecognizer(doubleTapCategoryGestureRecognizer) }
+        if sections[section] == .category { header?.addGestureRecognizer(doubleTapCategoryGestureRecognizer) }
         return header
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cls = indexPath.section == 0 ? SearchTextFieldCell.self : UITableViewCell.self
+        let cls = sections[indexPath.section] == .keyword ? SearchTextFieldCell.self : UITableViewCell.self
         let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(cls), for: indexPath)
         cell.selectionStyle = .none
         
-        switch indexPath.section {
-        case 0:
+        switch sections[indexPath.section] {
+        case .keyword:
             if let cell = cell as? SearchTextFieldCell {
                 if cell.searchTextField.text?.isEmpty ?? true {
                     cell.searchTextField.text = searchInfo.keyWord
@@ -126,24 +126,22 @@ extension SearchViewController {
                     self.searchInfo.keyWord = text
                 }
             }
-        case 1:
+        case .dateSource:
             let source = SearchInfo.Source.allCases[indexPath.row]
             cell.textLabel?.text = source.searchItemTitle
             cell.accessoryType = (searchInfo.source == source) ? .checkmark : .none
-        case 2:
+        case .language:
             let language = SearchInfo.Language.allCases[indexPath.row]
             cell.textLabel?.text = language.searchItemTitle
             cell.accessoryType = (searchInfo.language == language) ? .checkmark : .none
-        case 3:
+        case .rating:
             let rating = SearchInfo.Rating.allCases[indexPath.row]
             cell.textLabel?.text = rating.searchItemTitle
             cell.accessoryType = (searchInfo.rating == rating) ? .checkmark : .none
-        case 4:
+        case .category:
             let category = SearchInfo.Category.allCases[indexPath.row]
             cell.textLabel?.text = category.searchItemTitle
             cell.accessoryType = searchInfo.categories.contains(category) ? .checkmark : .none
-        default:
-            break
         }
         return cell
     }
@@ -152,24 +150,22 @@ extension SearchViewController {
 // MARK: UITableViewDelegate
 extension SearchViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        switch indexPath.section {
-        case 0:
+        switch sections[indexPath.section] {
+        case .keyword:
             break
-        case 1:
+        case .dateSource:
             searchInfo.source = SearchInfo.Source.allCases[indexPath.row]
-        case 2:
+        case .language:
             searchInfo.language = SearchInfo.Language.allCases[indexPath.row]
-        case 3:
+        case .rating:
             searchInfo.rating = SearchInfo.Rating.allCases[indexPath.row]
-        case 4:
+        case .category:
             let category = SearchInfo.Category.allCases[indexPath.row]
             if searchInfo.categories.contains(category) {
                 searchInfo.categories.removeAll(where: { $0 == category })
             } else {
                 searchInfo.categories.append(category)
             }
-        default:
-            break
         }
     }
 }
