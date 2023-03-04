@@ -56,7 +56,7 @@ class WebViewController: UIViewController {
     
     @objc
     private func shareAction() {
-        guard let shareItem else { return }
+        guard let shareItem, presentedViewController == nil else { return }
         let title = shareItem.shareTitle ?? title ?? url.absoluteString
         let image = shareItem.shareImage ?? UIApplication.shared.APPIcon ?? UIImage()
         let vc = UIActivityViewController(activityItems: [title, image, url], applicationActivities: nil)
