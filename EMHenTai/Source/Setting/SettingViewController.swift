@@ -9,6 +9,17 @@ import Combine
 import UIKit
 
 final class SettingViewController: UITableViewController {
+    private enum SectionType: String, CaseIterable {
+        case loginState = "登录状态"
+        case dateSize = "存储占用"
+    }
+    
+    private enum DataSizeType: String, CaseIterable {
+        case history = "历史数据"
+        case download = "下载数据"
+        case other = "其它数据"
+    }
+    
     private var dataSize = (historySize: 0, downloadSize: 0, otherSize: 0)
     private var cancelBag = Set<AnyCancellable>()
     
@@ -45,8 +56,8 @@ final class SettingViewController: UITableViewController {
             .receive(on: DispatchQueue.main)
             .dropFirst()
             .sink { [weak self] isLogin in
-                guard let self else { return }
-                self.tableView.reloadSections([0], with: .none)
+                guard let self, let index = SectionType.allCases.firstIndex(of: .loginState) else { return }
+                self.tableView.reloadSections([index], with: .none)
                 
                 if isLogin {
                     guard self.presentedViewController == nil else { return }
@@ -60,8 +71,9 @@ final class SettingViewController: UITableViewController {
     
     private func reloadDataSize() {
         Task {
+            guard let index = SectionType.allCases.firstIndex(of: .dateSize) else { return }
             dataSize = await SettingManager.shared.calculateFileSize()
-            tableView.reloadSections([1], with: .none)
+            tableView.reloadSections([index], with: .none)
         }
     }
     
@@ -103,17 +115,15 @@ final class SettingViewController: UITableViewController {
 // MARK: UITableViewDataSource
 extension SettingViewController {
     override func numberOfSections(in tableView: UITableView) -> Int {
-        2
+        SectionType.allCases.count
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch section {
-        case 0:
+        switch SectionType.allCases[section] {
+        case .loginState:
             return 1
-        case 1:
-            return 3
-        default:
-            return 0
+        case .dateSize:
+            return DataSizeType.allCases.count
         }
     }
     
@@ -122,39 +132,29 @@ extension SettingViewController {
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        switch section {
-        case 0:
-            return "登录状态"
-        case 1:
-            return "存储占用"
-        default:
-            return nil
-        }
+        SectionType.allCases[section].rawValue
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(UITableViewCell.self), for: indexPath)
         
-        switch indexPath.section {
-        case 0:
+        switch SectionType.allCases[indexPath.section] {
+        case .loginState:
             cell.textLabel?.text = SettingManager.shared.isLoginSubject.value ? "已登录：点击可登出" : "未登录：点击去登录"
             cell.selectionStyle = .default
-        case 1:
-            let text: String
-            switch indexPath.row {
-            case 0:
-                text = "历史数据：" + dataSize.historySize.diskSizeFormat
-            case 1:
-                text = "下载数据：" + dataSize.downloadSize.diskSizeFormat
-            case 2:
-                text = "其它数据：" + dataSize.otherSize.diskSizeFormat
-            default:
-                text = ""
+        case .dateSize:
+            let data = DataSizeType.allCases[indexPath.row]
+            var text = "\(data.rawValue)："
+            switch data {
+            case .history:
+                text += dataSize.historySize.diskSizeFormat
+            case .download:
+                text += dataSize.downloadSize.diskSizeFormat
+            case .other:
+                text += dataSize.otherSize.diskSizeFormat
             }
             cell.textLabel?.text = text
             cell.selectionStyle = .none
-        default:
-            break
         }
         
         return cell

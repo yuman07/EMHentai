@@ -20,8 +20,6 @@ final class SearchViewController: UITableViewController {
         case category = "分类"
     }
     
-    private let sections = SectionType.allCases
-    
     private var searchInfo = SearchInfo() {
         didSet {
             navigationItem.rightBarButtonItem?.isEnabled =
@@ -84,11 +82,11 @@ final class SearchViewController: UITableViewController {
 // MARK: UITableViewDataSource
 extension SearchViewController {
     override func numberOfSections(in tableView: UITableView) -> Int {
-        sections.count
+        SectionType.allCases.count
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch sections[section] {
+        switch SectionType.allCases[section] {
         case .keyword:
             return 1
         case .dateSource:
@@ -103,19 +101,21 @@ extension SearchViewController {
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let sectionType = SectionType.allCases[section]
         let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: NSStringFromClass(UITableViewHeaderFooterView.self))
-        header?.textLabel?.text = sections[section].rawValue
+        header?.textLabel?.text = sectionType.rawValue
         header?.removeGestureRecognizer(doubleTapCategoryGestureRecognizer)
-        if sections[section] == .category { header?.addGestureRecognizer(doubleTapCategoryGestureRecognizer) }
+        if sectionType == .category { header?.addGestureRecognizer(doubleTapCategoryGestureRecognizer) }
         return header
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cls = sections[indexPath.section] == .keyword ? SearchTextFieldCell.self : UITableViewCell.self
+        let sectionType = SectionType.allCases[indexPath.section]
+        let cls = sectionType == .keyword ? SearchTextFieldCell.self : UITableViewCell.self
         let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(cls), for: indexPath)
         cell.selectionStyle = .none
         
-        switch sections[indexPath.section] {
+        switch sectionType {
         case .keyword:
             if let cell = cell as? SearchTextFieldCell {
                 if cell.searchTextField.text?.isEmpty ?? true {
@@ -150,7 +150,7 @@ extension SearchViewController {
 // MARK: UITableViewDelegate
 extension SearchViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        switch sections[indexPath.section] {
+        switch SectionType.allCases[indexPath.section] {
         case .keyword:
             break
         case .dateSource:
