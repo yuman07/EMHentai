@@ -15,7 +15,7 @@ final class BookcaseViewModel {
     
     private let type: BookcaseViewController.BookcaseType
     private var hasMore = true
-    private(set) var searchInfo = SearchInfo()
+    private var searchInfo = SearchInfo()
     private var cancelBag = Set<AnyCancellable>()
     
     init(type: BookcaseViewController.BookcaseType) {
