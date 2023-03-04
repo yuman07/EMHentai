@@ -30,9 +30,9 @@ final class SearchViewController: UITableViewController {
     }
     
     private lazy var doubleTapCategoryGestureRecognizer = {
-        let gr = UITapGestureRecognizer(target: self, action: #selector(doubleTapCategoryHeaderAction))
-        gr.numberOfTapsRequired = 2
-        return gr
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(doubleTapCategoryHeaderAction))
+        gestureRecognizer.numberOfTapsRequired = 2
+        return gestureRecognizer
     }()
     
     init() {
