@@ -25,7 +25,6 @@ final actor DownloadManager {
     
     private init() {}
     private let groupTotalImgNum = 40
-    private let maxConcurrentDownloadCount = 8
     private var taskMap = [Int: Task<Void, Never>]()
     
     nonisolated func download(_ book: Book) {
@@ -113,15 +112,11 @@ final actor DownloadManager {
         }
         
         await withTaskGroup(of: Void.self, body: { group in
-            var count = 0
             for await url in urlStream {
                 let imgIndex = (url.split(separator: "-").last.flatMap({ Int("\($0)") }) ?? 1) - 1
                 let imgKey = url.split(separator: "/").count > 1 ? url.split(separator: "/").reversed()[1] : ""
                 guard !FileManager.default.fileExists(atPath: book.imagePath(at: imgIndex)) else { continue }
                 guard !imgKey.isEmpty else { continue }
-                
-                if count >= maxConcurrentDownloadCount { await group.next() }
-                count += 1
                 
                 group.addTask {
                     guard let value = try? await AF.request(url, interceptor: RetryPolicy()).serializingString(automaticallyCancelling: true).value else { return }
