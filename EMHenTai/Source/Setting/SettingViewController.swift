@@ -49,6 +49,7 @@ final class SettingViewController: UITableViewController {
                 self.tableView.reloadSections([0], with: .none)
                 
                 if isLogin {
+                    guard self.presentedViewController == nil else { return }
                     let vc = UIAlertController(title: "提示", message: "登录成功", preferredStyle: .alert)
                     vc.addAction(UIAlertAction(title: "好的", style: .default))
                     UIApplication.shared.keyWindow?.rootViewController?.present(vc, animated: true)
@@ -65,6 +66,7 @@ final class SettingViewController: UITableViewController {
     }
     
     private func login() {
+        guard presentedViewController == nil else { return }
         let vc = UIAlertController(title: "请选择登录方式", message: nil, preferredStyle: .alert)
         vc.addAction(UIAlertAction(title: "账号密码", style: .default, handler: { _ in
             self.navigationController?.pushViewController(LoginViewController(), animated: true)
@@ -85,7 +87,7 @@ final class SettingViewController: UITableViewController {
     }
     
     private func clearOtherData() {
-        guard dataSize.otherSize > 0 else { return }
+        guard dataSize.otherSize > 0, presentedViewController == nil else { return }
         let vc = UIAlertController(title: "提示", message: "确定要清除其他数据吗？\n（包含如封面图等数据）", preferredStyle: .alert)
         vc.addAction(UIAlertAction(title: "清除", style: .default, handler: { _ in
             Task {

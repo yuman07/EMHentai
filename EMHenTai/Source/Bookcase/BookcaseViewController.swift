@@ -124,6 +124,31 @@ final class BookcaseViewController: UITableViewController {
     }
 }
 
+// MARK: UITableViewDelegate
+extension BookcaseViewController {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        guard indexPath.row < viewModel.books.count else { return }
+        let book = viewModel.books[indexPath.row]
+        if !book.isOffensive {
+            navigationController?.pushViewController(GalleryViewController(book: book), animated: true)
+        } else {
+            guard presentedViewController == nil else { return }
+            let vc = UIAlertController(title: "警告", message: "此本含有令人不适内容(恶心猎奇)\n请确认是否一定要观看？", preferredStyle: .alert)
+            vc.addAction(UIAlertAction(title: "确认", style: .default, handler: { _ in
+                self.navigationController?.pushViewController(GalleryViewController(book: book), animated: true)
+            }))
+            vc.addAction(UIAlertAction(title: "算了", style: .cancel))
+            present(vc, animated: true)
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let prefetchPoint = Int(Double(viewModel.books.count) * 0.7)
+        if indexPath.row >= prefetchPoint { viewModel.loadMoreData() }
+    }
+}
+
 // MARK: TapNavBarRightItem
 extension BookcaseViewController {
     @objc
@@ -132,6 +157,7 @@ extension BookcaseViewController {
         case .home:
             navigationController?.pushViewController(SearchViewController(), animated: true)
         case .history:
+            guard presentedViewController == nil else { return }
             let vc = UIAlertController(title: "提示", message: "确定要清除所有历史记录吗？\n（不会影响已下载内容）", preferredStyle: .alert)
             vc.addAction(UIAlertAction(title: "清除", style: .default, handler: { _ in
                 DBManager.shared.books(of: .history)
@@ -151,6 +177,7 @@ extension BookcaseViewController {
 extension BookcaseViewController {
     private func showAlertVC(with book: Book) {
         Task {
+            guard presentedViewController == nil else { return }
             let vc = UIAlertController(title: "", message: book.showTitle, preferredStyle: .alert)
             
             if !DBManager.shared.contains(gid: book.gid, of: .download) {
@@ -204,33 +231,7 @@ extension BookcaseViewController {
             }
             
             vc.addAction(UIAlertAction(title: "没事", style: .cancel))
-            
             present(vc, animated: true)
         }
     }
 }
-
-// MARK: UITableViewDelegate
-extension BookcaseViewController {
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        guard indexPath.row < viewModel.books.count else { return }
-        let book = viewModel.books[indexPath.row]
-        if !book.isOffensive {
-            navigationController?.pushViewController(GalleryViewController(book: book), animated: true)
-        } else {
-            let vc = UIAlertController(title: "警告", message: "此本含有令人不适内容(恶心猎奇)\n请确认是否一定要观看？", preferredStyle: .alert)
-            vc.addAction(UIAlertAction(title: "确认", style: .default, handler: { _ in
-                self.navigationController?.pushViewController(GalleryViewController(book: book), animated: true)
-            }))
-            vc.addAction(UIAlertAction(title: "算了", style: .cancel))
-            present(vc, animated: true)
-        }
-    }
-    
-    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        let prefetchPoint = Int(Double(viewModel.books.count) * 0.7)
-        if indexPath.row >= prefetchPoint { viewModel.loadMoreData() }
-    }
-}
-
