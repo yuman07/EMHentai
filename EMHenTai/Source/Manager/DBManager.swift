@@ -138,7 +138,7 @@ final class DBManager {
         obj.setValue(book.uploader, forKey: "uploader")
         obj.setValue(book.filecount, forKey: "filecount")
         obj.setValue(book.filesize, forKey: "filesize")
-        obj.setValue(book.tags.joined(separator: ","), forKey: "tags")
+        obj.setValue(book.tags, forKey: "tags")
         obj.setValue(book.token, forKey: "token")
         obj.setValue(book.rating, forKey: "rating")
         obj.setValue(book.archiver_key, forKey: "archiver_key")
