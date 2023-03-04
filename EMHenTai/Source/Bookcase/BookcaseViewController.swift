@@ -69,30 +69,25 @@ final class BookcaseViewController: UITableViewController {
     private func setupCombine() {
         viewModel.$books
             .receive(on: DispatchQueue.main)
-            .scan([Book](), { [weak self] oldValue, newValue in
-                guard let self else { return newValue }
-                if self.type == .history { self.navigationItem.rightBarButtonItem?.isEnabled = !newValue.isEmpty }
-                self.reloadTableViewData(animated: {
-                    if self.type == .home { return !self.viewModel.searchInfo.lastGid.isEmpty }
-                    else { return !oldValue.isEmpty }
-                }())
-                return newValue
+            .sink(receiveValue: { [weak self] in
+                guard let self else { return }
+                if self.type == .history { self.navigationItem.rightBarButtonItem?.isEnabled = !$0.isEmpty }
+                self.reloadTableViewData()
             })
-            .sink(receiveValue: { _ in })
             .store(in: &cancelBag)
         
         viewModel.$hint
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] value in
-                self?.footerView.hint = value
+            .sink { [weak self] in
+                self?.footerView.hint = $0
             }
             .store(in: &cancelBag)
         
         viewModel.$isRefreshing
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] value in
+            .sink { [weak self] in
                 guard let self else { return }
-                if value {
+                if $0 {
                     self.tableView.setContentOffset(CGPoint(x: 0, y: -self.refreshControl!.frame.size.height * 3), animated: false)
                     self.refreshControl?.beginRefreshing()
                 } else {
@@ -115,12 +110,12 @@ final class BookcaseViewController: UITableViewController {
         }
     }
     
-    private func reloadTableViewData(animated: Bool) {
+    private func reloadTableViewData() {
         guard let dataSource else { return }
         var snapshot = NSDiffableDataSourceSnapshot<Int, Book>()
         snapshot.appendSections([0])
         snapshot.appendItems(viewModel.books, toSection: 0)
-        dataSource.apply(snapshot, animatingDifferences: animated)
+        dataSource.apply(snapshot, animatingDifferences: true)
     }
     
     @objc

@@ -11,6 +11,9 @@ import Foundation
 final class TranslateManager {
     static let shared = TranslateManager()
     
+    private var dictEn = [String: String]()
+    private var dictCn = [String: String]()
+    
     private init () {
         guard let url = Bundle.main.urls(forResourcesWithExtension: ".json", subdirectory: nil)?.first,
               let data = try? Data(contentsOf: url),
@@ -28,9 +31,6 @@ final class TranslateManager {
             }
         }
     }
-    
-    private var dictEn = [String: String]()
-    private var dictCn = [String: String]()
     
     func translateEn(_ en: String) -> String {
         dictEn[en].flatMap { "(\($0))" } ?? ""
