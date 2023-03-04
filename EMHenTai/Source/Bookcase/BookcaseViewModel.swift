@@ -95,7 +95,7 @@ final class BookcaseViewModel {
     
     func loadMoreData() {
         guard type == .home, hasMore, case var nextInfo = searchInfo else { return }
-        nextInfo.lastGid = books.last.flatMap({ String($0.gid) }) ?? ""
+        nextInfo.lastGid = books.last.flatMap { String($0.gid) } ?? ""
         SearchManager.shared.searchWith(info: nextInfo)
     }
 }

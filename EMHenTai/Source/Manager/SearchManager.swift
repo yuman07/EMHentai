@@ -27,10 +27,10 @@ final actor SearchManager {
     nonisolated let eventSubject = PassthroughSubject<SearchEvent, Never>()
     
     nonisolated func searchWith(info: SearchInfo) {
-        Task { await p_searchWith(info: info) }
+        Task { await checkSearchWith(info: info) }
     }
     
-    private func p_searchWith(info: SearchInfo) {
+    private func checkSearchWith(info: SearchInfo) {
         guard info.lastGid.isEmpty || currentTask == nil else {
             return
         }
@@ -40,7 +40,7 @@ final actor SearchManager {
         currentTask = Task {
             eventSubject.send(.start(info: info))
             
-            let result = await pp_searchWith(info: info)
+            let result = await startSearchWith(info: info)
             
             if !Task.isCancelled {
                 eventSubject.send(.finish(info: info, result: result))
@@ -50,7 +50,7 @@ final actor SearchManager {
         }
     }
     
-    private nonisolated func pp_searchWith(info: SearchInfo) async -> Result<[Book], Error> {
+    private nonisolated func startSearchWith(info: SearchInfo) async -> Result<[Book], Error> {
         guard let value = try? await AF.request(info.requestString, interceptor: RetryPolicy()).serializingString(automaticallyCancelling: true).value else {
             return .failure(.netError)
         }
