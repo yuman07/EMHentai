@@ -67,11 +67,10 @@ final class BookcaseViewModel {
         
         switch result {
         case .success(let newBooks):
-            let preBooks = books
             books = (info.lastGid.isEmpty ? newBooks : books + newBooks).unique()
-            hasMore = (info.lastGid.isEmpty ? !books.isEmpty : preBooks != books)
-            if !hasMore { hint = books.isEmpty ? .noData : .noMoreData }
-            else { hint = .loading }
+            hasMore = !newBooks.isEmpty
+            if hasMore { hint = .loading }
+            else { hint = books.isEmpty ? .noData : .noMoreData }
         case .failure(let error):
             if (info.lastGid.isEmpty) { books = [] }
             switch error {
