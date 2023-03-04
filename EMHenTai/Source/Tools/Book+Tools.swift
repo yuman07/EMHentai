@@ -39,9 +39,8 @@ extension Book {
         "\(source.rawValue)g/\(gid)/\(token)/"
     }
     
-    // content plus a cover
     var fileCountNum: Int {
-        (Int(filecount) ?? 0) + 1
+        Int(filecount) ?? 0
     }
     
     var downloadedFileCount: Int {
