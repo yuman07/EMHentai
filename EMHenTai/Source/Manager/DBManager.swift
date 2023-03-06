@@ -20,20 +20,20 @@ final class DBManager {
     
     private var booksMap = [DBType: [Book]]()
     private let queue = DispatchQueue(label: "com.DBManager.ConcurrentQueue", attributes: .concurrent)
-    private let semaphore = DispatchSemaphore(value: 0)
     private var context: NSManagedObjectContext?
     private init() {}
     
     func setupDB() {
         queue.async(flags: .barrier) { [weak self] in
             guard let self else { return }
+            let semaphore = DispatchSemaphore(value: 0)
             let container = NSPersistentContainer(name: "EMDB")
             container.loadPersistentStores { [weak self] _, error in
-                guard let self else { return }
+                guard let self else { semaphore.signal(); return }
                 if error == nil { self.context = container.newBackgroundContext() }
-                self.semaphore.signal()
+                semaphore.signal()
             }
-            self.semaphore.wait()
+            semaphore.wait()
             
             guard let context = self.context else { return }
             self.booksMap = DBType.allCases.reduce(into: [DBType: [Book]]()) { map, type in
