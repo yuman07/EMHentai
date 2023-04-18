@@ -123,8 +123,8 @@ extension SearchViewController {
                     cell.searchTextField.text = searchInfo.keyWord
                 }
                 cell.textChangedAction = { [weak self] text in
-                    guard let self, self.searchInfo.keyWord != text else { return }
-                    self.searchInfo.keyWord = text
+                    guard let self, searchInfo.keyWord != text else { return }
+                    searchInfo.keyWord = text
                 }
             }
         case .dateSource:

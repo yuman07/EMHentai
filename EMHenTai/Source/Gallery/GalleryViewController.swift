@@ -75,8 +75,8 @@ final class GalleryViewController: UICollectionViewController {
         DownloadManager.shared.downloadPageSuccessSubject
             .receive(on: DispatchQueue.main)
             .sink { [weak self] obj in
-                guard let self, obj.book.gid == self.book.gid else { return }
-                self.collectionView.reloadItems(at: [IndexPath(row: obj.index, section: 0)])
+                guard let self, obj.book.gid == book.gid else { return }
+                collectionView.reloadItems(at: [IndexPath(row: obj.index, section: 0)])
             }
             .store(in: &cancelBag)
     }
@@ -87,10 +87,11 @@ final class GalleryViewController: UICollectionViewController {
         isRotating = true
         let currentIndex = lastSeenPageIndex
         collectionView.collectionViewLayout.invalidateLayout()
-        coordinator.animate(alongsideTransition: nil) { _ in
-            self.isRotating = false
-            self.collectionView.collectionViewLayout.invalidateLayout()
-            self.collectionView.scrollToItem(at: IndexPath(row: currentIndex, section: 0), at: .left, animated: false)
+        coordinator.animate(alongsideTransition: nil) { [weak self] _ in
+            guard let self else { return }
+            isRotating = false
+            collectionView.collectionViewLayout.invalidateLayout()
+            collectionView.scrollToItem(at: IndexPath(row: currentIndex, section: 0), at: .left, animated: false)
         }
     }
     

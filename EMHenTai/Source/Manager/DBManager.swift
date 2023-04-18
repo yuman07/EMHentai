@@ -30,13 +30,13 @@ final class DBManager {
             let container = NSPersistentContainer(name: "EMDB")
             container.loadPersistentStores { [weak self] _, error in
                 guard let self else { semaphore.signal(); return }
-                if error == nil { self.context = container.newBackgroundContext() }
+                if error == nil { context = container.newBackgroundContext() }
                 semaphore.signal()
             }
             semaphore.wait()
             
-            guard let context = self.context else { return }
-            self.booksMap = DBType.allCases.reduce(into: [DBType: [Book]]()) { map, type in
+            guard let context else { return }
+            booksMap = DBType.allCases.reduce(into: [DBType: [Book]]()) { map, type in
                 map[type] = {
                     let request = NSFetchRequest<NSFetchRequestResult>(entityName: type.rawValue)
                     return (try? context.fetch(request) as? [NSManagedObject]).flatMap { $0.map { Self.bookFrom(obj: $0) }.reversed() } ?? []
@@ -59,12 +59,12 @@ final class DBManager {
     
     func insert(book: Book, of type: DBType) {
         queue.async(flags: .barrier) { [weak self] in
-            guard let self, !self.p_contains(gid: book.gid, of: type) else { return }
+            guard let self, !p_contains(gid: book.gid, of: type) else { return }
             
-            self.booksMap[type]?.insert(book, at: 0)
-            self.DBChangedSubject.send(type)
+            booksMap[type]?.insert(book, at: 0)
+            DBChangedSubject.send(type)
             
-            guard let context = self.context else { return }
+            guard let context else { return }
             context.perform {
                 let obj = NSEntityDescription.insertNewObject(forEntityName: type.rawValue, into: context)
                 Self.update(obj: obj, with: book)
@@ -77,10 +77,10 @@ final class DBManager {
         queue.async(flags: .barrier) { [weak self] in
             guard let self else { return }
             
-            self.booksMap[type]?.removeAll { $0.gid == book.gid }
-            self.DBChangedSubject.send(type)
+            booksMap[type]?.removeAll { $0.gid == book.gid }
+            DBChangedSubject.send(type)
             
-            guard let context = self.context else { return }
+            guard let context else { return }
             context.perform {
                 let request = NSFetchRequest<NSFetchRequestResult>(entityName: type.rawValue)
                 request.predicate = NSPredicate(format: "gid = %d", book.gid)
@@ -96,10 +96,10 @@ final class DBManager {
         queue.async(flags: .barrier) { [weak self] in
             guard let self else { return }
             
-            self.booksMap[type]?.removeAll()
-            self.DBChangedSubject.send(type)
+            booksMap[type]?.removeAll()
+            DBChangedSubject.send(type)
             
-            guard let context = self.context else { return }
+            guard let context else { return }
             context.perform {
                 let request = NSFetchRequest<NSFetchRequestResult>(entityName: type.rawValue)
                 let delRequest = NSBatchDeleteRequest(fetchRequest: request)

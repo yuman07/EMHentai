@@ -31,9 +31,9 @@ final class BookcaseViewModel {
                     guard let self else { return }
                     switch evnet {
                     case let .start(info: info):
-                        self.onSearchStart(info: info)
+                        onSearchStart(info: info)
                     case let .finish(info: info, result: result):
-                        self.onSearchFinish(info: info, result: result)
+                        onSearchFinish(info: info, result: result)
                     }
                 }
                 .store(in: &cancelBag)
@@ -46,7 +46,7 @@ final class BookcaseViewModel {
                     case (.history, .history):
                         fallthrough
                     case (.download, .download):
-                        self.refreshData()
+                        refreshData()
                     default:
                         break
                     }

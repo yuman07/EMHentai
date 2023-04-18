@@ -25,8 +25,8 @@ final class SettingManager {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 guard let self else { return }
-                if case let newValue = self.checkLogin(), self.isLoginSubject.value != newValue {
-                    self.isLoginSubject.send(newValue)
+                if case let newValue = checkLogin(), isLoginSubject.value != newValue {
+                    isLoginSubject.send(newValue)
                 }
             }
             .store(in: &cancelBag)

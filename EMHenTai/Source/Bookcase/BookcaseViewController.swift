@@ -71,8 +71,8 @@ final class BookcaseViewController: UITableViewController {
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: { [weak self] in
                 guard let self else { return }
-                if self.type == .history { self.navigationItem.rightBarButtonItem?.isEnabled = !$0.isEmpty }
-                self.reloadTableViewData()
+                if type == .history { navigationItem.rightBarButtonItem?.isEnabled = !$0.isEmpty }
+                reloadTableViewData()
             })
             .store(in: &cancelBag)
         
@@ -88,10 +88,10 @@ final class BookcaseViewController: UITableViewController {
             .sink { [weak self] in
                 guard let self else { return }
                 if $0 {
-                    self.tableView.setContentOffset(CGPoint(x: 0, y: -self.refreshControl!.frame.size.height * 3), animated: false)
-                    self.refreshControl?.beginRefreshing()
+                    tableView.setContentOffset(CGPoint(x: 0, y: -refreshControl!.frame.size.height * 3), animated: false)
+                    refreshControl?.beginRefreshing()
                 } else {
-                    self.refreshControl?.endRefreshing()
+                    refreshControl?.endRefreshing()
                 }
             }
             .store(in: &cancelBag)
@@ -134,8 +134,9 @@ extension BookcaseViewController {
         } else {
             guard presentedViewController == nil else { return }
             let vc = UIAlertController(title: "警告", message: "此本含有令人不适内容(恶心猎奇)\n请确认是否一定要观看？", preferredStyle: .alert)
-            vc.addAction(UIAlertAction(title: "确认", style: .default, handler: { _ in
-                self.navigationController?.pushViewController(GalleryViewController(book: book), animated: true)
+            vc.addAction(UIAlertAction(title: "确认", style: .default, handler: { [weak self] _ in
+                guard let self else { return }
+                navigationController?.pushViewController(GalleryViewController(book: book), animated: true)
             }))
             vc.addAction(UIAlertAction(title: "算了", style: .cancel))
             present(vc, animated: true)
@@ -217,15 +218,17 @@ extension BookcaseViewController {
             }
             
             if let url = URL(string: book.webURLString(with: SettingManager.shared.isLoginSubject.value ? .ExHentai : .EHentai)) {
-                vc.addAction(UIAlertAction(title: "打开原网页", style: .default, handler: { _ in
+                vc.addAction(UIAlertAction(title: "打开原网页", style: .default, handler: { [weak self] _ in
+                    guard let self else { return }
                     let image = ImageCache.default.retrieveImageInMemoryCache(forKey: book.thumb)
-                    self.navigationController?.pushViewController(WebViewController(url: url, shareItem: (book.showTitle, image)), animated: true)
+                    navigationController?.pushViewController(WebViewController(url: url, shareItem: (book.showTitle, image)), animated: true)
                 }))
             }
             
             if !book.tags.isEmpty {
-                vc.addAction(UIAlertAction(title: "搜索相关Tag", style: .default, handler: { _ in
-                    self.navigationController?.pushViewController(TagViewController(book: book), animated: true)
+                vc.addAction(UIAlertAction(title: "搜索相关Tag", style: .default, handler: { [weak self] _ in
+                    guard let self else { return }
+                    navigationController?.pushViewController(TagViewController(book: book), animated: true)
                 }))
             }
             

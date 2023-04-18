@@ -57,10 +57,10 @@ final class SettingViewController: UITableViewController {
             .dropFirst()
             .sink { [weak self] isLogin in
                 guard let self, let index = SectionType.allCases.firstIndex(of: .loginState) else { return }
-                self.tableView.reloadSections([index], with: .none)
+                tableView.reloadSections([index], with: .none)
                 
                 if isLogin {
-                    guard self.presentedViewController == nil else { return }
+                    guard presentedViewController == nil else { return }
                     let vc = UIAlertController(title: "提示", message: "登录成功", preferredStyle: .alert)
                     vc.addAction(UIAlertAction(title: "好的", style: .default))
                     UIApplication.shared.keyWindow?.rootViewController?.present(vc, animated: true)
@@ -80,10 +80,12 @@ final class SettingViewController: UITableViewController {
     private func login() {
         guard presentedViewController == nil else { return }
         let vc = UIAlertController(title: "请选择登录方式", message: nil, preferredStyle: .alert)
-        vc.addAction(UIAlertAction(title: "账号密码", style: .default, handler: { _ in
-            self.navigationController?.pushViewController(LoginViewController(), animated: true)
+        vc.addAction(UIAlertAction(title: "账号密码", style: .default, handler: { [weak self] _ in
+            guard let self else { return }
+            navigationController?.pushViewController(LoginViewController(), animated: true)
         }))
-        vc.addAction(UIAlertAction(title: "Cookie", style: .default, handler: { _ in
+        vc.addAction(UIAlertAction(title: "Cookie", style: .default, handler: { [weak self] _ in
+            guard let self else { return }
             let alertVC = UIAlertController(title: "登录", message: "请在此输入Cookie", preferredStyle: .alert)
             alertVC.addTextField()
             alertVC.addAction(UIAlertAction(title: "提交", style: .default, handler: { [weak alertVC] _ in
@@ -92,7 +94,7 @@ final class SettingViewController: UITableViewController {
                 }
             }))
             alertVC.addAction(UIAlertAction(title: "取消", style: .cancel))
-            self.present(alertVC, animated: true)
+            present(alertVC, animated: true)
         }))
         vc.addAction(UIAlertAction(title: "取消", style: .cancel))
         present(vc, animated: true)
@@ -101,10 +103,12 @@ final class SettingViewController: UITableViewController {
     private func clearOtherData() {
         guard dataSize.otherSize > 0, presentedViewController == nil else { return }
         let vc = UIAlertController(title: "提示", message: "确定要清除其他数据吗？\n（包含如封面图等数据）", preferredStyle: .alert)
-        vc.addAction(UIAlertAction(title: "清除", style: .default, handler: { _ in
-            Task {
+        vc.addAction(UIAlertAction(title: "清除", style: .default, handler: { [weak self] _ in
+            guard let self else { return }
+            Task { [weak self] in
+                guard let self else { return }
                 await SettingManager.shared.clearOtherData()
-                self.reloadDataSize()
+                reloadDataSize()
             }
         }))
         vc.addAction(UIAlertAction(title: "取消", style: .cancel))
