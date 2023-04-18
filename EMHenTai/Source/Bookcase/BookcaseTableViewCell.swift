@@ -109,8 +109,8 @@ final class BookcaseTableViewCell: UITableViewCell {
         DownloadManager.shared.downloadPageSuccessSubject.map(\.book)
             .merge(with: DownloadManager.shared.downloadStateChangedSubject.map(\.book))
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] obj in
-                guard let self, let book, obj.gid == book.gid else { return }
+            .sink { [weak self] in
+                guard let self, let book, $0.gid == book.gid else { return }
                 updateProgress()
             }
             .store(in: &cancelBag)

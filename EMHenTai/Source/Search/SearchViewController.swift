@@ -122,9 +122,9 @@ extension SearchViewController {
                 if cell.searchTextField.text?.isEmpty ?? true {
                     cell.searchTextField.text = searchInfo.keyWord
                 }
-                cell.textChangedAction = { [weak self] text in
-                    guard let self, searchInfo.keyWord != text else { return }
-                    searchInfo.keyWord = text
+                cell.textChangedAction = { [weak self] in
+                    guard let self, searchInfo.keyWord != $0 else { return }
+                    searchInfo.keyWord = $0
                 }
             }
         case .dateSource:

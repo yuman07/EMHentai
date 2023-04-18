@@ -55,11 +55,11 @@ final class SettingViewController: UITableViewController {
         SettingManager.shared.isLoginSubject
             .receive(on: DispatchQueue.main)
             .dropFirst()
-            .sink { [weak self] isLogin in
+            .sink { [weak self] in
                 guard let self, let index = SectionType.allCases.firstIndex(of: .loginState) else { return }
                 tableView.reloadSections([index], with: .none)
                 
-                if isLogin {
+                if $0 {
                     guard presentedViewController == nil else { return }
                     let vc = UIAlertController(title: "提示", message: "登录成功", preferredStyle: .alert)
                     vc.addAction(UIAlertAction(title: "好的", style: .default))
@@ -105,10 +105,9 @@ final class SettingViewController: UITableViewController {
         let vc = UIAlertController(title: "提示", message: "确定要清除其他数据吗？\n（包含如封面图等数据）", preferredStyle: .alert)
         vc.addAction(UIAlertAction(title: "清除", style: .default, handler: { [weak self] _ in
             guard let self else { return }
-            Task { [weak self] in
-                guard let self else { return }
+            Task {
                 await SettingManager.shared.clearOtherData()
-                reloadDataSize()
+                self.reloadDataSize()
             }
         }))
         vc.addAction(UIAlertAction(title: "取消", style: .cancel))

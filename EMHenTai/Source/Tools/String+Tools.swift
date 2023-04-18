@@ -11,7 +11,7 @@ extension String {
     private func allIndices(of string: String) -> [Int] {
         var indices = [Int]()
         var start = startIndex
-        while start < endIndex, let range = range(of: string, range: start..<endIndex), !range.isEmpty {
+        while start < endIndex, let range = range(of: string, range: start ..< endIndex), !range.isEmpty {
             indices.append(distance(from: startIndex, to: range.lowerBound))
             start = range.upperBound
         }

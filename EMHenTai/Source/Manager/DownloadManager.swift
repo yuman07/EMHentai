@@ -118,8 +118,7 @@ final actor DownloadManager {
                 guard !FileManager.default.fileExists(atPath: book.imagePath(at: imgIndex)) else { continue }
                 guard !imgKey.isEmpty else { continue }
                 
-                group.addTask { [weak self] in
-                    guard let self else { return }
+                group.addTask {
                     guard let value = try? await AF.request(url, interceptor: RetryPolicy()).serializingString(automaticallyCancelling: true).value else { return }
                     guard let showKey = value.allSubString(of: "showkey=\"", endCharater: "\"").first else { return }
                     
@@ -142,7 +141,7 @@ final actor DownloadManager {
                             .serializingDownload(using: URLResponseSerializer(), automaticallyCancelling: true)
                             .value, FileManager.default.fileExists(atPath: p.path) else { return }
                     
-                    downloadPageSuccessSubject.send((book, imgIndex))
+                    self.downloadPageSuccessSubject.send((book, imgIndex))
                 }
             }
         })

@@ -74,9 +74,9 @@ final class GalleryViewController: UICollectionViewController {
     private func setupCombine() {
         DownloadManager.shared.downloadPageSuccessSubject
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] obj in
-                guard let self, obj.book.gid == book.gid else { return }
-                collectionView.reloadItems(at: [IndexPath(row: obj.index, section: 0)])
+            .sink { [weak self] in
+                guard let self, $0.book.gid == book.gid else { return }
+                collectionView.reloadItems(at: [IndexPath(row: $0.index, section: 0)])
             }
             .store(in: &cancelBag)
     }

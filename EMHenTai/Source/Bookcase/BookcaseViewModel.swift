@@ -27,9 +27,9 @@ final class BookcaseViewModel {
         if type == .home {
             SearchManager.shared.eventSubject
                 .receive(on: DispatchQueue.main)
-                .sink { [weak self] evnet in
+                .sink { [weak self] in
                     guard let self else { return }
-                    switch evnet {
+                    switch $0 {
                     case let .start(info: info):
                         onSearchStart(info: info)
                     case let .finish(info: info, result: result):
@@ -40,9 +40,9 @@ final class BookcaseViewModel {
         } else {
             DBManager.shared.DBChangedSubject
                 .receive(on: DispatchQueue.main)
-                .sink { [weak self] type in
+                .sink { [weak self] in
                     guard let self else { return }
-                    switch (type, self.type) {
+                    switch ($0, type) {
                     case (.history, .history):
                         fallthrough
                     case (.download, .download):
