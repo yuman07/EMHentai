@@ -13,13 +13,18 @@ extension UIApplication {
         return windows.count == 1 ? windows.first : windows.first(where: { $0.isKeyWindow })
     }
     
-    var APPIcon: UIImage? {
-        if let icons = Bundle.main.infoDictionary?["CFBundleIcons"] as? [String: Any],
-           let primaryIcon = icons["CFBundlePrimaryIcon"] as? [String: Any],
-           let iconFiles = primaryIcon["CFBundleIconFiles"] as? [String],
-           let lastIcon = iconFiles.last {
-            return UIImage(named: lastIcon)
+    var appIcon: UIImage? {
+        enum Once {
+            static let appIcon = {
+                if let icons = Bundle.main.infoDictionary?["CFBundleIcons"] as? [String: Any],
+                   let primaryIcon = icons["CFBundlePrimaryIcon"] as? [String: Any],
+                   let iconFiles = primaryIcon["CFBundleIconFiles"] as? [String],
+                   let lastIcon = iconFiles.last {
+                    return UIImage(named: lastIcon)
+                }
+                return nil
+            }()
         }
-        return nil
+        return Once.appIcon
     }
 }
