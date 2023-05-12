@@ -58,8 +58,7 @@ final class SettingManager {
             Task.detached {
                 var otherSize = Int((try? KingfisherManager.shared.cache.diskStorage.totalSize()) ?? 0)
                 guard let folders = try? FileManager.default.contentsOfDirectory(atPath: Book.downloadFolderPath), !folders.isEmpty else {
-                    continuation.resume(returning: (0, 0, otherSize))
-                    return
+                    return continuation.resume(returning: (0, 0, otherSize))
                 }
                 
                 let size = folders.compactMap({ Int($0) }).reduce(into: (0, 0)) {
@@ -79,8 +78,7 @@ final class SettingManager {
             KingfisherManager.shared.cache.clearDiskCache {
                 Task.detached {
                     guard let folders = try? FileManager.default.contentsOfDirectory(atPath: Book.downloadFolderPath), !folders.isEmpty else {
-                        continuation.resume()
-                        return
+                        return continuation.resume()
                     }
                     folders.compactMap({ Int($0) }).forEach {
                         let path = Book.downloadFolderPath + "/\($0)"
