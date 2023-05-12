@@ -68,7 +68,7 @@ final class GalleryViewController: UICollectionViewController {
             navBarBackgroundView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
         ])
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "回到首页", style: .plain, target: self, action: #selector(backToFirstPage))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "跳转", style: .plain, target: self, action: #selector(jumpToPageX))
     }
     
     private func setupCombine() {
@@ -125,10 +125,16 @@ final class GalleryViewController: UICollectionViewController {
     }
     
     @objc
-    private func backToFirstPage() {
-        if !collectionView.visibleCells.isEmpty {
-            collectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .left, animated: true)
-        }
+    private func jumpToPageX() {
+        let vc = UIAlertController(title: "提示", message: "请输入要跳转的页数", preferredStyle: .alert)
+        vc.addTextField { $0.keyboardType = .numberPad }
+        vc.addAction(UIAlertAction(title: "跳转", style: .default, handler: { [weak self, weak vc] _ in
+            guard let self, let num = Int(vc?.textFields?.first?.text ?? "") else { return }
+            let page = max(1, min(book.contentImgCount, num))
+            collectionView.scrollToItem(at: IndexPath(row: page - 1, section: 0), at: .left, animated: true)
+        }))
+        vc.addAction(UIAlertAction(title: "取消", style: .cancel))
+        present(vc, animated: true)
     }
 }
 
