@@ -68,7 +68,7 @@ final class GalleryViewController: UICollectionViewController {
             navBarBackgroundView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
         ])
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "跳转", style: .plain, target: self, action: #selector(jumpToPageX))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(symbol: .jump), style: .plain, target: self, action: #selector(jumpToPageX))
     }
     
     private func setupCombine() {

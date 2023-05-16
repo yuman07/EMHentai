@@ -14,6 +14,7 @@ extension UIImage {
         case download = "tray.and.arrow.down.fill"
         case setting = "gear"
         case trash
+        case jump = "arrow.uturn.forward"
     }
     
     convenience init?(symbol: SFSymbol, size: CGFloat = 14) {
