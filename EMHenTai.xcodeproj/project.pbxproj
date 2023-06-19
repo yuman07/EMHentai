@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		7A05E65D27948098001EE48F /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A05E65C27948098001EE48F /* SearchViewController.swift */; };
-		7A06F2232A0DFDEA003BAA9B /* tag-v6.6636.1-230512.json in Resources */ = {isa = PBXBuildFile; fileRef = 7A06F2222A0DFDEA003BAA9B /* tag-v6.6636.1-230512.json */; };
 		7A11677A27954C7A00C200CA /* BookcaseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A11677927954C7A00C200CA /* BookcaseTableViewCell.swift */; };
 		7A11677D2795690500C200CA /* String+Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A11677C2795690500C200CA /* String+Tools.swift */; };
 		7A1167812796887500C200CA /* GalleryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1167802796887500C200CA /* GalleryCollectionViewCell.swift */; };
@@ -38,6 +37,7 @@
 		7AD3B2E7279E79D8000702C6 /* TagViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD3B2E6279E79D8000702C6 /* TagViewController.swift */; };
 		7AD3B2E9279E810A000702C6 /* TranslateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD3B2E8279E810A000702C6 /* TranslateManager.swift */; };
 		7AE1CBF128D42EEF00888582 /* Array+Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE1CBF028D42EEF00888582 /* Array+Tools.swift */; };
+		7AE52ACD2A4023E200A0C36B /* tag-v6.6767.1-230619.json in Resources */ = {isa = PBXBuildFile; fileRef = 7AE52ACC2A4023E200A0C36B /* tag-v6.6767.1-230619.json */; };
 		7AE912C527D07BB500DD9E65 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 7AE912C427D07BB500DD9E65 /* Alamofire */; };
 		7AE912C827D07C2500DD9E65 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 7AE912C727D07C2500DD9E65 /* Kingfisher */; };
 		7AEDF3FC279138640064DB12 /* SearchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AEDF3FB279138640064DB12 /* SearchManager.swift */; };
@@ -46,7 +46,6 @@
 
 /* Begin PBXFileReference section */
 		7A05E65C27948098001EE48F /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
-		7A06F2222A0DFDEA003BAA9B /* tag-v6.6636.1-230512.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "tag-v6.6636.1-230512.json"; sourceTree = "<group>"; };
 		7A11677927954C7A00C200CA /* BookcaseTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookcaseTableViewCell.swift; sourceTree = "<group>"; };
 		7A11677C2795690500C200CA /* String+Tools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Tools.swift"; sourceTree = "<group>"; };
 		7A1167802796887500C200CA /* GalleryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -78,6 +77,7 @@
 		7AD3B2E6279E79D8000702C6 /* TagViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagViewController.swift; sourceTree = "<group>"; };
 		7AD3B2E8279E810A000702C6 /* TranslateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslateManager.swift; sourceTree = "<group>"; };
 		7AE1CBF028D42EEF00888582 /* Array+Tools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Tools.swift"; sourceTree = "<group>"; };
+		7AE52ACC2A4023E200A0C36B /* tag-v6.6767.1-230619.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "tag-v6.6767.1-230619.json"; sourceTree = "<group>"; };
 		7AEDF3FB279138640064DB12 /* SearchManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchManager.swift; sourceTree = "<group>"; };
 		7AEDF3FD279177720064DB12 /* SearchInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchInfo.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -223,7 +223,7 @@
 		7AB96809279118C00006466A /* Support */ = {
 			isa = PBXGroup;
 			children = (
-				7A06F2222A0DFDEA003BAA9B /* tag-v6.6636.1-230512.json */,
+				7AE52ACC2A4023E200A0C36B /* tag-v6.6767.1-230619.json */,
 				7AB967FD279117CD0006466A /* Assets.xcassets */,
 				7AB967FF279117CD0006466A /* LaunchScreen.storyboard */,
 				7AB96802279117CD0006466A /* Info.plist */,
@@ -315,8 +315,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				7AB96801279117CD0006466A /* LaunchScreen.storyboard in Resources */,
+				7AE52ACD2A4023E200A0C36B /* tag-v6.6767.1-230619.json in Resources */,
 				7AB967FE279117CD0006466A /* Assets.xcassets in Resources */,
-				7A06F2232A0DFDEA003BAA9B /* tag-v6.6636.1-230512.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -589,7 +589,7 @@
 			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
 			requirement = {
 				kind = exactVersion;
-				version = 7.6.2;
+				version = 7.8.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
