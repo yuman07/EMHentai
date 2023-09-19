@@ -6,6 +6,7 @@
 //
 
 import Combine
+import Kingfisher
 import UIKit
 
 final class BookcaseTableViewCell: UITableViewCell {
