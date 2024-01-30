@@ -19,7 +19,6 @@
 		7A1C12B327995C5E00ADD54E /* EMDB.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7A1C12B127995C5E00ADD54E /* EMDB.xcdatamodeld */; };
 		7A1C12B5279A8CC000ADD54E /* FileManager+Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1C12B4279A8CC000ADD54E /* FileManager+Tools.swift */; };
 		7A1C12B7279A8EE400ADD54E /* Int+Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1C12B6279A8EE400ADD54E /* Int+Tools.swift */; };
-		7A32CD6F2B4532F80038F48D /* tag-20240103.json in Resources */ = {isa = PBXBuildFile; fileRef = 7A32CD6E2B4532F80038F48D /* tag-20240103.json */; };
 		7A3F29DA28E8342E00F8CC6B /* BookcaseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A3F29D928E8342E00F8CC6B /* BookcaseViewModel.swift */; };
 		7A3F29DC28E8907300F8CC6B /* SearchInfo+Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A3F29DB28E8907300F8CC6B /* SearchInfo+Tools.swift */; };
 		7A5CA04C27A9770C00E9FDF9 /* UIApplication+Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A5CA04B27A9770C00E9FDF9 /* UIApplication+Tools.swift */; };
@@ -35,6 +34,7 @@
 		7AB96801279117CD0006466A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7AB967FF279117CD0006466A /* LaunchScreen.storyboard */; };
 		7AB9680B279118F90006466A /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB9680A279118F90006466A /* RootViewController.swift */; };
 		7ACADDC027BF3E2700D8FC9B /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ACADDBF27BF3E2700D8FC9B /* WebViewController.swift */; };
+		7ACE1C512B68EBEA009C5D0F /* tag-20240130.json in Resources */ = {isa = PBXBuildFile; fileRef = 7ACE1C502B68EBEA009C5D0F /* tag-20240130.json */; };
 		7AD3B2E7279E79D8000702C6 /* TagViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD3B2E6279E79D8000702C6 /* TagViewController.swift */; };
 		7AD3B2E9279E810A000702C6 /* TranslateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD3B2E8279E810A000702C6 /* TranslateManager.swift */; };
 		7AE1CBF128D42EEF00888582 /* Array+Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE1CBF028D42EEF00888582 /* Array+Tools.swift */; };
@@ -57,7 +57,6 @@
 		7A1C12B227995C5E00ADD54E /* EMDB.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = EMDB.xcdatamodel; sourceTree = "<group>"; };
 		7A1C12B4279A8CC000ADD54E /* FileManager+Tools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileManager+Tools.swift"; sourceTree = "<group>"; };
 		7A1C12B6279A8EE400ADD54E /* Int+Tools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Tools.swift"; sourceTree = "<group>"; };
-		7A32CD6E2B4532F80038F48D /* tag-20240103.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "tag-20240103.json"; sourceTree = "<group>"; };
 		7A3F29D928E8342E00F8CC6B /* BookcaseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookcaseViewModel.swift; sourceTree = "<group>"; };
 		7A3F29DB28E8907300F8CC6B /* SearchInfo+Tools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SearchInfo+Tools.swift"; sourceTree = "<group>"; };
 		7A5CA04B27A9770C00E9FDF9 /* UIApplication+Tools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+Tools.swift"; sourceTree = "<group>"; };
@@ -75,6 +74,7 @@
 		7AB96802279117CD0006466A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7AB9680A279118F90006466A /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 		7ACADDBF27BF3E2700D8FC9B /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
+		7ACE1C502B68EBEA009C5D0F /* tag-20240130.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "tag-20240130.json"; sourceTree = "<group>"; };
 		7AD3B2E6279E79D8000702C6 /* TagViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagViewController.swift; sourceTree = "<group>"; };
 		7AD3B2E8279E810A000702C6 /* TranslateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslateManager.swift; sourceTree = "<group>"; };
 		7AE1CBF028D42EEF00888582 /* Array+Tools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Tools.swift"; sourceTree = "<group>"; };
@@ -223,7 +223,7 @@
 		7AB96809279118C00006466A /* Support */ = {
 			isa = PBXGroup;
 			children = (
-				7A32CD6E2B4532F80038F48D /* tag-20240103.json */,
+				7ACE1C502B68EBEA009C5D0F /* tag-20240130.json */,
 				7AB967FD279117CD0006466A /* Assets.xcassets */,
 				7AB967FF279117CD0006466A /* LaunchScreen.storyboard */,
 				7AB96802279117CD0006466A /* Info.plist */,
@@ -280,7 +280,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1320;
-				LastUpgradeCheck = 1500;
+				LastUpgradeCheck = 1520;
 				TargetAttributes = {
 					7AB967F0279117CC0006466A = {
 						CreatedOnToolsVersion = 13.2.1;
@@ -315,7 +315,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7AB96801279117CD0006466A /* LaunchScreen.storyboard in Resources */,
-				7A32CD6F2B4532F80038F48D /* tag-20240103.json in Resources */,
+				7ACE1C512B68EBEA009C5D0F /* tag-20240130.json in Resources */,
 				7AB967FE279117CD0006466A /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -378,6 +378,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -440,6 +441,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -498,7 +500,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = V9YTC5D8QQ;
+				DEVELOPMENT_TEAM = UBF8T346G9;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = EMHenTai/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = EMHenTai;
@@ -509,7 +511,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -529,7 +531,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = V9YTC5D8QQ;
+				DEVELOPMENT_TEAM = UBF8T346G9;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = EMHenTai/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = EMHenTai;
@@ -540,7 +542,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -591,7 +593,7 @@
 			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
 			requirement = {
 				kind = exactVersion;
-				version = 7.10.1;
+				version = 7.10.2;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
