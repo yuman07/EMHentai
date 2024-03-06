@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 60;
+	objectVersion = 63;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -29,12 +29,12 @@
 		7A6C95D127911E9A00077093 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A6C95D027911E9A00077093 /* SettingViewController.swift */; };
 		7A6C95D327911EB200077093 /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A6C95D227911EB200077093 /* Book.swift */; };
 		7A6C95D727911EF300077093 /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A6C95D627911EF300077093 /* DownloadManager.swift */; };
+		7A96F0F52B981ECD00EC7384 /* tag-20240306.json in Resources */ = {isa = PBXBuildFile; fileRef = 7A96F0F42B981ECD00EC7384 /* tag-20240306.json */; };
 		7AB967F5279117CC0006466A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB967F4279117CC0006466A /* AppDelegate.swift */; };
 		7AB967FE279117CD0006466A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7AB967FD279117CD0006466A /* Assets.xcassets */; };
 		7AB96801279117CD0006466A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7AB967FF279117CD0006466A /* LaunchScreen.storyboard */; };
 		7AB9680B279118F90006466A /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB9680A279118F90006466A /* RootViewController.swift */; };
 		7ACADDC027BF3E2700D8FC9B /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ACADDBF27BF3E2700D8FC9B /* WebViewController.swift */; };
-		7ACE1C512B68EBEA009C5D0F /* tag-20240130.json in Resources */ = {isa = PBXBuildFile; fileRef = 7ACE1C502B68EBEA009C5D0F /* tag-20240130.json */; };
 		7AD3B2E7279E79D8000702C6 /* TagViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD3B2E6279E79D8000702C6 /* TagViewController.swift */; };
 		7AD3B2E9279E810A000702C6 /* TranslateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD3B2E8279E810A000702C6 /* TranslateManager.swift */; };
 		7AE1CBF128D42EEF00888582 /* Array+Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE1CBF028D42EEF00888582 /* Array+Tools.swift */; };
@@ -67,6 +67,7 @@
 		7A6C95D027911E9A00077093 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		7A6C95D227911EB200077093 /* Book.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Book.swift; sourceTree = "<group>"; };
 		7A6C95D627911EF300077093 /* DownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
+		7A96F0F42B981ECD00EC7384 /* tag-20240306.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "tag-20240306.json"; sourceTree = "<group>"; };
 		7AB967F1279117CC0006466A /* EMHenTai.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EMHenTai.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7AB967F4279117CC0006466A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7AB967FD279117CD0006466A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -74,7 +75,6 @@
 		7AB96802279117CD0006466A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7AB9680A279118F90006466A /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 		7ACADDBF27BF3E2700D8FC9B /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
-		7ACE1C502B68EBEA009C5D0F /* tag-20240130.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "tag-20240130.json"; sourceTree = "<group>"; };
 		7AD3B2E6279E79D8000702C6 /* TagViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagViewController.swift; sourceTree = "<group>"; };
 		7AD3B2E8279E810A000702C6 /* TranslateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslateManager.swift; sourceTree = "<group>"; };
 		7AE1CBF028D42EEF00888582 /* Array+Tools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Tools.swift"; sourceTree = "<group>"; };
@@ -223,7 +223,7 @@
 		7AB96809279118C00006466A /* Support */ = {
 			isa = PBXGroup;
 			children = (
-				7ACE1C502B68EBEA009C5D0F /* tag-20240130.json */,
+				7A96F0F42B981ECD00EC7384 /* tag-20240306.json */,
 				7AB967FD279117CD0006466A /* Assets.xcassets */,
 				7AB967FF279117CD0006466A /* LaunchScreen.storyboard */,
 				7AB96802279117CD0006466A /* Info.plist */,
@@ -288,7 +288,7 @@
 				};
 			};
 			buildConfigurationList = 7AB967EC279117CC0006466A /* Build configuration list for PBXProject "EMHenTai" */;
-			compatibilityVersion = "Xcode 15.0";
+			compatibilityVersion = "Xcode 15.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -314,8 +314,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7A96F0F52B981ECD00EC7384 /* tag-20240306.json in Resources */,
 				7AB96801279117CD0006466A /* LaunchScreen.storyboard in Resources */,
-				7ACE1C512B68EBEA009C5D0F /* tag-20240130.json in Resources */,
 				7AB967FE279117CD0006466A /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -585,7 +585,7 @@
 			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
 			requirement = {
 				kind = exactVersion;
-				version = 5.8.1;
+				version = 5.9.0;
 			};
 		};
 		7AE912C627D07C2500DD9E65 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
@@ -593,7 +593,7 @@
 			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
 			requirement = {
 				kind = exactVersion;
-				version = 7.10.2;
+				version = 7.11.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
