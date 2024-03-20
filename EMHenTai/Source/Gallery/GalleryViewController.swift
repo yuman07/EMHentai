@@ -122,7 +122,8 @@ final class GalleryViewController: UICollectionViewController {
         } else if lastSeenPageIndex > 0 {
             let index = lastSeenPageIndex
             DispatchQueue.main.async { [weak self] in
-                self?.collectionView.scrollToItem(at: IndexPath(row: index, section: 0), at: .left, animated: false)
+                guard let self else { return }
+                collectionView.scrollToItem(at: IndexPath(row: index, section: 0), at: .left, animated: false)
             }
         }
     }
@@ -165,7 +166,8 @@ extension GalleryViewController {
         if let cell = cell as? GalleryCollectionViewCell {
             cell.updateImageWith(filePath: book.imagePath(at: indexPath.row))
             cell.tapBlock = { [weak self] in
-                self?.changeNavBarHidden()
+                guard let self else { return }
+                changeNavBarHidden()
             }
         }
         return cell
