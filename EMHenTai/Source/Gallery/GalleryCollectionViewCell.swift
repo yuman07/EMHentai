@@ -28,6 +28,14 @@ final class GalleryCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
+    private let progressView = {
+        let view = UIProgressView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .white
+        view.layer.cornerRadius = 1
+        return view
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
@@ -42,6 +50,7 @@ final class GalleryCollectionViewCell: UICollectionViewCell {
         contentView.backgroundColor = .black
         contentView.addSubview(scrollView)
         scrollView.addSubview(imageView)
+        imageView.addSubview(progressView)
         
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: contentView.topAnchor),
@@ -55,6 +64,12 @@ final class GalleryCollectionViewCell: UICollectionViewCell {
             imageView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             imageView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
             imageView.heightAnchor.constraint(equalTo: scrollView.heightAnchor),
+            
+            progressView.leftAnchor.constraint(equalTo: imageView.leftAnchor, constant: 25),
+            progressView.rightAnchor.constraint(equalTo: imageView.rightAnchor, constant: -25),
+            progressView.heightAnchor.constraint(equalToConstant: 2),
+            progressView.centerXAnchor.constraint(equalTo: imageView.centerXAnchor),
+            progressView.centerYAnchor.constraint(equalTo: imageView.centerYAnchor),
         ])
     }
     
@@ -80,6 +95,11 @@ final class GalleryCollectionViewCell: UICollectionViewCell {
     func updateImageWith(filePath: String) {
         scrollView.setZoomScale(1, animated: false)
         imageView.image = UIImage(filePath: filePath)
+        progressView.isHidden = imageView.image != nil
+    }
+    
+    func updateProgress(_ progress: Progress) {
+        progressView.progress = Float(progress.fractionCompleted)
     }
 }
 

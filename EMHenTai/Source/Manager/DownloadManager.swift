@@ -11,6 +11,7 @@ import Foundation
 import Kingfisher
 
 final actor DownloadManager {
+    // 整个本子的下载状态
     enum State {
         case before
         case ing
@@ -21,6 +22,7 @@ final actor DownloadManager {
     static let shared = DownloadManager()
     
     nonisolated let downloadStateChangedSubject = PassthroughSubject<(book: Book, state: State), Never>()
+    nonisolated let downloadPageProgressSubject = PassthroughSubject<(book: Book, index: Int, progress: Progress), Never>()
     nonisolated let downloadPageSuccessSubject = PassthroughSubject<(book: Book, index: Int), Never>()
     
     private init() {}
@@ -138,6 +140,10 @@ final actor DownloadManager {
                     
                     guard let p = try? await AF
                             .download(imgURL, interceptor: RetryPolicy(), to: { _, _ in (URL(fileURLWithPath: book.imagePath(at: imgIndex)), []) })
+                            .downloadProgress(queue: .main, closure: { [weak self] progress in
+                                guard let self else { return }
+                                downloadPageProgressSubject.send((book, imgIndex, progress))
+                            })
                             .serializingDownload(using: URLResponseSerializer(), automaticallyCancelling: true)
                             .value, FileManager.default.fileExists(atPath: p.path) else { return }
                     

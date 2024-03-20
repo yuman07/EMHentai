@@ -79,6 +79,15 @@ final class GalleryViewController: UICollectionViewController {
                 collectionView.reloadItems(at: [IndexPath(row: $0.index, section: 0)])
             }
             .store(in: &cancelBag)
+        
+        DownloadManager.shared.downloadPageProgressSubject
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in
+                guard let self, $0.book.gid == book.gid else { return }
+                guard let cell = collectionView.cellForItem(at: IndexPath(row: $0.index, section: 0)) as? GalleryCollectionViewCell else { return }
+                cell.updateProgress($0.progress)
+            }
+            .store(in: &cancelBag)
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
