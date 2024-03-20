@@ -7,10 +7,12 @@
 
 import Foundation
 
-// https://ehwiki.org/wiki/Technical_Issues  "Content Warning - This gallery has been flagged as Offensive For Everyone
-private let offensiveTags = Set(["guro", "snuff", "scat"])
-
 extension Book {
+    private enum Constant {
+        // https://ehwiki.org/wiki/Technical_Issues  "Content Warning - This gallery has been flagged as Offensive For Everyone
+        static let offensiveTags = Set(["guro", "snuff", "scat"])
+    }
+    
     static var downloadFolderPath: String {
         NSHomeDirectory() + "/Documents/EMDownload"
     }
@@ -48,6 +50,6 @@ extension Book {
     }
     
     var isOffensive: Bool {
-        !offensiveTags.intersection(Set(tags)).isEmpty
+        !Constant.offensiveTags.intersection(Set(tags)).isEmpty
     }
 }

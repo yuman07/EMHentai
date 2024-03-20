@@ -7,24 +7,26 @@
 
 import Foundation
 
-private let oneKB = 1024
-private let oneMB = oneKB * 1024
-private let oneGB = oneMB * 1024
-private let oneTB = oneGB * 1024
-
 extension Int {
+    private enum Constant {
+        static let oneKB = 1024
+        static let oneMB = oneKB * 1024
+        static let oneGB = oneMB * 1024
+        static let oneTB = oneGB * 1024
+    }
+    
     var diskSizeFormat: String {
         switch self {
-        case ..<oneKB:
+        case ..<Constant.oneKB:
             return "\(self) Byte"
-        case oneKB..<oneMB:
-            return String(format: "%.2f KB", Double(self) / Double(oneKB))
-        case oneMB..<oneGB:
-            return String(format: "%.2f MB", Double(self) / Double(oneMB))
-        case oneGB..<oneTB:
-            return String(format: "%.2f GB", Double(self) / Double(oneGB))
+        case Constant.oneKB ..< Constant.oneMB:
+            return String(format: "%.2f KB", Double(self) / Double(Constant.oneKB))
+        case Constant.oneMB ..< Constant.oneGB:
+            return String(format: "%.2f MB", Double(self) / Double(Constant.oneMB))
+        case Constant.oneGB ..< Constant.oneTB:
+            return String(format: "%.2f GB", Double(self) / Double(Constant.oneGB))
         default:
-            return String(format: "%.2f TB", Double(self) / Double(oneTB))
+            return String(format: "%.2f TB", Double(self) / Double(Constant.oneTB))
         }
     }
 }

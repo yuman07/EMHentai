@@ -27,7 +27,7 @@ extension String {
                 end = index(after: end)
                 if self[end] == endCharater { meet += 1 }
             }
-            return "\(self[start..<end])"
+            return "\(self[start ..< end])"
         }
     }
 }
