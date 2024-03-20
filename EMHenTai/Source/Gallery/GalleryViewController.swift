@@ -63,8 +63,8 @@ final class GalleryViewController: UICollectionViewController {
         
         NSLayoutConstraint.activate([
             navBarBackgroundView.topAnchor.constraint(equalTo: view.topAnchor),
-            navBarBackgroundView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
-            navBarBackgroundView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
+            navBarBackgroundView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            navBarBackgroundView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             navBarBackgroundView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
         ])
         

@@ -79,26 +79,26 @@ final class BookcaseTableViewCell: UITableViewCell {
         contentView.addSubview(fileCountLabel)
         
         NSLayoutConstraint.activate([
-            thumbImageView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 12),
+            thumbImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
             thumbImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             thumbImageView.widthAnchor.constraint(equalToConstant: 125),
             thumbImageView.heightAnchor.constraint(equalToConstant: 125),
             
             titleLabel.topAnchor.constraint(equalTo: thumbImageView.topAnchor),
-            titleLabel.leftAnchor.constraint(equalTo: thumbImageView.rightAnchor, constant: 8),
-            titleLabel.rightAnchor.constraint(lessThanOrEqualTo: scoreLabel.rightAnchor),
+            titleLabel.leadingAnchor.constraint(equalTo: thumbImageView.trailingAnchor, constant: 8),
+            titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: scoreLabel.trailingAnchor),
             
             categoryLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
-            categoryLabel.leftAnchor.constraint(equalTo: titleLabel.leftAnchor),
+            categoryLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             
             progressLabel.bottomAnchor.constraint(equalTo: fileCountLabel.bottomAnchor),
-            progressLabel.leftAnchor.constraint(equalTo: titleLabel.leftAnchor),
+            progressLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             
             scoreLabel.bottomAnchor.constraint(equalTo: fileCountLabel.topAnchor, constant: -8),
-            scoreLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -12),
+            scoreLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
             
             fileCountLabel.bottomAnchor.constraint(equalTo: thumbImageView.bottomAnchor),
-            fileCountLabel.rightAnchor.constraint(equalTo: scoreLabel.rightAnchor),
+            fileCountLabel.trailingAnchor.constraint(equalTo: scoreLabel.trailingAnchor),
         ])
     }
     

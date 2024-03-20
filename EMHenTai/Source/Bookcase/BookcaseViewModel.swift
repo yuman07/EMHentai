@@ -43,9 +43,7 @@ final class BookcaseViewModel {
                 .sink { [weak self] in
                     guard let self else { return }
                     switch ($0, type) {
-                    case (.history, .history):
-                        fallthrough
-                    case (.download, .download):
+                    case (.history, .history), (.download, .download):
                         refreshData()
                     default:
                         break

@@ -37,8 +37,8 @@ final class SearchTextFieldCell: UITableViewCell {
         contentView.addSubview(searchTextField)
         
         NSLayoutConstraint.activate([
-            searchTextField.leftAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leftAnchor, constant: 15),
-            searchTextField.rightAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.rightAnchor, constant: -15),
+            searchTextField.leadingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leadingAnchor, constant: 15),
+            searchTextField.trailingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.trailingAnchor, constant: -15),
             searchTextField.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             searchTextField.heightAnchor.constraint(equalToConstant: 30),
         ])

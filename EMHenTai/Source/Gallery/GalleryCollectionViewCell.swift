@@ -54,19 +54,19 @@ final class GalleryCollectionViewCell: UICollectionViewCell {
         
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            scrollView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
-            scrollView.rightAnchor.constraint(equalTo: contentView.rightAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             scrollView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             
             imageView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            imageView.leftAnchor.constraint(equalTo: scrollView.leftAnchor),
-            imageView.rightAnchor.constraint(equalTo: scrollView.rightAnchor),
+            imageView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            imageView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
             imageView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             imageView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
             imageView.heightAnchor.constraint(equalTo: scrollView.heightAnchor),
             
-            progressView.leftAnchor.constraint(equalTo: imageView.leftAnchor, constant: 25),
-            progressView.rightAnchor.constraint(equalTo: imageView.rightAnchor, constant: -25),
+            progressView.leadingAnchor.constraint(equalTo: imageView.leadingAnchor, constant: 25),
+            progressView.trailingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: -25),
             progressView.heightAnchor.constraint(equalToConstant: 2),
             progressView.centerXAnchor.constraint(equalTo: imageView.centerXAnchor),
             progressView.centerYAnchor.constraint(equalTo: imageView.centerYAnchor),

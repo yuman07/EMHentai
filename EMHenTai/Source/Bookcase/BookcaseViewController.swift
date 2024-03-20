@@ -79,7 +79,8 @@ final class BookcaseViewController: UITableViewController {
         viewModel.$hint
             .receive(on: DispatchQueue.main)
             .sink { [weak self] in
-                self?.footerView.hint = $0
+                guard let self else { return }
+                footerView.hint = $0
             }
             .store(in: &cancelBag)
         
@@ -103,7 +104,8 @@ final class BookcaseViewController: UITableViewController {
             if let cell = cell as? BookcaseTableViewCell {
                 cell.updateWith(book: book)
                 cell.longPressBlock = { [weak self] in
-                    self?.showAlertVC(with: book)
+                    guard let self else { return }
+                    showAlertVC(with: book)
                 }
             }
             return cell
