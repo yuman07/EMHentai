@@ -88,7 +88,7 @@ final actor DownloadManager {
                 try? FileManager.default.copyItem(at: from, to: to)
             } else {
                 _ = try? await AF
-                    .download(book.thumb, interceptor: RetryPolicy(), to: { _, _ in (URL(fileURLWithPath: book.coverImagePath), []) })
+                    .download(book.thumb, interceptor: RetryPolicy.downloadRetryPolicy, to: { _, _ in (URL(fileURLWithPath: book.coverImagePath), []) })
                     .serializingDownload(using: URLResponseSerializer(), automaticallyCancelling: true)
                     .value
             }
@@ -98,11 +98,12 @@ final actor DownloadManager {
             Task {
                 await withTaskGroup(of: Void.self, body: { group in
                     let groupNum = book.contentImgCount / groupTotalImgNum + (book.contentImgCount % groupTotalImgNum == 0 ? 0 : 1)
-                    for groupIndex in 0..<groupNum {
+                    for groupIndex in 0 ..< groupNum {
                         guard checkGroupNeedRequest(of: book, groupIndex: groupIndex) else { continue }
                         group.addTask {
                             let url = book.currentWebURLString + (groupIndex > 0 ? "?p=\(groupIndex)" : "") + "/?nw=session"
-                            guard let value = try? await AF.request(url, interceptor: RetryPolicy()).serializingString(automaticallyCancelling: true).value else { return }
+                            guard let value = try? await AF.request(url, interceptor: RetryPolicy.downloadRetryPolicy).serializingString(automaticallyCancelling: true).value 
+                            else { return }
                             let baseURL = SearchInfo.currentSource.rawValue + "s/"
                             value.allSubString(of: baseURL, endCharater: "\"").forEach { continuation.yield(baseURL + $0) }
                         }
@@ -121,7 +122,8 @@ final actor DownloadManager {
                 guard !imgKey.isEmpty else { continue }
                 
                 group.addTask {
-                    guard let value = try? await AF.request(url, interceptor: RetryPolicy()).serializingString(automaticallyCancelling: true).value else { return }
+                    guard let value = try? await AF.request(url, interceptor: RetryPolicy.downloadRetryPolicy).serializingString(automaticallyCancelling: true).value 
+                    else { return }
                     guard let showKey = value.allSubString(of: "showkey=\"", endCharater: "\"").first else { return }
                     
                     guard let source = try? await AF.request(
@@ -139,11 +141,11 @@ final actor DownloadManager {
                     guard let imgURL = source.allSubString(of: "src=\"", endCharater: "\"").first else { return }
                     
                     guard let p = try? await AF
-                            .download(imgURL, interceptor: RetryPolicy(), to: { _, _ in (URL(fileURLWithPath: book.imagePath(at: imgIndex)), []) })
-                            .downloadProgress(queue: .main, closure: { [weak self] progress in
-                                guard let self else { return }
-                                downloadPageProgressSubject.send((book, imgIndex, progress))
-                            })
+                        .download(imgURL, interceptor: RetryPolicy.downloadRetryPolicy, to: { _, _ in (URL(fileURLWithPath: book.imagePath(at: imgIndex)), []) })
+                        .downloadProgress(queue: .main, closure: { [weak self] progress in
+                            guard let self else { return }
+                            downloadPageProgressSubject.send((book, imgIndex, progress))
+                        })
                             .serializingDownload(using: URLResponseSerializer(), automaticallyCancelling: true)
                             .value, FileManager.default.fileExists(atPath: p.path) else { return }
                     
@@ -168,4 +170,8 @@ final actor DownloadManager {
 
 private struct GroupModel: Codable {
     let i3: String
+}
+
+private extension RetryPolicy {
+    static let downloadRetryPolicy = RetryPolicy(retryLimit: .max)
 }
