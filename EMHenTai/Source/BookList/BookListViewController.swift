@@ -1,5 +1,5 @@
 //
-//  BookcaseViewController.swift
+//  BookListViewController.swift
 //  EMHenTai
 //
 //  Created by yuman on 2022/1/14.
@@ -9,22 +9,22 @@ import Combine
 import Kingfisher
 import UIKit
 
-final class BookcaseViewController: UITableViewController {
-    enum BookcaseType {
+final class BookListViewController: UITableViewController {
+    enum BookListType {
         case home
         case history
         case download
     }
     
-    private let type: BookcaseType
-    private let viewModel: BookcaseViewModel
-    private let footerView = BookcaseFooterView()
+    private let type: BookListType
+    private let viewModel: BookListViewModel
+    private let footerView = BookListFooterView()
     private var dataSource: UITableViewDiffableDataSource<Int, Book>?
     private var cancelBag = Set<AnyCancellable>()
     
-    init(type: BookcaseType) {
+    init(type: BookListType) {
         self.type = type
-        self.viewModel = BookcaseViewModel(type: type)
+        self.viewModel = BookListViewModel(type: type)
         super.init(style: .plain)
         hidesBottomBarWhenPushed = false
     }
@@ -46,7 +46,7 @@ final class BookcaseViewController: UITableViewController {
         tableView.rowHeight = 141
         tableView.tableHeaderView = UIView()
         tableView.tableFooterView = footerView
-        tableView.register(BookcaseTableViewCell.self, forCellReuseIdentifier: NSStringFromClass(BookcaseTableViewCell.self))
+        tableView.register(BookListTableViewCell.self, forCellReuseIdentifier: NSStringFromClass(BookListTableViewCell.self))
         
         if type == .home {
             refreshControl = UIRefreshControl()
@@ -100,8 +100,8 @@ final class BookcaseViewController: UITableViewController {
     
     private func setupDataSource() {
         dataSource = UITableViewDiffableDataSource<Int, Book>(tableView: tableView) { tableView, indexPath, book in
-            let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(BookcaseTableViewCell.self), for: indexPath)
-            if let cell = cell as? BookcaseTableViewCell {
+            let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(BookListTableViewCell.self), for: indexPath)
+            if let cell = cell as? BookListTableViewCell {
                 cell.updateWith(book: book)
                 cell.longPressBlock = { [weak self] in
                     guard let self else { return }
@@ -127,7 +127,7 @@ final class BookcaseViewController: UITableViewController {
 }
 
 // MARK: UITableViewDelegate
-extension BookcaseViewController {
+extension BookListViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let book = viewModel.books[indexPath.row]
@@ -152,7 +152,7 @@ extension BookcaseViewController {
 }
 
 // MARK: TapNavBarRightItem
-extension BookcaseViewController {
+extension BookListViewController {
     @objc
     private func tapNavBarRightItem() {
         switch type {
@@ -176,7 +176,7 @@ extension BookcaseViewController {
 }
 
 // MARK: AlertVC
-extension BookcaseViewController {
+extension BookListViewController {
     private func showAlertVC(with book: Book) {
         Task {
             guard presentedViewController == nil else { return }

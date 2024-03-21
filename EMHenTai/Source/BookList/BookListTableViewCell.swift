@@ -1,5 +1,5 @@
 //
-//  BookcaseTableViewCell.swift
+//  BookListTableViewCell.swift
 //  EMHenTai
 //
 //  Created by yuman on 2022/1/17.
@@ -9,7 +9,7 @@ import Combine
 import Kingfisher
 import UIKit
 
-final class BookcaseTableViewCell: UITableViewCell {
+final class BookListTableViewCell: UITableViewCell {
     var longPressBlock: (() -> Void)?
     
     private var book: Book?

@@ -1,5 +1,5 @@
 //
-//  BookcaseViewModel.swift
+//  BookListViewModel.swift
 //  EMHenTai
 //
 //  Created by yuman on 2022/10/1.
@@ -8,17 +8,17 @@
 import Combine
 import Foundation
 
-final class BookcaseViewModel {
+final class BookListViewModel {
     @Published private(set) var books = [Book]()
-    @Published private(set) var hint = BookcaseFooterView.HintType.empty
+    @Published private(set) var hint = BookListFooterView.HintType.empty
     @Published private(set) var isRefreshing = false
     
-    private let type: BookcaseViewController.BookcaseType
+    private let type: BookListViewController.BookListType
     private var hasMore = true
     private var searchInfo = SearchInfo()
     private var cancelBag = Set<AnyCancellable>()
     
-    init(type: BookcaseViewController.BookcaseType) {
+    init(type: BookListViewController.BookListType) {
         self.type = type
         setupCombine()
     }
