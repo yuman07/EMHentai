@@ -102,7 +102,7 @@ final actor DownloadManager {
                         guard checkGroupNeedRequest(of: book, groupIndex: groupIndex) else { continue }
                         group.addTask {
                             let url = book.currentWebURLString + (groupIndex > 0 ? "?p=\(groupIndex)" : "") + "/?nw=session"
-                            guard let value = try? await AF.request(url, interceptor: RetryPolicy.downloadRetryPolicy).serializingString(automaticallyCancelling: true).value 
+                            guard let value = try? await AF.request(url, interceptor: RetryPolicy.downloadRetryPolicy).serializingString(automaticallyCancelling: true).value
                             else { return }
                             let baseURL = SearchInfo.currentSource.rawValue + "s/"
                             value.allSubString(of: baseURL, endCharater: "\"").forEach { continuation.yield(baseURL + $0) }
@@ -122,7 +122,7 @@ final actor DownloadManager {
                 guard !imgKey.isEmpty else { continue }
                 
                 group.addTask {
-                    guard let value = try? await AF.request(url, interceptor: RetryPolicy.downloadRetryPolicy).serializingString(automaticallyCancelling: true).value 
+                    guard let value = try? await AF.request(url, interceptor: RetryPolicy.downloadRetryPolicy).serializingString(automaticallyCancelling: true).value
                     else { return }
                     guard let showKey = value.allSubString(of: "showkey=\"", endCharater: "\"").first else { return }
                     

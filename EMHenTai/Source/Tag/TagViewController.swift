@@ -77,4 +77,3 @@ extension TagViewController {
         navigationItem.rightBarButtonItem?.isEnabled = !selectedTags.isEmpty
     }
 }
-

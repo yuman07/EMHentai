@@ -22,8 +22,7 @@ final class SearchViewController: UITableViewController {
     
     private var searchInfo = SearchInfo() {
         didSet {
-            navigationItem.rightBarButtonItem?.isEnabled =
-                !searchInfo.categories.isEmpty && (searchInfo.source == .EHentai || SettingManager.shared.isLoginSubject.value)
+            navigationItem.rightBarButtonItem?.isEnabled = !searchInfo.categories.isEmpty && (searchInfo.source == .EHentai || SettingManager.shared.isLoginSubject.value)
             if oldValue.keyWord == searchInfo.keyWord { tableView.reloadData() }
         }
     }
