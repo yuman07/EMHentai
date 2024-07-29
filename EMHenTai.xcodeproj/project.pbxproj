@@ -19,6 +19,7 @@
 		7A1C12B327995C5E00ADD54E /* EMDB.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7A1C12B127995C5E00ADD54E /* EMDB.xcdatamodeld */; };
 		7A1C12B5279A8CC000ADD54E /* FileManager+Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1C12B4279A8CC000ADD54E /* FileManager+Tools.swift */; };
 		7A1C12B7279A8EE400ADD54E /* Int+Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1C12B6279A8EE400ADD54E /* Int+Tools.swift */; };
+		7A1F22FC2C572AFE00EFA75B /* AFSession+Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1F22FB2C572AFE00EFA75B /* AFSession+Tools.swift */; };
 		7A20A20C2C37D6E700A67054 /* tag-20240705.json in Resources */ = {isa = PBXBuildFile; fileRef = 7A20A20B2C37D6E700A67054 /* tag-20240705.json */; };
 		7A3F29DA28E8342E00F8CC6B /* BookListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A3F29D928E8342E00F8CC6B /* BookListViewModel.swift */; };
 		7A3F29DC28E8907300F8CC6B /* SearchInfo+Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A3F29DB28E8907300F8CC6B /* SearchInfo+Tools.swift */; };
@@ -57,6 +58,7 @@
 		7A1C12B227995C5E00ADD54E /* EMDB.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = EMDB.xcdatamodel; sourceTree = "<group>"; };
 		7A1C12B4279A8CC000ADD54E /* FileManager+Tools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileManager+Tools.swift"; sourceTree = "<group>"; };
 		7A1C12B6279A8EE400ADD54E /* Int+Tools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Tools.swift"; sourceTree = "<group>"; };
+		7A1F22FB2C572AFE00EFA75B /* AFSession+Tools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AFSession+Tools.swift"; sourceTree = "<group>"; };
 		7A20A20B2C37D6E700A67054 /* tag-20240705.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "tag-20240705.json"; sourceTree = "<group>"; };
 		7A3F29D928E8342E00F8CC6B /* BookListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookListViewModel.swift; sourceTree = "<group>"; };
 		7A3F29DB28E8907300F8CC6B /* SearchInfo+Tools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SearchInfo+Tools.swift"; sourceTree = "<group>"; };
@@ -107,6 +109,7 @@
 		7A11677B279568D200C200CA /* Tools */ = {
 			isa = PBXGroup;
 			children = (
+				7A1F22FB2C572AFE00EFA75B /* AFSession+Tools.swift */,
 				7A1C12B6279A8EE400ADD54E /* Int+Tools.swift */,
 				7AE1CBF028D42EEF00888582 /* Array+Tools.swift */,
 				7A11677C2795690500C200CA /* String+Tools.swift */,
@@ -341,6 +344,7 @@
 				7A3F29DA28E8342E00F8CC6B /* BookListViewModel.swift in Sources */,
 				7A1167932797D80B00C200CA /* BookListFooterView.swift in Sources */,
 				7AD3B2E9279E810A000702C6 /* TranslateManager.swift in Sources */,
+				7A1F22FC2C572AFE00EFA75B /* AFSession+Tools.swift in Sources */,
 				7ACADDC027BF3E2700D8FC9B /* WebViewController.swift in Sources */,
 				7A1C12B7279A8EE400ADD54E /* Int+Tools.swift in Sources */,
 				7A6C95CC27911E4600077093 /* GalleryViewController.swift in Sources */,

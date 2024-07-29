@@ -51,7 +51,7 @@ final actor SearchManager {
     }
     
     private nonisolated func startSearchWith(info: SearchInfo) async -> Result<[Book], Error> {
-        guard let value = try? await AF.request(info.requestString, interceptor: RetryPolicy()).serializingString(automaticallyCancelling: true).value else {
+        guard let value = try? await emSession.request(info.requestString, interceptor: RetryPolicy()).serializingString(automaticallyCancelling: true).value else {
             return .failure(.netError)
         }
         guard !value.contains(Error.ipError.rawValue) else { return .failure(.ipError) }
@@ -62,11 +62,12 @@ final actor SearchManager {
             .filter { $0.count == 2 }
         guard !ids.isEmpty else { return .success([]) }
         
-        guard let value = try? await AF
+        guard let value = try? await emSession
             .request(info.source.rawValue + "api.php",
                      method: .post,
                      parameters: ["method": "gdata", "gidlist": ids],
-                     encoding: JSONEncoding.default)
+                     encoding: JSONEncoding.default,
+                     interceptor: RetryPolicy())
                 .serializingDecodable(Gmetadata.self, automaticallyCancelling: true).value else { return .failure(.netError) }
         
         return .success(value.gmetadata)

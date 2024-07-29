@@ -87,7 +87,7 @@ final actor DownloadManager {
                 let to = URL(fileURLWithPath: book.coverImagePath)
                 try? FileManager.default.copyItem(at: from, to: to)
             } else {
-                _ = try? await AF
+                _ = try? await emSession
                     .download(book.thumb, interceptor: RetryPolicy.downloadRetryPolicy, to: { _, _ in (URL(fileURLWithPath: book.coverImagePath), []) })
                     .serializingDownload(using: URLResponseSerializer(), automaticallyCancelling: true)
                     .value
@@ -102,7 +102,7 @@ final actor DownloadManager {
                         guard checkGroupNeedRequest(of: book, groupIndex: groupIndex) else { continue }
                         group.addTask {
                             let url = book.currentWebURLString + (groupIndex > 0 ? "?p=\(groupIndex)" : "") + "/?nw=session"
-                            guard let value = try? await AF.request(url, interceptor: RetryPolicy.downloadRetryPolicy).serializingString(automaticallyCancelling: true).value
+                            guard let value = try? await emSession.request(url, interceptor: RetryPolicy.downloadRetryPolicy).serializingString(automaticallyCancelling: true).value
                             else { return }
                             let baseURL = SearchInfo.currentSource.rawValue + "s/"
                             value.allSubString(of: baseURL, endCharater: "\"").forEach { continuation.yield(baseURL + $0) }
@@ -122,11 +122,11 @@ final actor DownloadManager {
                 guard !imgKey.isEmpty else { continue }
                 
                 group.addTask {
-                    guard let value = try? await AF.request(url, interceptor: RetryPolicy.downloadRetryPolicy).serializingString(automaticallyCancelling: true).value
+                    guard let value = try? await emSession.request(url, interceptor: RetryPolicy.downloadRetryPolicy).serializingString(automaticallyCancelling: true).value
                     else { return }
                     guard let showKey = value.allSubString(of: "showkey=\"", endCharater: "\"").first else { return }
                     
-                    guard let source = try? await AF.request(
+                    guard let source = try? await emSession.request(
                         SearchInfo.currentSource.rawValue + "api.php",
                         method: .post,
                         parameters: [
@@ -135,12 +135,13 @@ final actor DownloadManager {
                             "page": imgIndex + 1,
                             "imgkey": imgKey,
                             "showkey": showKey],
-                        encoding: JSONEncoding.default
+                        encoding: JSONEncoding.default,
+                        interceptor: RetryPolicy.downloadRetryPolicy
                     ).serializingDecodable(GroupModel.self, automaticallyCancelling: true).value.i3 else { return }
                     
                     guard let imgURL = source.allSubString(of: "src=\"", endCharater: "\"").first else { return }
                     
-                    guard let p = try? await AF
+                    guard let p = try? await emSession
                         .download(imgURL, interceptor: RetryPolicy.downloadRetryPolicy, to: { _, _ in (URL(fileURLWithPath: book.imagePath(at: imgIndex)), []) })
                         .downloadProgress(queue: .main, closure: { [weak self] progress in
                             guard let self else { return }
