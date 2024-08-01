@@ -20,9 +20,9 @@
 		7A1C12B5279A8CC000ADD54E /* FileManager+Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1C12B4279A8CC000ADD54E /* FileManager+Tools.swift */; };
 		7A1C12B7279A8EE400ADD54E /* Int+Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1C12B6279A8EE400ADD54E /* Int+Tools.swift */; };
 		7A1F22FC2C572AFE00EFA75B /* AFSession+Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1F22FB2C572AFE00EFA75B /* AFSession+Tools.swift */; };
-		7A20A20C2C37D6E700A67054 /* tag-20240705.json in Resources */ = {isa = PBXBuildFile; fileRef = 7A20A20B2C37D6E700A67054 /* tag-20240705.json */; };
 		7A3F29DA28E8342E00F8CC6B /* BookListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A3F29D928E8342E00F8CC6B /* BookListViewModel.swift */; };
 		7A3F29DC28E8907300F8CC6B /* SearchInfo+Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A3F29DB28E8907300F8CC6B /* SearchInfo+Tools.swift */; };
+		7A41D24B2C5B691400359E79 /* tag-20240801.json in Resources */ = {isa = PBXBuildFile; fileRef = 7A41D24A2C5B691400359E79 /* tag-20240801.json */; };
 		7A5CA04C27A9770C00E9FDF9 /* UIApplication+Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A5CA04B27A9770C00E9FDF9 /* UIApplication+Tools.swift */; };
 		7A5FE79527D384ED0042B712 /* UIImage+Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A5FE79427D384ED0042B712 /* UIImage+Tools.swift */; };
 		7A5FE79927D389310042B712 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A5FE79827D389310042B712 /* LoginViewController.swift */; };
@@ -59,9 +59,9 @@
 		7A1C12B4279A8CC000ADD54E /* FileManager+Tools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileManager+Tools.swift"; sourceTree = "<group>"; };
 		7A1C12B6279A8EE400ADD54E /* Int+Tools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Tools.swift"; sourceTree = "<group>"; };
 		7A1F22FB2C572AFE00EFA75B /* AFSession+Tools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AFSession+Tools.swift"; sourceTree = "<group>"; };
-		7A20A20B2C37D6E700A67054 /* tag-20240705.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "tag-20240705.json"; sourceTree = "<group>"; };
 		7A3F29D928E8342E00F8CC6B /* BookListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookListViewModel.swift; sourceTree = "<group>"; };
 		7A3F29DB28E8907300F8CC6B /* SearchInfo+Tools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SearchInfo+Tools.swift"; sourceTree = "<group>"; };
+		7A41D24A2C5B691400359E79 /* tag-20240801.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "tag-20240801.json"; sourceTree = "<group>"; };
 		7A5CA04B27A9770C00E9FDF9 /* UIApplication+Tools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+Tools.swift"; sourceTree = "<group>"; };
 		7A5FE79427D384ED0042B712 /* UIImage+Tools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Tools.swift"; sourceTree = "<group>"; };
 		7A5FE79827D389310042B712 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -226,7 +226,7 @@
 		7AB96809279118C00006466A /* Support */ = {
 			isa = PBXGroup;
 			children = (
-				7A20A20B2C37D6E700A67054 /* tag-20240705.json */,
+				7A41D24A2C5B691400359E79 /* tag-20240801.json */,
 				7AB967FD279117CD0006466A /* Assets.xcassets */,
 				7AB967FF279117CD0006466A /* LaunchScreen.storyboard */,
 				7AB96802279117CD0006466A /* Info.plist */,
@@ -317,8 +317,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7A20A20C2C37D6E700A67054 /* tag-20240705.json in Resources */,
 				7AB96801279117CD0006466A /* LaunchScreen.storyboard in Resources */,
+				7A41D24B2C5B691400359E79 /* tag-20240801.json in Resources */,
 				7AB967FE279117CD0006466A /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
