@@ -39,8 +39,7 @@ final class SettingManager {
         let igneouss = createCookies(name: "igneous", value: "\(coms[1])")
         
         [passHashs, memberIDs, igneouss]
-            .flatMap({ $0 })
-            .compactMap({ $0 })
+            .flatMap(\.self)
             .forEach { HTTPCookieStorage.shared.setCookie($0) }
     }
     
@@ -54,46 +53,36 @@ final class SettingManager {
     }
     
     func calculateFileSize() async -> (historySize: Int, downloadSize: Int, otherSize: Int) {
-        await withUnsafeContinuation { continuation in
-            DispatchQueue.global().async {
-                var otherSize = Int((try? KingfisherManager.shared.cache.diskStorage.totalSize()) ?? 0)
-                guard let folders = try? FileManager.default.contentsOfDirectory(atPath: Book.downloadFolderPath), !folders.isEmpty else {
-                    return continuation.resume(returning: (0, 0, otherSize))
-                }
-                
-                let size = folders.compactMap({ Int($0) }).reduce(into: (0, 0)) {
-                    let folderSize = FileManager.default.folderSizeAt(path: Book.downloadFolderPath + "/\($1)")
-                    if DBManager.shared.contains(gid: $1, of: .download) { $0.1 += folderSize }
-                    else if DBManager.shared.contains(gid: $1, of: .history) { $0.0 += folderSize }
-                    else { otherSize += folderSize }
-                }
-                
-                continuation.resume(returning: (size.0, size.1, otherSize))
+        var otherSize = Int((try? KingfisherManager.shared.cache.diskStorage.totalSize()) ?? 0)
+        guard let folders = try? FileManager.default.contentsOfDirectory(atPath: Book.downloadFolderPath), !folders.isEmpty else {
+            return (0, 0, otherSize)
+        }
+        
+        let size = folders.compactMap({ Int($0) }).reduce(into: (0, 0)) {
+            let folderSize = FileManager.default.folderSizeAt(path: Book.downloadFolderPath + "/\($1)")
+            if DBManager.shared.contains(gid: $1, of: .download) { $0.1 += folderSize }
+            else if DBManager.shared.contains(gid: $1, of: .history) { $0.0 += folderSize }
+            else { otherSize += folderSize }
+        }
+        
+        return (size.0, size.1, otherSize)
+    }
+    
+    func clearOtherData() async {
+        await KingfisherManager.shared.cache.clearDiskCache()
+        guard let folders = try? FileManager.default.contentsOfDirectory(atPath: Book.downloadFolderPath), !folders.isEmpty else {
+            return
+        }
+        folders.compactMap({ Int($0) }).forEach {
+            let path = Book.downloadFolderPath + "/\($0)"
+            if !DBManager.shared.contains(gid: $0, of: .download) && !DBManager.shared.contains(gid: $0, of: .history) {
+                try? FileManager.default.removeItem(atPath: path)
             }
         }
     }
     
-    func clearOtherData() async {
-        await withUnsafeContinuation({ continuation in
-            KingfisherManager.shared.cache.clearDiskCache {
-                DispatchQueue.global().async {
-                    guard let folders = try? FileManager.default.contentsOfDirectory(atPath: Book.downloadFolderPath), !folders.isEmpty else {
-                        return continuation.resume()
-                    }
-                    folders.compactMap({ Int($0) }).forEach {
-                        let path = Book.downloadFolderPath + "/\($0)"
-                        if !DBManager.shared.contains(gid: $0, of: .download) && !DBManager.shared.contains(gid: $0, of: .history) {
-                            try? FileManager.default.removeItem(atPath: path)
-                        }
-                    }
-                    continuation.resume()
-                }
-            }
-        })
-    }
-    
-    private func createCookies(name: String, value: String) -> [HTTPCookie?] {
-        [".exhentai.org", ".e-hentai.org"].map {
+    private func createCookies(name: String, value: String) -> [HTTPCookie] {
+        [".exhentai.org", ".e-hentai.org"].compactMap {
             HTTPCookie(properties: [.domain: $0, .name: name, .value: value, .path: "/", .expires: Date(timeInterval: 157784760, since: Date())])
         }
     }
