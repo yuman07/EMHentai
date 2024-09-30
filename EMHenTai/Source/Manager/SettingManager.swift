@@ -52,7 +52,7 @@ final class SettingManager {
         }
     }
     
-    func calculateFileSize() async -> (historySize: Int, downloadSize: Int, otherSize: Int) {
+    func calculateUsedDiskSize() async -> (historySize: Int, downloadSize: Int, otherSize: Int) {
         var otherSize = Int((try? KingfisherManager.shared.cache.diskStorage.totalSize()) ?? 0)
         guard let folders = try? FileManager.default.contentsOfDirectory(atPath: Book.downloadFolderPath), !folders.isEmpty else {
             return (0, 0, otherSize)

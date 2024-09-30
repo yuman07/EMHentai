@@ -72,7 +72,7 @@ final class SettingViewController: UITableViewController {
     private func reloadDataSize() {
         Task {
             guard let index = SectionType.allCases.firstIndex(of: .dateSize) else { return }
-            dataSize = await SettingManager.shared.calculateFileSize()
+            dataSize = await SettingManager.shared.calculateUsedDiskSize()
             tableView.reloadSections([index], with: .none)
         }
     }

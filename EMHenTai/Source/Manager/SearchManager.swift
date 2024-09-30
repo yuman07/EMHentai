@@ -27,7 +27,9 @@ final actor SearchManager {
     nonisolated let eventSubject = PassthroughSubject<SearchEvent, Never>()
     
     nonisolated func searchWith(info: SearchInfo) {
-        Task { await checkSearchWith(info: info) }
+        Task { @SearchManagerActor in
+            await checkSearchWith(info: info)
+        }
     }
     
     private func checkSearchWith(info: SearchInfo) {
@@ -50,8 +52,8 @@ final actor SearchManager {
         }
     }
     
-    private nonisolated func startSearchWith(info: SearchInfo) async -> Result<[Book], Error> {
-        guard let value = try? await emSession.request(info.requestString, interceptor: RetryPolicy()).serializingString(automaticallyCancelling: true).value else {
+    private func startSearchWith(info: SearchInfo) async -> Result<[Book], Error> {
+        guard let value = try? await emSession.request(info.requestString, interceptor: RetryPolicy()).serializingString().value else {
             return .failure(.netError)
         }
         guard !value.contains(Error.ipError.rawValue) else { return .failure(.ipError) }
@@ -68,7 +70,9 @@ final actor SearchManager {
                      parameters: ["method": "gdata", "gidlist": ids],
                      encoding: JSONEncoding.default,
                      interceptor: RetryPolicy())
-                .serializingDecodable(Gmetadata.self, automaticallyCancelling: true).value else { return .failure(.netError) }
+                .serializingDecodable(Gmetadata.self)
+                .value
+        else { return .failure(.netError) }
         
         return .success(value.gmetadata)
     }
@@ -76,4 +80,8 @@ final actor SearchManager {
 
 private struct Gmetadata: Codable {
     let gmetadata: [Book]
+}
+
+@globalActor private actor SearchManagerActor {
+    static let shared = SearchManagerActor()
 }
