@@ -24,7 +24,7 @@ final actor SearchManager {
     
     private var currentTask: Task<Void, Never>?
     
-    nonisolated let eventSubject = PassthroughSubject<SearchEvent, Never>()
+    let eventSubject = PassthroughSubject<SearchEvent, Never>()
     
     nonisolated func searchWith(info: SearchInfo) {
         Task { @SearchManagerActor in
@@ -40,6 +40,8 @@ final actor SearchManager {
         currentTask?.cancel()
         
         currentTask = Task {
+            guard !Task.isCancelled else { return }
+            
             eventSubject.send(.start(info: info))
             
             let result = await startSearchWith(info: info)
@@ -52,7 +54,7 @@ final actor SearchManager {
         }
     }
     
-    private func startSearchWith(info: SearchInfo) async -> Result<[Book], Error> {
+    private nonisolated func startSearchWith(info: SearchInfo) async -> Result<[Book], Error> {
         guard let value = try? await emSession.request(info.requestString, interceptor: RetryPolicy()).serializingString().value else {
             return .failure(.netError)
         }
@@ -65,11 +67,13 @@ final actor SearchManager {
         guard !ids.isEmpty else { return .success([]) }
         
         guard let value = try? await emSession
-            .request(info.source.rawValue + "api.php",
-                     method: .post,
-                     parameters: ["method": "gdata", "gidlist": ids],
-                     encoding: JSONEncoding.default,
-                     interceptor: RetryPolicy())
+            .request(
+                info.source.rawValue + "api.php",
+                method: .post,
+                parameters: ["method": "gdata", "gidlist": ids],
+                encoding: JSONEncoding.default,
+                interceptor: RetryPolicy()
+            )
                 .serializingDecodable(Gmetadata.self)
                 .value
         else { return .failure(.netError) }

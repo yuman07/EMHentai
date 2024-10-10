@@ -14,7 +14,13 @@ extension Book {
     }
     
     static var downloadFolderPath: String {
-        NSHomeDirectory() + "/Documents/EMDownload"
+        enum Once {
+            static let documentPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first
+        }
+        if let documentPath = Once.documentPath {
+            return "\(documentPath)/EMDownload"
+        }
+        return "\(NSHomeDirectory())/Documents/EMDownload)"
     }
     
     var folderPath: String {

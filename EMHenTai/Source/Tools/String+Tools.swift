@@ -20,7 +20,7 @@ extension String {
     
     func allSubString(of target: String, endCharater: Character, count: Int = 1) -> [String] {
         allIndices(of: target).map {
-            guard case let start = index(startIndex, offsetBy: $0 + target.count), start < endIndex else { return "" }
+            guard let start = index(startIndex, offsetBy: $0 + target.count, limitedBy: endIndex), start < endIndex else { return "" }
             var end = index(after: start)
             var meet = 0
             while end < endIndex && meet < count {
