@@ -115,7 +115,7 @@ final class BookListTableViewCell: UITableViewCell {
                 updateProgress()
             }
             .store(in: &cancelBag)
-        DBManager.shared.DBChangedSubject
+        DBManager.shared.dbChangedSubject
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 guard let self else { return }

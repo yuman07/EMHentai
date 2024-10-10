@@ -11,6 +11,7 @@ import UIKit
 final class GalleryViewController: UICollectionViewController {
     private let book: Book
     private var isRotating = false
+    private var progressMap = [Int: Progress]()
     private var cancelBag = Set<AnyCancellable>()
     private var lastSeenPageIndex: Int {
         get { UserDefaults.standard.integer(forKey: "GalleryViewController_lastSeenPageIndex_\(book.gid)") }
@@ -84,6 +85,7 @@ final class GalleryViewController: UICollectionViewController {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] in
                 guard let self, $0.book.gid == book.gid else { return }
+                progressMap[$0.index] = $0.progress
                 guard let cell = collectionView.cellForItem(at: IndexPath(row: $0.index, section: 0)) as? GalleryCollectionViewCell else { return }
                 cell.updateProgress($0.progress)
             }
@@ -165,6 +167,7 @@ extension GalleryViewController {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NSStringFromClass(GalleryCollectionViewCell.self), for: indexPath)
         if let cell = cell as? GalleryCollectionViewCell {
             cell.updateImageWith(filePath: book.imagePath(at: indexPath.row))
+            cell.updateProgress(progressMap[indexPath.row] ?? Progress())
             cell.tapBlock = { [weak self] in
                 guard let self else { return }
                 changeNavBarHidden()

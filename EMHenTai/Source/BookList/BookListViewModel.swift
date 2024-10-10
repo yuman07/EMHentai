@@ -38,7 +38,7 @@ final class BookListViewModel {
                 }
                 .store(in: &cancelBag)
         } else {
-            DBManager.shared.DBChangedSubject
+            DBManager.shared.dbChangedSubject
                 .receive(on: DispatchQueue.main)
                 .sink { [weak self] in
                     guard let self else { return }

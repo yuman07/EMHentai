@@ -21,9 +21,9 @@ final actor DownloadManager {
     
     static let shared = DownloadManager()
     
-    let downloadStateChangedSubject = PassthroughSubject<(book: Book, state: State), Never>()
-    let downloadPageProgressSubject = PassthroughSubject<(book: Book, index: Int, progress: Progress), Never>()
-    let downloadPageSuccessSubject = PassthroughSubject<(book: Book, index: Int), Never>()
+    nonisolated let downloadStateChangedSubject = PassthroughSubject<(book: Book, state: State), Never>()
+    nonisolated let downloadPageProgressSubject = PassthroughSubject<(book: Book, index: Int, progress: Progress), Never>()
+    nonisolated let downloadPageSuccessSubject = PassthroughSubject<(book: Book, index: Int), Never>()
     
     private init() {}
     private let groupTotalImgNum = 40
@@ -144,11 +144,14 @@ final actor DownloadManager {
                         .download(imgURL, interceptor: RetryPolicy.downloadRetryPolicy, to: { _, _ in (URL(fileURLWithPath: book.imagePath(at: imgIndex)), []) })
                         .downloadProgress(queue: .main, closure: { [weak self] progress in
                             guard let self else { return }
-                            Task { await self.downloadPageProgressSubject.send((book, imgIndex, progress)) }
+                            downloadPageProgressSubject.send((book, imgIndex, progress))
                         })
                             .serializingDownload(using: URLResponseSerializer())
                             .value, FileManager.default.fileExists(atPath: p.path) else { return }
-                    await self.downloadPageSuccessSubject.send((book, imgIndex))
+                    
+                    Task { @DownloadManagerActor in
+                        self.downloadPageSuccessSubject.send((book, imgIndex))
+                    }
                 }
             }
         })
@@ -175,8 +178,7 @@ private extension RetryPolicy {
     static let downloadRetryPolicy = RetryPolicy(retryLimit: .max)
 }
 
-public extension Task where Success == Never, Failure == Never {
-    static func sleep(seconds: TimeInterval) async throws {
-        try await Task.sleep(nanoseconds: UInt64(TimeInterval(NSEC_PER_SEC) * seconds))
-    }
+@globalActor private actor DownloadManagerActor {
+    static let shared = DownloadManagerActor()
 }
+

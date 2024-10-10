@@ -24,7 +24,7 @@ final actor SearchManager {
     
     private var currentTask: Task<Void, Never>?
     
-    let eventSubject = PassthroughSubject<SearchEvent, Never>()
+    nonisolated let eventSubject = PassthroughSubject<SearchEvent, Never>()
     
     nonisolated func searchWith(info: SearchInfo) {
         Task { @SearchManagerActor in
@@ -46,9 +46,9 @@ final actor SearchManager {
             
             let result = await startSearchWith(info: info)
             
-            if !Task.isCancelled {
-                eventSubject.send(.finish(info: info, result: result))
-            }
+            guard !Task.isCancelled else { return }
+            
+            eventSubject.send(.finish(info: info, result: result))
             
             currentTask = nil
         }

@@ -16,7 +16,7 @@ final class DBManager {
     
     static let shared = DBManager()
     
-    let DBChangedSubject = PassthroughSubject<DBType, Never>()
+    let dbChangedSubject = PassthroughSubject<DBType, Never>()
     
     private var booksMap = [DBType: [Book]]()
     private let queue = DispatchQueue(label: "com.DBManager.ConcurrentQueue", attributes: .concurrent)
@@ -62,7 +62,7 @@ final class DBManager {
             guard let self, !p_contains(gid: book.gid, of: type) else { return }
             
             booksMap[type]?.insert(book, at: 0)
-            DBChangedSubject.send(type)
+            dbChangedSubject.send(type)
             
             guard let context else { return }
             context.perform {
@@ -78,7 +78,7 @@ final class DBManager {
             guard let self else { return }
             
             booksMap[type]?.removeAll { $0.gid == book.gid }
-            DBChangedSubject.send(type)
+            dbChangedSubject.send(type)
             
             guard let context else { return }
             context.perform {
@@ -97,7 +97,7 @@ final class DBManager {
             guard let self else { return }
             
             booksMap[type]?.removeAll()
-            DBChangedSubject.send(type)
+            dbChangedSubject.send(type)
             
             guard let context else { return }
             context.perform {
