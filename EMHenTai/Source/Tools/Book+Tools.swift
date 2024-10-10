@@ -20,7 +20,7 @@ extension Book {
         if let documentPath = Once.documentPath {
             return "\(documentPath)/EMDownload"
         }
-        return "\(NSHomeDirectory())/Documents/EMDownload)"
+        return "\(NSHomeDirectory())/Documents/EMDownload"
     }
     
     var folderPath: String {

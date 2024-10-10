@@ -100,8 +100,7 @@ final actor DownloadManager {
                         guard checkGroupNeedRequest(of: book, groupIndex: groupIndex) else { continue }
                         group.addTask {
                             let url = book.currentWebURLString + (groupIndex > 0 ? "?p=\(groupIndex)" : "") + "/?nw=session"
-                            guard let value = try? await emSession.request(url, interceptor: RetryPolicy.downloadRetryPolicy).serializingString().value
-                            else { return }
+                            guard let value = try? await emSession.request(url, interceptor: RetryPolicy.downloadRetryPolicy).serializingString().value else { return }
                             let baseURL = SearchInfo.currentSource.rawValue + "s/"
                             value.allSubString(of: baseURL, endCharater: "\"").forEach { continuation.yield(baseURL + $0) }
                         }
@@ -114,14 +113,14 @@ final actor DownloadManager {
         
         await withTaskGroup(of: Void.self, body: { group in
             for await url in urlStream {
-                let imgIndex = (url.split(separator: "-").last.flatMap({ Int("\($0)") }) ?? 1) - 1
-                let imgKey = url.split(separator: "/").count > 1 ? url.split(separator: "/").reversed()[1] : ""
+                let imgIndex = (url.split(separator: "-").last.flatMap({ Int($0) }) ?? 1) - 1
+                let components = url.split(separator: "/")
+                let imgKey = components.count > 1 ? components.reversed()[1] : ""
                 guard !FileManager.default.fileExists(atPath: book.imagePath(at: imgIndex)) else { continue }
                 guard !imgKey.isEmpty else { continue }
                 
                 group.addTask {
-                    guard let value = try? await emSession.request(url, interceptor: RetryPolicy.downloadRetryPolicy).serializingString().value
-                    else { return }
+                    guard let value = try? await emSession.request(url, interceptor: RetryPolicy.downloadRetryPolicy).serializingString().value else { return }
                     guard let showKey = value.allSubString(of: "showkey=\"", endCharater: "\"").first else { return }
                     
                     guard let source = try? await emSession.request(
