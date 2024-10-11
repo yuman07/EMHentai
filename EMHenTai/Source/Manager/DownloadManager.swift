@@ -92,15 +92,18 @@ final actor DownloadManager {
             }
         }
         
+        guard !Task.isCancelled else { return }
+        
         let urlStream = AsyncStream<String> { continuation in
             Task {
                 await withTaskGroup(of: Void.self, body: { group in
                     let groupNum = book.contentImgCount / groupTotalImgNum + (book.contentImgCount % groupTotalImgNum == 0 ? 0 : 1)
                     for groupIndex in 0 ..< groupNum {
                         guard checkGroupNeedRequest(of: book, groupIndex: groupIndex) else { continue }
-                        group.addTask {
+                        _ = group.addTaskUnlessCancelled {
                             let url = book.currentWebURLString + (groupIndex > 0 ? "?p=\(groupIndex)" : "") + "/?nw=session"
                             guard let value = try? await emSession.request(url, interceptor: RetryPolicy.downloadRetryPolicy).serializingString().value else { return }
+                            guard !Task.isCancelled else { return }
                             let baseURL = SearchInfo.currentSource.rawValue + "s/"
                             value.allSubString(of: baseURL, endCharater: "\"").forEach { continuation.yield(baseURL + $0) }
                         }
@@ -119,8 +122,9 @@ final actor DownloadManager {
                 guard !FileManager.default.fileExists(atPath: book.imagePath(at: imgIndex)) else { continue }
                 guard !imgKey.isEmpty else { continue }
                 
-                group.addTask {
+                _ = group.addTaskUnlessCancelled {
                     guard let value = try? await emSession.request(url, interceptor: RetryPolicy.downloadRetryPolicy).serializingString().value else { return }
+                    guard !Task.isCancelled else { return }
                     guard let showKey = value.allSubString(of: "showkey=\"", endCharater: "\"").first else { return }
                     
                     guard let source = try? await emSession.request(
@@ -137,6 +141,7 @@ final actor DownloadManager {
                         interceptor: RetryPolicy.downloadRetryPolicy
                     ).serializingDecodable(GroupModel.self).value.i3 else { return }
                     
+                    guard !Task.isCancelled else { return }
                     guard let imgURL = source.allSubString(of: "src=\"", endCharater: "\"").first else { return }
                     
                     guard let p = try? await emSession
