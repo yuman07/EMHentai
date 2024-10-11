@@ -100,7 +100,7 @@ final actor DownloadManager {
                     let groupNum = book.contentImgCount / groupTotalImgNum + (book.contentImgCount % groupTotalImgNum == 0 ? 0 : 1)
                     for groupIndex in 0 ..< groupNum {
                         guard checkGroupNeedRequest(of: book, groupIndex: groupIndex) else { continue }
-                        _ = group.addTaskUnlessCancelled {
+                        group.addTask {
                             let url = book.currentWebURLString + (groupIndex > 0 ? "?p=\(groupIndex)" : "") + "/?nw=session"
                             guard let value = try? await emSession.request(url, interceptor: RetryPolicy.downloadRetryPolicy).serializingString().value else { return }
                             guard !Task.isCancelled else { return }
@@ -108,6 +108,7 @@ final actor DownloadManager {
                             value.allSubString(of: baseURL, endCharater: "\"").forEach { continuation.yield(baseURL + $0) }
                         }
                         await group.waitForAll()
+                        guard !Task.isCancelled else { return }
                     }
                 })
                 continuation.finish()
@@ -116,13 +117,14 @@ final actor DownloadManager {
         
         await withTaskGroup(of: Void.self, body: { group in
             for await url in urlStream {
+                guard !Task.isCancelled else { return }
                 let imgIndex = (url.split(separator: "-").last.flatMap({ Int($0) }) ?? 1) - 1
                 let components = url.split(separator: "/")
                 let imgKey = components.count > 1 ? components.reversed()[1] : ""
                 guard !FileManager.default.fileExists(atPath: book.imagePath(at: imgIndex)) else { continue }
                 guard !imgKey.isEmpty else { continue }
                 
-                _ = group.addTaskUnlessCancelled {
+                group.addTask {
                     guard let value = try? await emSession.request(url, interceptor: RetryPolicy.downloadRetryPolicy).serializingString().value else { return }
                     guard !Task.isCancelled else { return }
                     guard let showKey = value.allSubString(of: "showkey=\"", endCharater: "\"").first else { return }
