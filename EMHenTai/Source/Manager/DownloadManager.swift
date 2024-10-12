@@ -119,32 +119,12 @@ final actor DownloadManager {
             for await url in urlStream {
                 guard !Task.isCancelled else { return }
                 let imgIndex = (url.split(separator: "-").last.flatMap({ Int($0) }) ?? 1) - 1
-                let components = url.split(separator: "/")
-                let imgKey = components.count > 1 ? components.reversed()[1] : ""
                 guard !FileManager.default.fileExists(atPath: book.imagePath(at: imgIndex)) else { continue }
-                guard !imgKey.isEmpty else { continue }
                 
                 group.addTask {
-                    guard let value = try? await emSession.request(url, interceptor: RetryPolicy.downloadRetryPolicy).serializingString().value else { return }
+                    guard let html = try? await emSession.request(url, interceptor: RetryPolicy.downloadRetryPolicy).serializingString().value else { return }
                     guard !Task.isCancelled else { return }
-                    guard let showKey = value.allSubString(of: "showkey=\"", endCharater: "\"").first else { return }
-                    
-                    guard let source = try? await emSession.request(
-                        SearchInfo.currentSource.rawValue + "api.php",
-                        method: .post,
-                        parameters: [
-                            "method": "showpage",
-                            "gid": book.gid,
-                            "page": imgIndex + 1,
-                            "imgkey": imgKey,
-                            "showkey": showKey
-                        ],
-                        encoding: JSONEncoding.default,
-                        interceptor: RetryPolicy.downloadRetryPolicy
-                    ).serializingDecodable(GroupModel.self).value.i3 else { return }
-                    
-                    guard !Task.isCancelled else { return }
-                    guard let imgURL = source.allSubString(of: "src=\"", endCharater: "\"").first else { return }
+                    guard let imgURL = html.allSubString(of: "<img id=\"img\" src=\"", endCharater: "\"").first else { return }
                     
                     guard let p = try? await emSession
                         .download(imgURL, interceptor: RetryPolicy.downloadRetryPolicy, to: { _, _ in (URL(fileURLWithPath: book.imagePath(at: imgIndex)), []) })
@@ -153,7 +133,9 @@ final actor DownloadManager {
                             downloadPageProgressSubject.send((book, imgIndex, progress))
                         })
                             .serializingDownload(using: URLResponseSerializer())
-                            .value, FileManager.default.fileExists(atPath: p.path) else { return }
+                            .value,
+                            FileManager.default.fileExists(atPath: p.path)
+                    else { return }
                     
                     Task { @DownloadManagerActor in
                         self.downloadPageSuccessSubject.send((book, imgIndex))
@@ -176,12 +158,8 @@ final actor DownloadManager {
     }
 }
 
-private struct GroupModel: Codable {
-    let i3: String
-}
-
 private extension RetryPolicy {
-    static let downloadRetryPolicy = RetryPolicy(retryLimit: .max)
+    static let downloadRetryPolicy = RetryPolicy(retryLimit: 6)
 }
 
 @globalActor private actor DownloadManagerActor {
