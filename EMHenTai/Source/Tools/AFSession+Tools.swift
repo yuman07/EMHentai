@@ -9,7 +9,7 @@ import Alamofire
 import Foundation
 
 let emSession: Session = {
-  let configuration = URLSessionConfiguration.af.default
-  configuration.timeoutIntervalForRequest = 10
-  return Session(configuration: configuration)
+    let configuration = URLSessionConfiguration.af.default
+    configuration.timeoutIntervalForRequest = 10
+    return Session(configuration: configuration)
 }()
