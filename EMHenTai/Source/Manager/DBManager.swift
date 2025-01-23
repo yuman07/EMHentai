@@ -111,24 +111,26 @@ final class DBManager {
     }
     
     private static func bookFrom(obj: NSManagedObject) -> Book {
-        Book(gid: obj.value(forKey: "gid") as? Int ?? 0,
-             title: obj.value(forKey: "title") as? String ?? "",
-             titleJpn: obj.value(forKey: "title_jpn") as? String ?? "",
-             category: obj.value(forKey: "category") as? String ?? "",
-             thumb: obj.value(forKey: "thumb") as? String ?? "",
-             fileCount: obj.value(forKey: "filecount") as? Int ?? 0,
-             tags: (obj.value(forKey: "tags") as? [String] ?? []),
-             token: obj.value(forKey: "token") as? String ?? "",
-             rating: obj.value(forKey: "rating") as? String ?? "")
+        Book(
+            gid: obj.value(forKey: "gid") as? Int ?? 0,
+            title: obj.value(forKey: "title") as? String,
+            titleJpn: obj.value(forKey: "titleJpn") as? String,
+            category: obj.value(forKey: "category") as? String,
+            thumb: obj.value(forKey: "thumb") as? String,
+            fileCount: obj.value(forKey: "fileCount") as? Int ?? 0,
+            tags: (obj.value(forKey: "tags") as? [String] ?? []),
+            token: obj.value(forKey: "token") as? String,
+            rating: obj.value(forKey: "rating") as? String
+        )
     }
     
     private static func update(obj: NSManagedObject, with book: Book) {
         obj.setValue(book.gid, forKey: "gid")
         obj.setValue(book.title, forKey: "title")
-        obj.setValue(book.titleJpn, forKey: "title_jpn")
+        obj.setValue(book.titleJpn, forKey: "titleJpn")
         obj.setValue(book.category, forKey: "category")
         obj.setValue(book.thumb, forKey: "thumb")
-        obj.setValue(book.fileCount, forKey: "filecount")
+        obj.setValue(book.fileCount, forKey: "fileCount")
         obj.setValue(book.tags, forKey: "tags")
         obj.setValue(book.token, forKey: "token")
         obj.setValue(book.rating, forKey: "rating")
