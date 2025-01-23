@@ -142,7 +142,7 @@ final class GalleryViewController: UICollectionViewController {
         vc.addTextField { $0.keyboardType = .numberPad }
         vc.addAction(UIAlertAction(title: "跳转", style: .default, handler: { [weak self, weak vc] _ in
             guard let self, let num = Int(vc?.textFields?.first?.text ?? "") else { return }
-            let page = max(1, min(book.contentImgCount, num))
+            let page = max(1, min(book.fileCount, num))
             collectionView.scrollToItem(at: IndexPath(row: page - 1, section: 0), at: .left, animated: true)
         }))
         vc.addAction(UIAlertAction(title: "取消", style: .cancel))
@@ -160,7 +160,7 @@ extension GalleryViewController: UICollectionViewDelegateFlowLayout {
 // MARK: UICollectionViewDataSource
 extension GalleryViewController {
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        book.contentImgCount
+        book.fileCount
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -181,7 +181,7 @@ extension GalleryViewController {
 extension GalleryViewController {
     override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         guard !isRotating else { return }
-        navigationItem.title = "\(indexPath.row + 1)/\(book.contentImgCount)"
+        navigationItem.title = "\(indexPath.row + 1)/\(book.fileCount)"
         lastSeenPageIndex = indexPath.row
     }
 }

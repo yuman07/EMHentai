@@ -135,9 +135,9 @@ final class BookListTableViewCell: UITableViewCell {
             case .before:
                 progressLabel.text = ""
             case .ing:
-                progressLabel.text = "下载中：" + "\(book.downloadedImgCount)/\(book.contentImgCount)"
+                progressLabel.text = "下载中：" + "\(book.downloadedImgCount)/\(book.fileCount)"
             case .suspend:
-                progressLabel.text = "已暂停：" + "\(book.downloadedImgCount)/\(book.contentImgCount)"
+                progressLabel.text = "已暂停：" + "\(book.downloadedImgCount)/\(book.fileCount)"
             case .finish:
                 progressLabel.text = "已下载"
             }
@@ -148,13 +148,13 @@ final class BookListTableViewCell: UITableViewCell {
         self.book = book
         if let image = UIImage(filePath: book.coverImagePath) {
             thumbImageView.image = image
-        } else {
-            thumbImageView.kf.setImage(with: URL(string: book.thumb))
+        } else if let thumb = book.thumb {
+            thumbImageView.kf.setImage(with: URL(string: thumb))
         }
         titleLabel.text = book.showTitle
         categoryLabel.text = book.category
         scoreLabel.text = book.rating
-        fileCountLabel.text = "\(book.contentImgCount)页"
+        fileCountLabel.text = "\(book.fileCount)页"
         progressLabel.text = ""
         updateProgress()
     }

@@ -36,19 +36,18 @@ extension Book {
     }
     
     var showTitle: String {
-        title_jpn.isEmpty ? title : title_jpn
+        if let titleJpn, !titleJpn.isEmpty {
+            return titleJpn
+        }
+        return title ?? ""
     }
     
     var currentWebURLString: String {
-        "\(SearchInfo.currentSource.rawValue)g/\(gid)/\(token)/"
+        "\(SearchInfo.currentSource.rawValue)g/\(gid)/\(token ?? "")/"
     }
     
     func webURLString(with source: SearchInfo.Source) -> String {
-        "\(source.rawValue)g/\(gid)/\(token)/"
-    }
-    
-    var contentImgCount: Int {
-        Int(filecount) ?? 0
+        "\(source.rawValue)g/\(gid)/\(token ?? "")/"
     }
     
     var downloadedImgCount: Int {

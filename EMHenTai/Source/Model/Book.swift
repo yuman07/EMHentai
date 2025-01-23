@@ -7,14 +7,14 @@
 
 import Foundation
 
-struct Book: Codable, Hashable {
+struct Book: Hashable {
     let gid: Int
-    let title: String
-    let title_jpn: String
-    let category: String
-    let thumb: String
-    let filecount: String
+    let title: String?
+    let titleJpn: String?
+    let category: String?
+    let thumb: String?
+    let fileCount: Int
     let tags: [String]
-    let token: String
-    let rating: String
+    let token: String?
+    let rating: String?
 }

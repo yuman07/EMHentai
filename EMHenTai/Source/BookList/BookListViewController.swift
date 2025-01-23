@@ -222,7 +222,10 @@ extension BookListViewController {
             if let url = URL(string: book.webURLString(with: SettingManager.shared.isLoginSubject.value ? .ExHentai : .EHentai)) {
                 vc.addAction(UIAlertAction(title: "打开原网页", style: .default, handler: { [weak self] _ in
                     guard let self else { return }
-                    let image = ImageCache.default.retrieveImageInMemoryCache(forKey: book.thumb)
+                    var image: UIImage?
+                    if let thumb = book.thumb {
+                        image = ImageCache.default.retrieveImageInMemoryCache(forKey: thumb)
+                    }
                     navigationController?.pushViewController(WebViewController(url: url, shareItem: (book.showTitle, image)), animated: true)
                 }))
             }

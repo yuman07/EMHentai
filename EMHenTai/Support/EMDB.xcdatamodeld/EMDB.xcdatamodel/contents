@@ -1,22 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21512" systemVersion="22A400" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23605" systemVersion="24C101" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="DownloadBook" representedClassName="DownloadBook" syncable="YES" codeGenerationType="class">
-        <attribute name="archiver_key" attributeType="String"/>
-        <attribute name="category" attributeType="String"/>
-        <attribute name="expunged" attributeType="Boolean" usesScalarValueType="YES"/>
-        <attribute name="filecount" attributeType="String"/>
-        <attribute name="filesize" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="category" optional="YES" attributeType="String"/>
+        <attribute name="fileCount" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="gid" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="posted" attributeType="String"/>
-        <attribute name="rating" attributeType="String"/>
+        <attribute name="rating" optional="YES" attributeType="String"/>
         <attribute name="tags" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData"/>
-        <attribute name="thumb" attributeType="String"/>
-        <attribute name="title" attributeType="String"/>
-        <attribute name="title_jpn" attributeType="String"/>
-        <attribute name="token" attributeType="String"/>
-        <attribute name="torrentcount" attributeType="String"/>
-        <attribute name="torrents" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData"/>
-        <attribute name="uploader" attributeType="String"/>
+        <attribute name="thumb" optional="YES" attributeType="String"/>
+        <attribute name="title" optional="YES" attributeType="String"/>
+        <attribute name="titleJpn" optional="YES" attributeType="String"/>
+        <attribute name="token" optional="YES" attributeType="String"/>
         <fetchIndex name="bygid">
             <fetchIndexElement property="gid" type="Binary" order="ascending"/>
         </fetchIndex>
@@ -27,22 +20,15 @@
         </uniquenessConstraints>
     </entity>
     <entity name="HistoryBook" representedClassName="HistoryBook" syncable="YES" codeGenerationType="class">
-        <attribute name="archiver_key" attributeType="String"/>
-        <attribute name="category" attributeType="String"/>
-        <attribute name="expunged" attributeType="Boolean" usesScalarValueType="YES"/>
-        <attribute name="filecount" attributeType="String"/>
-        <attribute name="filesize" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="category" optional="YES" attributeType="String"/>
+        <attribute name="fileCount" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="gid" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="posted" attributeType="String"/>
-        <attribute name="rating" attributeType="String"/>
+        <attribute name="rating" optional="YES" attributeType="String"/>
         <attribute name="tags" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData"/>
-        <attribute name="thumb" attributeType="String"/>
-        <attribute name="title" attributeType="String"/>
-        <attribute name="title_jpn" attributeType="String"/>
-        <attribute name="token" attributeType="String"/>
-        <attribute name="torrentcount" attributeType="String"/>
-        <attribute name="torrents" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData"/>
-        <attribute name="uploader" attributeType="String"/>
+        <attribute name="thumb" optional="YES" attributeType="String"/>
+        <attribute name="title" optional="YES" attributeType="String"/>
+        <attribute name="titleJpn" optional="YES" attributeType="String"/>
+        <attribute name="token" optional="YES" attributeType="String"/>
         <fetchIndex name="bygid">
             <fetchIndexElement property="gid" type="Binary" order="ascending"/>
         </fetchIndex>

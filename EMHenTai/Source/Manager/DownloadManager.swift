@@ -69,7 +69,7 @@ final actor DownloadManager {
     }
     
     func downloadState(of book: Book) -> State {
-        if book.downloadedImgCount == book.contentImgCount + 1 {
+        if book.downloadedImgCount == book.fileCount + 1 {
             return .finish
         } else if taskMap[book.gid] != nil {
             return .ing
@@ -79,14 +79,14 @@ final actor DownloadManager {
     }
     
     private nonisolated func startDownload(_ book: Book) async {
-        if !FileManager.default.fileExists(atPath: book.coverImagePath) {
-            let from = KingfisherManager.shared.cache.diskStorage.cacheFileURL(forKey: book.thumb)
+        if !FileManager.default.fileExists(atPath: book.coverImagePath), let thumb = book.thumb {
+            let from = KingfisherManager.shared.cache.diskStorage.cacheFileURL(forKey: thumb)
             if FileManager.default.fileExists(atPath: from.path) {
                 let to = URL(fileURLWithPath: book.coverImagePath)
                 try? FileManager.default.copyItem(at: from, to: to)
             } else {
                 _ = try? await emSession
-                    .download(book.thumb, interceptor: RetryPolicy.downloadRetryPolicy, to: { _, _ in (URL(fileURLWithPath: book.coverImagePath), []) })
+                    .download(thumb, interceptor: RetryPolicy.downloadRetryPolicy, to: { _, _ in (URL(fileURLWithPath: book.coverImagePath), []) })
                     .serializingDownload(using: URLResponseSerializer())
                     .value
             }
@@ -97,7 +97,7 @@ final actor DownloadManager {
         let urlStream = AsyncStream<String> { continuation in
             Task {
                 await withTaskGroup(of: Void.self, body: { group in
-                    let groupNum = book.contentImgCount / groupTotalImgNum + (book.contentImgCount % groupTotalImgNum == 0 ? 0 : 1)
+                    let groupNum = book.fileCount / groupTotalImgNum + (book.fileCount % groupTotalImgNum == 0 ? 0 : 1)
                     for groupIndex in 0 ..< groupNum {
                         guard checkGroupNeedRequest(of: book, groupIndex: groupIndex) else { continue }
                         group.addTask {
@@ -147,7 +147,7 @@ final actor DownloadManager {
     
     private nonisolated func checkGroupNeedRequest(of book: Book, groupIndex: Int) -> Bool {
         for index in 0 ..< groupTotalImgNum {
-            guard case let realIndex = groupIndex * groupTotalImgNum + index, realIndex < book.contentImgCount else {
+            guard case let realIndex = groupIndex * groupTotalImgNum + index, realIndex < book.fileCount else {
                 break
             }
             if !FileManager.default.fileExists(atPath: book.imagePath(at: realIndex)) {

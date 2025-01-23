@@ -78,14 +78,43 @@ final actor SearchManager {
                 .value
         else { return .failure(.netError) }
         
-        return .success(value.gmetadata)
+        return .success(value.gmetadata.compactMap({ Book($0) }))
     }
-}
-
-private struct Gmetadata: Codable {
-    let gmetadata: [Book]
 }
 
 @globalActor private actor SearchManagerActor {
     static let shared = SearchManagerActor()
+}
+
+private struct Gmetadata: Codable {
+    let gmetadata: [BookDto]
+}
+
+private struct BookDto: Codable {
+    let gid: Int?
+    let title: String?
+    let title_jpn: String?
+    let category: String?
+    let thumb: String?
+    let filecount: String?
+    let tags: [String?]?
+    let token: String?
+    let rating: String?
+}
+
+private extension Book {
+    init?(_ dto: BookDto) {
+        guard let gid = dto.gid else { return nil }
+        self.init(
+            gid: gid,
+            title: dto.title,
+            titleJpn: dto.title_jpn,
+            category: dto.category,
+            thumb: dto.thumb,
+            fileCount: Int(dto.filecount ?? "0") ?? 0,
+            tags: (dto.tags ?? []).compactMap({ $0 }),
+            token: dto.token,
+            rating: dto.rating
+        )
+    }
 }
