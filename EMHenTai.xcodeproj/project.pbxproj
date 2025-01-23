@@ -20,6 +20,7 @@
 		7A1C12B5279A8CC000ADD54E /* FileManager+Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1C12B4279A8CC000ADD54E /* FileManager+Tools.swift */; };
 		7A1C12B7279A8EE400ADD54E /* Int+Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1C12B6279A8EE400ADD54E /* Int+Tools.swift */; };
 		7A1F22FC2C572AFE00EFA75B /* AFSession+Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1F22FB2C572AFE00EFA75B /* AFSession+Tools.swift */; };
+		7A2A99AE2D422894007A1B1F /* tag-20250123.json in Resources */ = {isa = PBXBuildFile; fileRef = 7A2A99AD2D422894007A1B1F /* tag-20250123.json */; };
 		7A3F29DA28E8342E00F8CC6B /* BookListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A3F29D928E8342E00F8CC6B /* BookListViewModel.swift */; };
 		7A3F29DC28E8907300F8CC6B /* SearchInfo+Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A3F29DB28E8907300F8CC6B /* SearchInfo+Tools.swift */; };
 		7A5CA04C27A9770C00E9FDF9 /* UIApplication+Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A5CA04B27A9770C00E9FDF9 /* UIApplication+Tools.swift */; };
@@ -42,7 +43,6 @@
 		7AE912C827D07C2500DD9E65 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 7AE912C727D07C2500DD9E65 /* Kingfisher */; };
 		7AEDF3FC279138640064DB12 /* SearchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AEDF3FB279138640064DB12 /* SearchManager.swift */; };
 		7AEDF3FE279177720064DB12 /* SearchInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AEDF3FD279177720064DB12 /* SearchInfo.swift */; };
-		7AFA24782D086F7600A865A3 /* tag-20241210.json in Resources */ = {isa = PBXBuildFile; fileRef = 7AFA24772D086F7600A865A3 /* tag-20241210.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -59,6 +59,7 @@
 		7A1C12B4279A8CC000ADD54E /* FileManager+Tools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileManager+Tools.swift"; sourceTree = "<group>"; };
 		7A1C12B6279A8EE400ADD54E /* Int+Tools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Tools.swift"; sourceTree = "<group>"; };
 		7A1F22FB2C572AFE00EFA75B /* AFSession+Tools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AFSession+Tools.swift"; sourceTree = "<group>"; };
+		7A2A99AD2D422894007A1B1F /* tag-20250123.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "tag-20250123.json"; sourceTree = "<group>"; };
 		7A3F29D928E8342E00F8CC6B /* BookListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookListViewModel.swift; sourceTree = "<group>"; };
 		7A3F29DB28E8907300F8CC6B /* SearchInfo+Tools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SearchInfo+Tools.swift"; sourceTree = "<group>"; };
 		7A5CA04B27A9770C00E9FDF9 /* UIApplication+Tools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+Tools.swift"; sourceTree = "<group>"; };
@@ -81,7 +82,6 @@
 		7AE1CBF028D42EEF00888582 /* Array+Tools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Tools.swift"; sourceTree = "<group>"; };
 		7AEDF3FB279138640064DB12 /* SearchManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchManager.swift; sourceTree = "<group>"; };
 		7AEDF3FD279177720064DB12 /* SearchInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchInfo.swift; sourceTree = "<group>"; };
-		7AFA24772D086F7600A865A3 /* tag-20241210.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "tag-20241210.json"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -226,7 +226,7 @@
 		7AB96809279118C00006466A /* Support */ = {
 			isa = PBXGroup;
 			children = (
-				7AFA24772D086F7600A865A3 /* tag-20241210.json */,
+				7A2A99AD2D422894007A1B1F /* tag-20250123.json */,
 				7AB967FD279117CD0006466A /* Assets.xcassets */,
 				7AB967FF279117CD0006466A /* LaunchScreen.storyboard */,
 				7AB96802279117CD0006466A /* Info.plist */,
@@ -318,8 +318,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				7AB96801279117CD0006466A /* LaunchScreen.storyboard in Resources */,
-				7AFA24782D086F7600A865A3 /* tag-20241210.json in Resources */,
 				7AB967FE279117CD0006466A /* Assets.xcassets in Resources */,
+				7A2A99AE2D422894007A1B1F /* tag-20250123.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -599,7 +599,7 @@
 			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
 			requirement = {
 				kind = exactVersion;
-				version = 8.1.2;
+				version = 8.1.3;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
