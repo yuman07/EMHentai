@@ -116,17 +116,10 @@ final class DBManager {
              title_jpn: obj.value(forKey: "title_jpn") as? String ?? "",
              category: obj.value(forKey: "category") as? String ?? "",
              thumb: obj.value(forKey: "thumb") as? String ?? "",
-             uploader: obj.value(forKey: "uploader") as? String ?? "",
              filecount: obj.value(forKey: "filecount") as? String ?? "",
-             filesize: obj.value(forKey: "filesize") as? Int ?? 0,
              tags: (obj.value(forKey: "tags") as? [String] ?? []),
              token: obj.value(forKey: "token") as? String ?? "",
-             rating: obj.value(forKey: "rating") as? String ?? "",
-             archiver_key: obj.value(forKey: "archiver_key") as? String ?? "",
-             posted: obj.value(forKey: "posted") as? String ?? "",
-             expunged: obj.value(forKey: "expunged") as? Bool ?? false,
-             torrentcount: obj.value(forKey: "torrentcount") as? String ?? "",
-             torrents: (obj.value(forKey: "torrents") as? [[String: String]] ?? []))
+             rating: obj.value(forKey: "rating") as? String ?? "")
     }
     
     private static func update(obj: NSManagedObject, with book: Book) {
@@ -135,16 +128,9 @@ final class DBManager {
         obj.setValue(book.title_jpn, forKey: "title_jpn")
         obj.setValue(book.category, forKey: "category")
         obj.setValue(book.thumb, forKey: "thumb")
-        obj.setValue(book.uploader, forKey: "uploader")
         obj.setValue(book.filecount, forKey: "filecount")
-        obj.setValue(book.filesize, forKey: "filesize")
         obj.setValue(book.tags, forKey: "tags")
         obj.setValue(book.token, forKey: "token")
         obj.setValue(book.rating, forKey: "rating")
-        obj.setValue(book.archiver_key, forKey: "archiver_key")
-        obj.setValue(book.posted, forKey: "posted")
-        obj.setValue(book.expunged, forKey: "expunged")
-        obj.setValue(book.torrentcount, forKey: "torrentcount")
-        obj.setValue(book.torrents, forKey: "torrents")
     }
 }
