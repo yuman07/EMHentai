@@ -78,7 +78,7 @@ final actor SearchManager {
                 .value
         else { return .failure(.netError) }
         
-        return .success(value.gmetadata.compactMap({ Book($0) }))
+        return .success((value.gmetadata ?? []).compactMap({ Book($0) }))
     }
 }
 
@@ -86,11 +86,11 @@ final actor SearchManager {
     static let shared = SearchManagerActor()
 }
 
-private struct Gmetadata: Codable {
-    let gmetadata: [BookDto]
+private struct Gmetadata: Decodable {
+    let gmetadata: [BookDto]?
 }
 
-private struct BookDto: Codable {
+private struct BookDto: Decodable {
     let gid: Int?
     let title: String?
     let title_jpn: String?
