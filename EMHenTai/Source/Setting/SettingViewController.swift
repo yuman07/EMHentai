@@ -12,12 +12,18 @@ final class SettingViewController: UITableViewController {
     private enum SectionType: String, CaseIterable {
         case loginState = "登录状态"
         case dateSize = "存储占用"
+        case filter = "内容过滤"
     }
     
     private enum DataSizeType: String, CaseIterable {
         case history = "历史数据"
         case download = "下载数据"
         case other = "其它数据"
+    }
+    
+    private enum FilterType: String, CaseIterable {
+        case ai = "AI生成"
+        case gore = "血腥猎奇"
     }
     
     private var dataSize = (historySize: 0, downloadSize: 0, otherSize: 0)
@@ -113,6 +119,17 @@ final class SettingViewController: UITableViewController {
         vc.addAction(UIAlertAction(title: "取消", style: .cancel))
         present(vc, animated: true)
     }
+
+    @objc func onFilterSwitchValueChanged(_ sender: UISwitch) {
+        switch sender.tag {
+        case 0:
+            SettingManager.shared.isAIDisabled.toggle()
+        case 1:
+            SettingManager.shared.isGoreDisabled.toggle()
+        default:
+            break
+        }
+    }
 }
 
 // MARK: UITableViewDataSource
@@ -127,6 +144,8 @@ extension SettingViewController {
             return 1
         case .dateSize:
             return DataSizeType.allCases.count
+        case .filter:
+            return FilterType.allCases.count
         }
     }
     
@@ -140,24 +159,39 @@ extension SettingViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(UITableViewCell.self), for: indexPath)
+        cell.selectionStyle = .default
+        cell.accessoryView = nil
         
         switch SectionType.allCases[indexPath.section] {
         case .loginState:
             cell.textLabel?.text = SettingManager.shared.isLoginSubject.value ? "已登录：点击可登出" : "未登录：点击去登录"
-            cell.selectionStyle = .default
         case .dateSize:
             let data = DataSizeType.allCases[indexPath.row]
             var text = "\(data.rawValue)："
             switch data {
             case .history:
                 text += dataSize.historySize.diskSizeFormat
+                cell.selectionStyle = .none
             case .download:
                 text += dataSize.downloadSize.diskSizeFormat
+                cell.selectionStyle = .none
             case .other:
                 text += dataSize.otherSize.diskSizeFormat
             }
             cell.textLabel?.text = text
-            cell.selectionStyle = .none
+        case .filter:
+            let switchView = UISwitch()
+            switchView.tag = indexPath.row
+            switchView.addTarget(self, action: #selector(onFilterSwitchValueChanged(_:)), for: .valueChanged)
+            cell.accessoryView = switchView
+            let data = FilterType.allCases[indexPath.row]
+            switch data {
+            case .ai:
+                switchView.isOn = SettingManager.shared.isAIDisabled
+            case .gore:
+                switchView.isOn = SettingManager.shared.isGoreDisabled
+            }
+            cell.textLabel?.text = data.rawValue
         }
         
         return cell
@@ -181,6 +215,10 @@ extension SettingViewController {
             if DataSizeType.allCases[indexPath.row] == .other {
                 clearOtherData()
             }
+        case .filter:
+            guard let switchView = tableView.cellForRow(at: indexPath)?.accessoryView as? UISwitch else { return }
+            switchView.setOn(!switchView.isOn, animated: true)
+            onFilterSwitchValueChanged(switchView)
         }
     }
 }

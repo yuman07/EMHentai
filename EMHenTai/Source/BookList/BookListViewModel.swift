@@ -65,8 +65,19 @@ final class BookListViewModel {
         
         switch result {
         case .success(let newBooks):
-            books = (info.lastGid.isEmpty ? newBooks : books + newBooks).unique()
-            hasMore = !newBooks.isEmpty
+            let oldBooks = books
+            books = (info.lastGid.isEmpty ? newBooks : books + newBooks)
+                .unique()
+                .filter { book in
+                    if SettingManager.shared.isAIDisabled && book.isAI {
+                        return false
+                    }
+                    if SettingManager.shared.isGoreDisabled && book.isOffensive {
+                        return false
+                    }
+                    return true
+                }
+            hasMore = oldBooks != books
             if hasMore { hint = .loading }
             else { hint = books.isEmpty ? .noData : .noMoreData }
         case .failure(let error):

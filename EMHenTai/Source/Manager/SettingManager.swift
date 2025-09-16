@@ -12,6 +12,15 @@ import WebKit
 final class SettingManager {
     static let shared = SettingManager()
     
+    var isAIDisabled: Bool {
+        get { UserDefaults.standard.bool(forKey: "SettingManager_isAIDisabled") }
+        set { UserDefaults.standard.set(newValue, forKey: "SettingManager_isAIDisabled") }
+    }
+    var isGoreDisabled: Bool {
+        get { UserDefaults.standard.bool(forKey: "SettingManager_isGoreDisabled") }
+        set { UserDefaults.standard.set(newValue, forKey: "SettingManager_isGoreDisabled") }
+    }
+    
     private(set) lazy var isLoginSubject = CurrentValueSubject<Bool, Never>(checkLogin())
     private var cancelBag = Set<AnyCancellable>()
     

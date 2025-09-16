@@ -11,6 +11,7 @@ extension Book {
     private enum Constant {
         // https://ehwiki.org/wiki/Technical_Issues  "Content Warning - This gallery has been flagged as Offensive For Everyone
         static let offensiveTags = Set(["guro", "snuff", "scat"])
+        static let aiTags = Set(["ai generated"])
     }
     
     static var downloadFolderPath: String {
@@ -56,5 +57,9 @@ extension Book {
     
     var isOffensive: Bool {
         !Constant.offensiveTags.intersection(Set(tags)).isEmpty
+    }
+    
+    var isAI: Bool {
+        !Constant.aiTags.intersection(Set(tags)).isEmpty
     }
 }

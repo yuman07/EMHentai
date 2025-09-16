@@ -160,7 +160,7 @@ extension BookListViewController {
             navigationController?.pushViewController(SearchViewController(), animated: true)
         case .history:
             guard presentedViewController == nil else { return }
-            let vc = UIAlertController(title: "提示", message: "确定要清除所有历史记录吗？\n（不会影响下载内容）", preferredStyle: .alert)
+            let vc = UIAlertController(title: "提示", message: "确定要清除所有历史记录吗？\n（不会影响已下载内容）", preferredStyle: .alert)
             vc.addAction(UIAlertAction(title: "清除", style: .default, handler: { _ in
                 DBManager.shared.books(of: .history)
                     .filter { !DBManager.shared.contains(gid: $0.gid, of: .download) }
