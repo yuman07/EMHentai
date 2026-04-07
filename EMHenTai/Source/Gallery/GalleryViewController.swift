@@ -138,14 +138,14 @@ final class GalleryViewController: UICollectionViewController {
     
     @objc
     private func jumpToPageX() {
-        let vc = UIAlertController(title: "提示", message: "请输入要跳转的页数", preferredStyle: .alert)
+        let vc = UIAlertController(title: "alert.notice".localized, message: "gallery.enter_page".localized, preferredStyle: .alert)
         vc.addTextField { $0.keyboardType = .numberPad }
-        vc.addAction(UIAlertAction(title: "跳转", style: .default, handler: { [weak self, weak vc] _ in
+        vc.addAction(UIAlertAction(title: "gallery.jump".localized, style: .default, handler: { [weak self, weak vc] _ in
             guard let self, let num = Int(vc?.textFields?.first?.text ?? "") else { return }
             let page = max(1, min(book.fileCount, num))
             collectionView.scrollToItem(at: IndexPath(row: page - 1, section: 0), at: .left, animated: true)
         }))
-        vc.addAction(UIAlertAction(title: "取消", style: .cancel))
+        vc.addAction(UIAlertAction(title: "alert.cancel".localized, style: .cancel))
         present(vc, animated: true)
     }
 }

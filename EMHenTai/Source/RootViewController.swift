@@ -14,25 +14,25 @@ final class RootViewController: UITabBarController {
         viewControllers = [
             {
                 let vc = UINavigationController(rootViewController: BookListViewController(type: .home))
-                vc.tabBarItem.title = "主页"
+                vc.tabBarItem.title = "tab.home".localized
                 vc.tabBarItem.image = UIImage(symbol: .home)
                 return vc
             }(),
             {
                 let vc = UINavigationController(rootViewController: BookListViewController(type: .history))
-                vc.tabBarItem.title = "历史"
+                vc.tabBarItem.title = "tab.history".localized
                 vc.tabBarItem.image = UIImage(symbol: .history)
                 return vc
             }(),
             {
                 let vc = UINavigationController(rootViewController: BookListViewController(type: .download))
-                vc.tabBarItem.title = "下载"
+                vc.tabBarItem.title = "tab.download".localized
                 vc.tabBarItem.image = UIImage(symbol: .download)
                 return vc
             }(),
             {
                 let vc = UINavigationController(rootViewController: SettingViewController())
-                vc.tabBarItem.title = "设置"
+                vc.tabBarItem.title = "tab.settings".localized
                 vc.tabBarItem.image = UIImage(symbol: .setting)
                 return vc
             }(),

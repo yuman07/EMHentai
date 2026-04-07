@@ -8,18 +8,29 @@
 import UIKit
 
 final class BookListFooterView: UIView {
-    enum HintType: String {
-        case empty = " "
-        case loading = "加载中..."
-        case noData = "无数据"
-        case noMoreData = "没有更多了"
-        case netError = "网络错误：请检查网络连接或VPN设置"
-        case ipError = "IP错误：IP地址被禁，请尝试更换节点"
+    enum HintType {
+        case empty
+        case loading
+        case noData
+        case noMoreData
+        case netError
+        case ipError
+
+        var title: String {
+            switch self {
+            case .empty: return " "
+            case .loading: return "footer.loading".localized
+            case .noData: return "footer.no_data".localized
+            case .noMoreData: return "footer.no_more".localized
+            case .netError: return "footer.net_error".localized
+            case .ipError: return "footer.ip_error".localized
+            }
+        }
     }
-    
+
     var hint = HintType.empty {
         didSet {
-            label.text = hint.rawValue
+            label.text = hint.title
         }
     }
     
@@ -34,7 +45,7 @@ final class BookListFooterView: UIView {
     
     private let label = {
         let label = UILabel()
-        label.text = HintType.empty.rawValue
+        label.text = HintType.empty.title
         label.font = .systemFont(ofSize: 14)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label

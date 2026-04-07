@@ -12,12 +12,22 @@ protocol SearchVCItemDataSource {
 }
 
 final class SearchViewController: UITableViewController {
-    private enum SectionType: String, CaseIterable {
-        case keyword = "关键词"
-        case dateSource = "数据源"
-        case language = "语言"
-        case rating = "评分"
-        case category = "分类"
+    private enum SectionType: CaseIterable {
+        case keyword
+        case dateSource
+        case language
+        case rating
+        case category
+
+        var title: String {
+            switch self {
+            case .keyword: return "search.keyword".localized
+            case .dateSource: return "search.source".localized
+            case .language: return "search.language".localized
+            case .rating: return "search.rating".localized
+            case .category: return "search.category".localized
+            }
+        }
     }
     
     private var searchInfo = SearchInfo() {
@@ -48,7 +58,7 @@ final class SearchViewController: UITableViewController {
     }
     
     private func setupUI() {
-        navigationItem.title = "搜索"
+        navigationItem.title = "search.title".localized
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "GO", style: .done, target: self, action: #selector(searchAction))
         
         tableView.backgroundColor = .systemGroupedBackground
@@ -101,7 +111,7 @@ extension SearchViewController {
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let sectionType = SectionType.allCases[section]
         let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: NSStringFromClass(UITableViewHeaderFooterView.self))
-        header?.textLabel?.text = sectionType.rawValue
+        header?.textLabel?.text = sectionType.title
         if sectionType == .category {
             header?.removeGestureRecognizer(doubleTapCategoryGestureRecognizer)
             header?.addGestureRecognizer(doubleTapCategoryGestureRecognizer)

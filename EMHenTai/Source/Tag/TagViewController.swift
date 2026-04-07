@@ -32,7 +32,7 @@ final class TagViewController: UITableViewController {
         tableView.bounces = false
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: NSStringFromClass(UITableViewCell.self))
         
-        navigationItem.title = "选择相关Tag进行搜索"
+        navigationItem.title = "tag.select_title".localized
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "GO", style: .done, target: self, action: #selector(searchAction))
         navigationItem.rightBarButtonItem?.isEnabled = false
     }

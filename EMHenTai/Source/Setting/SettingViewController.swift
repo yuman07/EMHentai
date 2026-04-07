@@ -9,21 +9,44 @@ import Combine
 import UIKit
 
 final class SettingViewController: UITableViewController {
-    private enum SectionType: String, CaseIterable {
-        case loginState = "登录状态"
-        case dateSize = "存储占用"
-        case filter = "内容过滤"
+    private enum SectionType: CaseIterable {
+        case loginState
+        case dateSize
+        case filter
+
+        var title: String {
+            switch self {
+            case .loginState: return "setting.login_status".localized
+            case .dateSize: return "setting.storage".localized
+            case .filter: return "setting.filter".localized
+            }
+        }
     }
-    
-    private enum DataSizeType: String, CaseIterable {
-        case history = "历史数据"
-        case download = "下载数据"
-        case other = "其它数据"
+
+    private enum DataSizeType: CaseIterable {
+        case history
+        case download
+        case other
+
+        var title: String {
+            switch self {
+            case .history: return "setting.history_data".localized
+            case .download: return "setting.download_data".localized
+            case .other: return "setting.other_data".localized
+            }
+        }
     }
-    
-    private enum FilterType: String, CaseIterable {
-        case ai = "AI生成"
-        case gore = "血腥猎奇"
+
+    private enum FilterType: CaseIterable {
+        case ai
+        case gore
+
+        var title: String {
+            switch self {
+            case .ai: return "setting.ai_generated".localized
+            case .gore: return "setting.gore".localized
+            }
+        }
     }
     
     private var dataSize = (historySize: 0, downloadSize: 0, otherSize: 0)
@@ -54,7 +77,7 @@ final class SettingViewController: UITableViewController {
         tableView.bounces = false
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: NSStringFromClass(UITableViewCell.self))
         
-        navigationItem.title = "设置"
+        navigationItem.title = "tab.settings".localized
     }
     
     private func setupCombine() {
@@ -67,8 +90,8 @@ final class SettingViewController: UITableViewController {
                 
                 if $0 {
                     guard presentedViewController == nil else { return }
-                    let vc = UIAlertController(title: "提示", message: "登录成功", preferredStyle: .alert)
-                    vc.addAction(UIAlertAction(title: "好的", style: .default))
+                    let vc = UIAlertController(title: "alert.notice".localized, message: "setting.login_success".localized, preferredStyle: .alert)
+                    vc.addAction(UIAlertAction(title: "alert.ok".localized, style: .default))
                     UIApplication.shared.keyWindow?.rootViewController?.present(vc, animated: true)
                 }
             }
@@ -85,38 +108,38 @@ final class SettingViewController: UITableViewController {
     
     private func login() {
         guard presentedViewController == nil else { return }
-        let vc = UIAlertController(title: "请选择登录方式", message: nil, preferredStyle: .alert)
-        vc.addAction(UIAlertAction(title: "账号密码", style: .default, handler: { [weak self] _ in
+        let vc = UIAlertController(title: "setting.choose_login".localized, message: nil, preferredStyle: .alert)
+        vc.addAction(UIAlertAction(title: "setting.account_password".localized, style: .default, handler: { [weak self] _ in
             guard let self else { return }
             navigationController?.pushViewController(LoginViewController(), animated: true)
         }))
         vc.addAction(UIAlertAction(title: "Cookie", style: .default, handler: { [weak self] _ in
             guard let self else { return }
-            let alertVC = UIAlertController(title: "登录", message: "请在此输入Cookie", preferredStyle: .alert)
+            let alertVC = UIAlertController(title: "setting.login".localized, message: "setting.enter_cookie".localized, preferredStyle: .alert)
             alertVC.addTextField()
-            alertVC.addAction(UIAlertAction(title: "提交", style: .default, handler: { [weak alertVC] _ in
+            alertVC.addAction(UIAlertAction(title: "setting.submit".localized, style: .default, handler: { [weak alertVC] _ in
                 if let cookie = alertVC?.textFields?.first?.text, !cookie.isEmpty {
                     SettingManager.shared.loginWith(cookie: cookie)
                 }
             }))
-            alertVC.addAction(UIAlertAction(title: "取消", style: .cancel))
+            alertVC.addAction(UIAlertAction(title: "alert.cancel".localized, style: .cancel))
             present(alertVC, animated: true)
         }))
-        vc.addAction(UIAlertAction(title: "取消", style: .cancel))
+        vc.addAction(UIAlertAction(title: "alert.cancel".localized, style: .cancel))
         present(vc, animated: true)
     }
     
     private func clearOtherData() {
         guard dataSize.otherSize > 0, presentedViewController == nil else { return }
-        let vc = UIAlertController(title: "提示", message: "确定要清除其他数据吗？\n（包含如封面图等数据）", preferredStyle: .alert)
-        vc.addAction(UIAlertAction(title: "清除", style: .default, handler: { [weak self] _ in
+        let vc = UIAlertController(title: "alert.notice".localized, message: "setting.clear_other_message".localized, preferredStyle: .alert)
+        vc.addAction(UIAlertAction(title: "alert.clear".localized, style: .default, handler: { [weak self] _ in
             guard let self else { return }
             Task {
                 await SettingManager.shared.clearOtherData()
                 self.reloadDataSize()
             }
         }))
-        vc.addAction(UIAlertAction(title: "取消", style: .cancel))
+        vc.addAction(UIAlertAction(title: "alert.cancel".localized, style: .cancel))
         present(vc, animated: true)
     }
 
@@ -154,7 +177,7 @@ extension SettingViewController {
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        SectionType.allCases[section].rawValue
+        SectionType.allCases[section].title
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -164,10 +187,10 @@ extension SettingViewController {
         
         switch SectionType.allCases[indexPath.section] {
         case .loginState:
-            cell.textLabel?.text = SettingManager.shared.isLoginSubject.value ? "已登录：点击可登出" : "未登录：点击去登录"
+            cell.textLabel?.text = SettingManager.shared.isLoginSubject.value ? "setting.logged_in".localized : "setting.not_logged_in".localized
         case .dateSize:
             let data = DataSizeType.allCases[indexPath.row]
-            var text = "\(data.rawValue)："
+            var text = data.title + ": "
             switch data {
             case .history:
                 text += dataSize.historySize.diskSizeFormat
@@ -191,7 +214,7 @@ extension SettingViewController {
             case .gore:
                 switchView.isOn = SettingManager.shared.isGoreDisabled
             }
-            cell.textLabel?.text = data.rawValue
+            cell.textLabel?.text = data.title
         }
         
         return cell

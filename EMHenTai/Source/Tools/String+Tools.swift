@@ -8,6 +8,10 @@
 import Foundation
 
 extension String {
+    var localized: String {
+        NSLocalizedString(self, comment: "")
+    }
+
     private func allIndices(of string: String) -> [Int] {
         var indices = [Int]()
         var start = startIndex

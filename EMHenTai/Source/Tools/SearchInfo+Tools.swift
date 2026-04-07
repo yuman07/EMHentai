@@ -31,7 +31,7 @@ extension SearchInfo.Source: SearchVCItemDataSource {
         case .EHentai:
             return "E-Hentai"
         case .ExHentai:
-            return "ExHentai" + (SettingManager.shared.isLoginSubject.value ? "" : "(登录后可用)")
+            return "ExHentai" + (SettingManager.shared.isLoginSubject.value ? "" : "source.login_required".localized)
         }
     }
 }
@@ -40,9 +40,9 @@ extension SearchInfo.Language: SearchVCItemDataSource {
     var searchItemTitle: String {
         switch self {
         case .all:
-            return "不限"
+            return "language.all".localized
         case .chinese:
-            return "中文"
+            return "language.chinese".localized
         }
     }
 }
@@ -51,15 +51,15 @@ extension SearchInfo.Rating: SearchVCItemDataSource {
     var searchItemTitle: String {
         switch self {
         case .all:
-            return "不限"
+            return "rating.all".localized
         case .atLeast2:
-            return "至少2星"
+            return "rating.2stars".localized
         case .atLeast3:
-            return "至少3星"
+            return "rating.3stars".localized
         case .atLeast4:
-            return "至少4星"
+            return "rating.4stars".localized
         case .atLeast5:
-            return "满星"
+            return "rating.5stars".localized
         }
     }
 }

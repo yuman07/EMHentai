@@ -1,0 +1,83 @@
+/* Tabs */
+"tab.home" = "Home";
+"tab.history" = "History";
+"tab.download" = "Download";
+"tab.settings" = "Settings";
+
+/* BookList */
+"pull.refreshing" = "Refreshing...";
+
+/* Alerts */
+"alert.warning" = "Warning";
+"alert.offensive_content" = "This book contains disturbing content (gore/bizarre).\nAre you sure you want to view it?";
+"alert.confirm" = "Confirm";
+"alert.never_mind" = "Never Mind";
+"alert.notice" = "Notice";
+"alert.clear_history_message" = "Are you sure you want to clear all history?\n(Downloaded content will not be affected)";
+"alert.clear" = "Clear";
+"alert.cancel" = "Cancel";
+"alert.ok" = "OK";
+
+/* Actions */
+"action.download" = "Download";
+"action.pause" = "Pause";
+"action.delete_download" = "Delete Download";
+"action.delete_history" = "Delete History";
+"action.open_webpage" = "Open Original Page";
+"action.search_tags" = "Search Related Tags";
+"action.dismiss" = "Dismiss";
+
+/* Settings */
+"setting.login_status" = "Login Status";
+"setting.storage" = "Storage Usage";
+"setting.filter" = "Content Filter";
+"setting.history_data" = "History Data";
+"setting.download_data" = "Download Data";
+"setting.other_data" = "Other Data";
+"setting.ai_generated" = "AI Generated";
+"setting.gore" = "Gore/Bizarre";
+"setting.logged_in" = "Logged in: Tap to logout";
+"setting.not_logged_in" = "Not logged in: Tap to login";
+"setting.login_success" = "Login successful";
+"setting.choose_login" = "Choose Login Method";
+"setting.account_password" = "Account & Password";
+"setting.login" = "Login";
+"setting.enter_cookie" = "Enter your Cookie here";
+"setting.submit" = "Submit";
+"setting.clear_other_message" = "Are you sure you want to clear other data?\n(Including cover images, etc.)";
+
+/* Search */
+"search.keyword" = "Keyword";
+"search.source" = "Data Source";
+"search.language" = "Language";
+"search.rating" = "Rating";
+"search.category" = "Category";
+"search.title" = "Search";
+"source.login_required" = "(Login required)";
+"language.all" = "All";
+"language.chinese" = "Chinese";
+"rating.all" = "All";
+"rating.2stars" = "At least 2 stars";
+"rating.3stars" = "At least 3 stars";
+"rating.4stars" = "At least 4 stars";
+"rating.5stars" = "5 stars";
+
+/* Footer */
+"footer.loading" = "Loading...";
+"footer.no_data" = "No data";
+"footer.no_more" = "No more data";
+"footer.net_error" = "Network error: Check your connection or VPN settings";
+"footer.ip_error" = "IP error: IP banned, please try another node";
+
+/* Tag */
+"tag.select_title" = "Select tags to search";
+
+/* Gallery */
+"gallery.enter_page" = "Enter page number";
+"gallery.jump" = "Go";
+
+/* Cell */
+"cell.downloading" = "Downloading: ";
+"cell.paused" = "Paused: ";
+"cell.downloaded" = "Downloaded";
+"cell.pages" = "pages";

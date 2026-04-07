@@ -1,0 +1,83 @@
+/* Tabs */
+"tab.home" = "主页";
+"tab.history" = "历史";
+"tab.download" = "下载";
+"tab.settings" = "设置";
+
+/* BookList */
+"pull.refreshing" = "刷新中...";
+
+/* Alerts */
+"alert.warning" = "警告";
+"alert.offensive_content" = "此本含有令人不适内容(恶心猎奇)\n请确认是否一定要观看？";
+"alert.confirm" = "确认";
+"alert.never_mind" = "算了";
+"alert.notice" = "提示";
+"alert.clear_history_message" = "确定要清除所有历史记录吗？\n（不会影响已下载内容）";
+"alert.clear" = "清除";
+"alert.cancel" = "取消";
+"alert.ok" = "好的";
+
+/* Actions */
+"action.download" = "下载";
+"action.pause" = "暂停";
+"action.delete_download" = "删除下载";
+"action.delete_history" = "删除历史";
+"action.open_webpage" = "打开原网页";
+"action.search_tags" = "搜索相关Tag";
+"action.dismiss" = "没事";
+
+/* Settings */
+"setting.login_status" = "登录状态";
+"setting.storage" = "存储占用";
+"setting.filter" = "内容过滤";
+"setting.history_data" = "历史数据";
+"setting.download_data" = "下载数据";
+"setting.other_data" = "其它数据";
+"setting.ai_generated" = "AI生成";
+"setting.gore" = "血腥猎奇";
+"setting.logged_in" = "已登录：点击可登出";
+"setting.not_logged_in" = "未登录：点击去登录";
+"setting.login_success" = "登录成功";
+"setting.choose_login" = "请选择登录方式";
+"setting.account_password" = "账号密码";
+"setting.login" = "登录";
+"setting.enter_cookie" = "请在此输入Cookie";
+"setting.submit" = "提交";
+"setting.clear_other_message" = "确定要清除其他数据吗？\n（包含如封面图等数据）";
+
+/* Search */
+"search.keyword" = "关键词";
+"search.source" = "数据源";
+"search.language" = "语言";
+"search.rating" = "评分";
+"search.category" = "分类";
+"search.title" = "搜索";
+"source.login_required" = "(登录后可用)";
+"language.all" = "不限";
+"language.chinese" = "中文";
+"rating.all" = "不限";
+"rating.2stars" = "至少2星";
+"rating.3stars" = "至少3星";
+"rating.4stars" = "至少4星";
+"rating.5stars" = "满星";
+
+/* Footer */
+"footer.loading" = "加载中...";
+"footer.no_data" = "无数据";
+"footer.no_more" = "没有更多了";
+"footer.net_error" = "网络错误：请检查网络连接或VPN设置";
+"footer.ip_error" = "IP错误：IP地址被禁，请尝试更换节点";
+
+/* Tag */
+"tag.select_title" = "选择相关Tag进行搜索";
+
+/* Gallery */
+"gallery.enter_page" = "请输入要跳转的页数";
+"gallery.jump" = "跳转";
+
+/* Cell */
+"cell.downloading" = "下载中：";
+"cell.paused" = "已暂停：";
+"cell.downloaded" = "已下载";
+"cell.pages" = "页";
