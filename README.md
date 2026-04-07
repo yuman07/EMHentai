@@ -1,12 +1,10 @@
 # EMHentai
 
-
+[English](README_EN.md) | **中文**
 
 ## 简介
 
 一个简易，小巧，快速，纯Swift的Ehentai的iOS APP
-
-
 
 ## 功能
 
@@ -24,19 +22,24 @@
 - [x] 适配iPhone/iPad
 - [x] 适配暗黑模式
 - [x] 适配横竖屏
+- [x] 中英文双语支持
 - [x] 适配至iOS26
-
-
 
 ## 预览图
 
 更多预览图可以去Screenshots文件夹中查看
 
-![](https://github.com/yuman07/EMHentai/blob/main/Screenshots/IMG_1136.PNG?raw=true)
+<p align="center">
+<img src="https://github.com/yuman07/EMHentai/blob/main/Screenshots/IMG_1136.PNG?raw=true" width="250"/>
+<img src="https://github.com/yuman07/EMHentai/blob/main/Screenshots/IMG_1140.PNG?raw=true" width="250"/>
+<img src="https://github.com/yuman07/EMHentai/blob/main/Screenshots/IMG_1139.PNG?raw=true" width="250"/>
+</p>
 
-![](https://github.com/yuman07/EMHentai/blob/main/Screenshots/IMG_1141.PNG?raw=true)
-
-![](https://github.com/yuman07/EMHentai/blob/main/Screenshots/IMG_1140.PNG?raw=true)
+<p align="center">
+<img src="https://github.com/yuman07/EMHentai/blob/main/Screenshots/IMG_1142.PNG?raw=true" width="250"/>
+<img src="https://github.com/yuman07/EMHentai/blob/main/Screenshots/IMG_1138.PNG?raw=true" width="250"/>
+<img src="https://github.com/yuman07/EMHentai/blob/main/Screenshots/IMG_1143.PNG?raw=true" width="250"/>
+</p>
 
 ## 安装
 
@@ -49,15 +52,11 @@
 3. open EMHenTai.xcodeproj
 4. Run
 
-
-
 ## QA
 
 Q：为什么我网页登录成功了，但APP中仍显示未登录？
 
 A：这是因为EH会对频繁登录的IP拒绝访问，可以通过切换节点(推荐使用欧美IP)然后再次登录
-
-
 
 ## 其他
 
@@ -66,8 +65,6 @@ A：这是因为EH会对频繁登录的IP拒绝访问，可以通过切换节点
 有任何BUG或者功能/代码上的问题等，都可以直接提issue
 
 所有PR/issue保证在24h内回复
-
-
 
 ## 感谢
 
