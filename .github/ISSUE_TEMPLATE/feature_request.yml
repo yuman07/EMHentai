@@ -1,0 +1,30 @@
+name: Feature Request / 功能建议
+description: Suggest a new feature. | 提出新功能建议。
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for your suggestion!
+        感谢你的建议！
+  - type: textarea
+    id: description
+    attributes:
+      label: Feature Description / 功能描述
+      description: A clear description of the feature you'd like. | 清晰描述你希望的功能。
+    validations:
+      required: true
+  - type: textarea
+    id: reason
+    attributes:
+      label: Why / 原因
+      description: Why do you want this feature? | 为什么需要这个功能？
+    validations:
+      required: false
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots or Mockups / 截图或设计稿
+      description: If applicable, add visual references. | 如有参考图请附上。
+    validations:
+      required: false

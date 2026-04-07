@@ -1,0 +1,50 @@
+name: Bug Report / 提交 Bug
+description: Report a bug to help us improve. | 报告 Bug 以帮助我们改进。
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+        感谢你花时间提交这个 Bug 报告！
+  - type: input
+    id: ios-version
+    attributes:
+      label: iOS Version
+      description: Which iOS version are you using? | 你使用的 iOS 版本？
+      placeholder: e.g. 17.4
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Device
+      description: Which device? | 你使用的设备？
+      placeholder: e.g. iPhone 15 Pro / iPad Air 5
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description / 问题描述
+      description: A clear description of what the bug is. | 清晰描述你遇到的问题。
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce / 复现步骤
+      description: Steps to reproduce the behavior. | 复现问题的步骤。
+      placeholder: |
+        1. Go to '...'
+        2. Click on '...'
+        3. See error
+    validations:
+      required: false
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots / 截图
+      description: If applicable, add screenshots. | 如果有截图请附上。
+    validations:
+      required: false
