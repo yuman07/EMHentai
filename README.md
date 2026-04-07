@@ -1,75 +1,79 @@
+<div align="center">
+
 # EMHentai
 
-[English](README_EN.md) | **中文**
+**A simple, lightweight, fast, pure-Swift E-Hentai iOS client.**
 
-## 简介
+[![Swift](https://img.shields.io/badge/Swift-5-orange.svg?style=flat)](https://swift.org)
+[![iOS](https://img.shields.io/badge/iOS-17.0%2B-blue.svg?style=flat)](https://developer.apple.com/ios/)
+[![License](https://img.shields.io/badge/License-MIT-green.svg?style=flat)](LICENSE)
 
-一个简易，小巧，快速，纯Swift的Ehentai的iOS APP
+[中文文档](README_CN.md)
 
-## 功能
+</div>
 
-- [x] 查看Ehentai上的本子
-- [x] E-hentai/ExHentai切换
-- [x] 高级搜索(按语言，评分等)
-- [x] 相关Tag搜索
-- [x] 历史记录
-- [x] 下载管理
-- [x] 后台下载
-- [x] Tag翻译
-- [x] 分享功能
-- [x] 账号密码/Cookie登录
-- [x] 支持过滤AI/猎奇向等内容
-- [x] 适配iPhone/iPad
-- [x] 适配暗黑模式
-- [x] 适配横竖屏
-- [x] 中英文双语支持
-- [x] 适配至iOS26
+---
 
-## 预览图
+## Features
 
-更多预览图可以去Screenshots文件夹中查看
+| Category | Details |
+|----------|---------|
+| **Browsing** | Browse E-Hentai galleries, E-Hentai / ExHentai source switching |
+| **Search** | Advanced search (by language, rating, category, etc.), related tag search |
+| **Library** | Browsing history, download management, background downloading |
+| **Extras** | Tag translation, share functionality, AI / gore content filtering |
+| **Login** | Account & password login, Cookie login |
+| **Compatibility** | iPhone & iPad, dark mode, portrait & landscape, Chinese & English, iOS 17 ~ 26 |
+
+## Screenshots
 
 <p align="center">
-<img src="https://github.com/yuman07/EMHentai/blob/main/Screenshots/IMG_1136.PNG?raw=true" width="250"/>
-<img src="https://github.com/yuman07/EMHentai/blob/main/Screenshots/IMG_1140.PNG?raw=true" width="250"/>
-<img src="https://github.com/yuman07/EMHentai/blob/main/Screenshots/IMG_1139.PNG?raw=true" width="250"/>
+<img src="https://github.com/yuman07/EMHentai/blob/main/Screenshots/IMG_1136.PNG?raw=true" width="200"/>
+&nbsp;&nbsp;
+<img src="https://github.com/yuman07/EMHentai/blob/main/Screenshots/IMG_1140.PNG?raw=true" width="200"/>
+&nbsp;&nbsp;
+<img src="https://github.com/yuman07/EMHentai/blob/main/Screenshots/IMG_1139.PNG?raw=true" width="200"/>
 </p>
 
 <p align="center">
-<img src="https://github.com/yuman07/EMHentai/blob/main/Screenshots/IMG_1142.PNG?raw=true" width="250"/>
-<img src="https://github.com/yuman07/EMHentai/blob/main/Screenshots/IMG_1138.PNG?raw=true" width="250"/>
-<img src="https://github.com/yuman07/EMHentai/blob/main/Screenshots/IMG_1143.PNG?raw=true" width="250"/>
+<img src="https://github.com/yuman07/EMHentai/blob/main/Screenshots/IMG_1142.PNG?raw=true" width="200"/>
+&nbsp;&nbsp;
+<img src="https://github.com/yuman07/EMHentai/blob/main/Screenshots/IMG_1138.PNG?raw=true" width="200"/>
+&nbsp;&nbsp;
+<img src="https://github.com/yuman07/EMHentai/blob/main/Screenshots/IMG_1143.PNG?raw=true" width="200"/>
 </p>
 
-## 安装
+<p align="center"><sub>More screenshots available in the <a href="Screenshots/">Screenshots</a> folder.</sub></p>
 
-因为考虑到Ehentai的法律风险，这里就不直接提供IPA安装包了。
+## Getting Started
 
-有Mac的同学可以直接使用Xcode安装（无需开发者账号）：
+> No pre-built IPA is provided due to legal considerations around E-Hentai content.
 
-1. 确保你当前的macOS和Xcode版本为最新，iPhone/iPad的iOS版本>=17.0
-2. Download ZIP / git clone
-3. open EMHenTai.xcodeproj
-4. Run
+**Requirements:** macOS (latest) + Xcode (latest) + iPhone / iPad with iOS >= 17.0
 
-## QA
+```bash
+git clone https://github.com/yuman07/EMHentai.git
+open EMHentai/EMHenTai.xcodeproj
+# Then press ⌘R to run — no paid developer account needed.
+```
 
-Q：为什么我网页登录成功了，但APP中仍显示未登录？
+## FAQ
 
-A：这是因为EH会对频繁登录的IP拒绝访问，可以通过切换节点(推荐使用欧美IP)然后再次登录
+**Q: I logged in on the website, but the app still shows "Not logged in"?**
 
-## 其他
+A: E-Hentai may block IPs that log in too frequently. Switch to a different VPN node (US / EU IPs recommended) and try again.
 
-长期维护，欢迎提PR或者建议
+## Contributing
 
-有任何BUG或者功能/代码上的问题等，都可以直接提issue
+This project is **actively maintained**. PRs and suggestions are always welcome!
 
-所有PR/issue保证在24h内回复
+Feel free to open an [Issue](https://github.com/yuman07/EMHentai/issues) for bugs, feature requests, or questions — **guaranteed response within 24 hours**.
 
-## 感谢
+## Acknowledgements
 
-本项目部分UI设计参考了[@Dai-Hentai](https://github.com/DaidoujiChen/Dai-Hentai)
+- UI design inspired by [@Dai-Hentai](https://github.com/DaidoujiChen/Dai-Hentai)
+- Tag translations powered by [@EhTagTranslation](https://github.com/EhTagTranslation/Database)
 
-Tags的翻译使用了[@EhTagTranslation](https://github.com/EhTagTranslation/Database)
+## License
 
-这里表示特别感谢
+This project is licensed under the [MIT License](LICENSE).
