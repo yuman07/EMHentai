@@ -133,6 +133,8 @@ xcodebuild -project EMHenTai.xcodeproj -scheme EMHenTai \
 
 EMHenTai follows an **MVVM architecture** with a layer of **singleton managers** handling core business logic. The UI is built entirely in **programmatic UIKit** — no storyboards or XIBs — using `UITableViewDiffableDataSource` for smooth, animated list updates.
 
+**App lifecycle** uses **UIScene**: `AppDelegate` initializes shared services once, while `SceneDelegate` creates the window and root tab bar for the connected `UIWindowScene`. Multiple windows remain disabled.
+
 **Concurrency** relies on Swift's **actor model**. Both `SearchManager` and `DownloadManager` are declared as `actor`, providing compile-time data race safety without manual locking. A custom `@globalActor` isolates search state. Image downloads run in parallel via `TaskGroup`, with each gallery split into groups of 40 images for efficient batch fetching.
 
 **Reactive data flow** is powered by **Combine**. Managers expose `PassthroughSubject` and `CurrentValueSubject` publishers; ViewModels subscribe via `sink` and drive UI through `@Published` properties. This creates a unidirectional cycle: user action → manager operation → Combine event → ViewModel state change → UI update.
@@ -221,8 +223,10 @@ graph TD
 ```
 EMHenTai/
 |-- EMHenTai/
+|   |-- Info.plist                         # Scene lifecycle configuration
 |   |-- Source/
 |   |   |-- AppDelegate.swift              # App entry, Kingfisher & DB setup
+|   |   |-- SceneDelegate.swift             # Scene window & root UI setup
 |   |   |-- RootViewController.swift        # Tab bar with 4 tabs
 |   |   |-- BookList/                       # Gallery list (home / history / download)
 |   |   |-- Gallery/                        # Full-screen horizontal image viewer

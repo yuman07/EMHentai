@@ -33,6 +33,7 @@
 		7A6C95D52F90A00100077093 /* BookRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A6C95D42F90A00100077093 /* BookRecord.swift */; };
 		7A6C95D727911EF300077093 /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A6C95D627911EF300077093 /* DownloadManager.swift */; };
 		7AB967F5279117CC0006466A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB967F4279117CC0006466A /* AppDelegate.swift */; };
+		7AB967F7279117CC0006466A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB967F6279117CC0006466A /* SceneDelegate.swift */; };
 		7AB967FE279117CD0006466A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7AB967FD279117CD0006466A /* Assets.xcassets */; };
 		7AB96801279117CD0006466A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7AB967FF279117CD0006466A /* LaunchScreen.storyboard */; };
 		7AB9680B279118F90006466A /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB9680A279118F90006466A /* RootViewController.swift */; };
@@ -75,6 +76,7 @@
 		7A6C95D627911EF300077093 /* DownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
 		7AB967F1279117CC0006466A /* EMHenTai.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EMHenTai.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7AB967F4279117CC0006466A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		7AB967F6279117CC0006466A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		7AB967FD279117CD0006466A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7AB96800279117CD0006466A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7AB96802279117CD0006466A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -220,6 +222,7 @@
 				7ACADDBE27BF3DFE00D8FC9B /* WebView */,
 				7A5FE79727D389170042B712 /* Login */,
 				7AB967F4279117CC0006466A /* AppDelegate.swift */,
+				7AB967F6279117CC0006466A /* SceneDelegate.swift */,
 				7AB9680A279118F90006466A /* RootViewController.swift */,
 			);
 			path = Source;
@@ -332,6 +335,7 @@
 				7A5FE79927D389310042B712 /* LoginViewController.swift in Sources */,
 				7A6C95D127911E9A00077093 /* SettingViewController.swift in Sources */,
 				7AB967F5279117CC0006466A /* AppDelegate.swift in Sources */,
+				7AB967F7279117CC0006466A /* SceneDelegate.swift in Sources */,
 				7A1167812796887500C200CA /* GalleryCollectionViewCell.swift in Sources */,
 				7A6C95D327911EB200077093 /* Book.swift in Sources */,
 				7A6C95D52F90A00100077093 /* BookRecord.swift in Sources */,

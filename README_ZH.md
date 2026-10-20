@@ -133,6 +133,8 @@ xcodebuild -project EMHenTai.xcodeproj -scheme EMHenTai \
 
 EMHenTai 采用 **MVVM 架构**，配合一组**单例 Manager** 处理核心业务逻辑。UI 完全使用**纯代码 UIKit** 构建——没有 Storyboard 或 XIB——并使用 `UITableViewDiffableDataSource` 实现流畅的列表动画更新。
 
+**启动生命周期** 使用 **UIScene**：`AppDelegate` 负责一次性的共享服务初始化，`SceneDelegate` 为连接的 `UIWindowScene` 创建窗口与根 TabBar，保持单窗口行为。
+
 **并发模型** 基于 Swift 的 **Actor 机制**。`SearchManager` 和 `DownloadManager` 均声明为 `actor`，在编译期即可保证数据竞争安全，无需手动加锁。自定义 `@globalActor` 用于隔离搜索状态。图片下载通过 `TaskGroup` 并行执行，每个画廊按 40 张一组分批获取。
 
 **响应式数据流** 由 **Combine** 驱动。Manager 层通过 `PassthroughSubject` 和 `CurrentValueSubject` 发布事件；ViewModel 通过 `sink` 订阅并以 `@Published` 属性驱动 UI。由此形成单向数据流：用户操作 → Manager 执行 → Combine 事件 → ViewModel 状态变更 → UI 刷新。
@@ -221,8 +223,10 @@ graph TD
 ```
 EMHenTai/
 |-- EMHenTai/
+|   |-- Info.plist                         # Scene 生命周期配置
 |   |-- Source/
 |   |   |-- AppDelegate.swift              # 应用入口，Kingfisher 与数据库初始化
+|   |   |-- SceneDelegate.swift             # Scene 窗口与根界面初始化
 |   |   |-- RootViewController.swift        # 四标签页 TabBar
 |   |   |-- BookList/                       # 画廊列表（主页 / 历史 / 下载）
 |   |   |-- Gallery/                        # 全屏水平翻页阅读器
