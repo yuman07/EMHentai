@@ -99,7 +99,7 @@ final class BookListViewController: UITableViewController {
     }
     
     private func setupDataSource() {
-        dataSource = UITableViewDiffableDataSource<Int, Book>(tableView: tableView) { tableView, indexPath, book in
+        dataSource = UITableViewDiffableDataSource<Int, Book>(tableView: tableView) { [weak self] tableView, indexPath, book in
             let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(BookListTableViewCell.self), for: indexPath)
             if let cell = cell as? BookListTableViewCell {
                 cell.updateWith(book: book)
