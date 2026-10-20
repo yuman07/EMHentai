@@ -600,7 +600,7 @@
 			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
 			requirement = {
 				kind = exactVersion;
-				version = 5.12.0;
+				version = 5.12.2;
 			};
 		};
 		7AE912C627D07C2500DD9E65 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
@@ -608,7 +608,7 @@
 			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
 			requirement = {
 				kind = exactVersion;
-				version = 8.11.0;
+				version = 8.14.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
