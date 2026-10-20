@@ -25,7 +25,6 @@
 		7A5CA04C27A9770C00E9FDF9 /* UIApplication+Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A5CA04B27A9770C00E9FDF9 /* UIApplication+Tools.swift */; };
 		7A5FE79527D384ED0042B712 /* UIImage+Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A5FE79427D384ED0042B712 /* UIImage+Tools.swift */; };
 		7A5FE79927D389310042B712 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A5FE79827D389310042B712 /* LoginViewController.swift */; };
-		7A66655A2F84D77100FDCE2C /* tag-260407.json in Resources */ = {isa = PBXBuildFile; fileRef = 7A6665592F84D77100FDCE2C /* tag-260407.json */; };
 		7A6C95C727911DC200077093 /* BookListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A6C95C627911DC200077093 /* BookListViewController.swift */; };
 		7A6C95CC27911E4600077093 /* GalleryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A6C95CB27911E4600077093 /* GalleryViewController.swift */; };
 		7A6C95D127911E9A00077093 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A6C95D027911E9A00077093 /* SettingViewController.swift */; };
@@ -40,6 +39,7 @@
 		7ACADDC027BF3E2700D8FC9B /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ACADDBF27BF3E2700D8FC9B /* WebViewController.swift */; };
 		7AD3B2E7279E79D8000702C6 /* TagViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD3B2E6279E79D8000702C6 /* TagViewController.swift */; };
 		7AD3B2E9279E810A000702C6 /* TranslateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD3B2E8279E810A000702C6 /* TranslateManager.swift */; };
+		7ADEBDCA308751AF00FBA57E /* tag-261020.json in Resources */ = {isa = PBXBuildFile; fileRef = 7ADEBDC9308751AF00FBA57E /* tag-261020.json */; };
 		7AE1CBF128D42EEF00888582 /* Array+Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE1CBF028D42EEF00888582 /* Array+Tools.swift */; };
 		7AE912C527D07BB500DD9E65 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 7AE912C427D07BB500DD9E65 /* Alamofire */; };
 		7AE912C827D07C2500DD9E65 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 7AE912C727D07C2500DD9E65 /* Kingfisher */; };
@@ -67,7 +67,6 @@
 		7A5CA04B27A9770C00E9FDF9 /* UIApplication+Tools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+Tools.swift"; sourceTree = "<group>"; };
 		7A5FE79427D384ED0042B712 /* UIImage+Tools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Tools.swift"; sourceTree = "<group>"; };
 		7A5FE79827D389310042B712 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
-		7A6665592F84D77100FDCE2C /* tag-260407.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "tag-260407.json"; sourceTree = "<group>"; };
 		7A6C95C627911DC200077093 /* BookListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookListViewController.swift; sourceTree = "<group>"; };
 		7A6C95CB27911E4600077093 /* GalleryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryViewController.swift; sourceTree = "<group>"; };
 		7A6C95D027911E9A00077093 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
@@ -84,6 +83,7 @@
 		7ACADDBF27BF3E2700D8FC9B /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		7AD3B2E6279E79D8000702C6 /* TagViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagViewController.swift; sourceTree = "<group>"; };
 		7AD3B2E8279E810A000702C6 /* TranslateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslateManager.swift; sourceTree = "<group>"; };
+		7ADEBDC9308751AF00FBA57E /* tag-261020.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "tag-261020.json"; sourceTree = "<group>"; };
 		7AE1CBF028D42EEF00888582 /* Array+Tools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Tools.swift"; sourceTree = "<group>"; };
 		7AEDF3FB279138640064DB12 /* SearchManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchManager.swift; sourceTree = "<group>"; };
 		7AEDF3FD279177720064DB12 /* SearchInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchInfo.swift; sourceTree = "<group>"; };
@@ -231,9 +231,9 @@
 		7AB96809279118C00006466A /* Support */ = {
 			isa = PBXGroup;
 			children = (
+				7ADEBDC9308751AF00FBA57E /* tag-261020.json */,
 				7A0C0A0300000001000E0001 /* Localizable.strings */,
 				7AB967FD279117CD0006466A /* Assets.xcassets */,
-				7A6665592F84D77100FDCE2C /* tag-260407.json */,
 				7AB967FF279117CD0006466A /* LaunchScreen.storyboard */,
 				7AB96802279117CD0006466A /* Info.plist */,
 			);
@@ -323,7 +323,7 @@
 				7A0C0A0400000001000E0001 /* Localizable.strings in Resources */,
 				7AB96801279117CD0006466A /* LaunchScreen.storyboard in Resources */,
 				7AB967FE279117CD0006466A /* Assets.xcassets in Resources */,
-				7A66655A2F84D77100FDCE2C /* tag-260407.json in Resources */,
+				7ADEBDCA308751AF00FBA57E /* tag-261020.json in Resources */,
 			);
 		};
 /* End PBXResourcesBuildPhase section */
